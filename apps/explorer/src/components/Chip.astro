@@ -13,5 +13,5 @@ const { tone = "neutral", label, dot = false, compact = false } = Astro.props;
 
 <span class:list={["chip", tone, compact && "compact"]}>
   {dot && <span class="dot" aria-hidden="true"></span>}
-  {label ? <span>{label}</span> : <slot />}
+  {label ? <span class="chip-label">{label}</span> : <slot />}
 </span>

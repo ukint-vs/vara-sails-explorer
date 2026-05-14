@@ -23,7 +23,7 @@ import { variants } from "../data/fixtures";
     <section class="variant-grid">
       {
         variants.map((variant) => (
-          <Card title={variant.name} description={variant.caption} className="variant-card">
+          <Card title={variant.name} description={variant.caption} className={`variant-card compare-${variant.slug}`}>
             <Fragment slot="action"><Button href={variant.route} size="sm">Open full</Button></Fragment>
             <div class="variant-preview">
               <div class="chip-row"><Chip tone="info" label={variant.role} /><Chip label={variant.slug} /></div>

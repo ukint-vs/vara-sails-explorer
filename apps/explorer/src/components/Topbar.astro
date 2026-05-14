@@ -7,39 +7,32 @@ interface Props {
 
 const { active = "overview" } = Astro.props;
 const nav = [
-  { id: "overview", href: "/", label: "Overview" },
-  { id: "blocks", href: "/blocks", label: "Blocks" },
-  { id: "messages", href: "/messages", label: "Messages" },
-  { id: "programs", href: "/program-detail", label: "Programs" },
-  { id: "decode", href: "/decode", label: "Decode" },
-  { id: "compare", href: "/compare", label: "Variants" }
+  { id: "overview", href: "/", label: "HOME" },
+  { id: "blocks", href: "/blocks", label: "BLOCKS" },
+  { id: "messages", href: "/messages", label: "MESSAGES" },
+  { id: "programs", href: "/program-detail", label: "PROGRAMS" },
+  { id: "decode", href: "/decode", label: "DECODE" },
+  { id: "compare", href: "/compare", label: "VARIANTS" }
 ] as const;
 ---
 
 <header class="topbar">
   <div class="topbar-inner">
     <a class="logo" href="/" aria-label="Vara Sails Explorer home">
-      <span class="logo-mark">V</span>
+      <!-- TODO(vara-brand): replace [V] with the official Vara mark SVG when the asset ships. -->
+      <span class="logo-mark">[V]</span>
       <span class="logo-copy">Vara Sails Explorer<small>Direct RPC first · indexed later</small></span>
     </a>
     <nav class="nav" aria-label="Primary navigation">
       {
         nav.map((item) => (
-          <a href={item.href} class:list={[active === item.id && "active"]}>
-            {item.label}
-          </a>
+          <a href={item.href} class:list={[active === item.id && "active"]}>{item.label}</a>
         ))
       }
     </nav>
     <div class="header-actions">
-      <Button href="/settings" size="sm">RPC: Vara Mainnet</Button>
-      <Button variant="ghost" size="sm" ariaLabel="Switch theme" data-theme-toggle>Light</Button>
-      <Button variant="primary">Connect wallet</Button>
-      <Button square ariaLabel="Open menu">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M5 7.5h14M5 12h14M5 16.5h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-        </svg>
-      </Button>
+      <a class="network-chip" href="/settings"><span class="vara-mark">[V]</span> VARA.ETH MAINNET</a>
+      <Button variant="primary">CONNECT WALLET</Button>
     </div>
   </div>
 </header>

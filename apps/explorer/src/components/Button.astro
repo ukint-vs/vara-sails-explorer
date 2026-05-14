@@ -3,7 +3,6 @@ interface Props {
   href?: string;
   variant?: "default" | "primary" | "ghost";
   size?: "sm" | "md";
-  square?: boolean;
   type?: "button" | "submit" | "reset";
   ariaLabel?: string;
   dataCopy?: string;
@@ -13,12 +12,11 @@ const {
   href,
   variant = "default",
   size = "md",
-  square = false,
   type = "button",
   ariaLabel,
   dataCopy
 } = Astro.props;
-const classes = ["btn", variant, size === "sm" && "small", square && "square"];
+const classes = ["btn", variant, size === "sm" && "small"];
 ---
 
 {
