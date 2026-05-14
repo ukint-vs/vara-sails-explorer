@@ -1,0 +1,23 @@
+---
+import Chip from "./Chip.astro";
+import { statusStrip } from "../data/fixtures";
+---
+
+<section class="status-strip" aria-label="Live explorer status">
+  <div class="status-tile">
+    <span class="label">Data source</span>
+    <Chip tone="info" label={statusStrip.dataSource} dot compact />
+  </div>
+  <div class="status-tile">
+    <span class="label">Best / finalized</span>
+    <span class="value mono">{statusStrip.heads}</span>
+  </div>
+  <div class="status-tile">
+    <span class="label">Node health</span>
+    <Chip tone="success" label={statusStrip.nodeHealth} dot compact />
+  </div>
+  <div class="status-tile">
+    <span class="label">Local cache</span>
+    <span class="value">{statusStrip.cache}</span>
+  </div>
+</section>

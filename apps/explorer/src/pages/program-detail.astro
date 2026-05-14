@@ -1,0 +1,89 @@
+---
+import Button from "../components/Button.astro";
+import Card from "../components/Card.astro";
+import Chip from "../components/Chip.astro";
+import MessageTable from "../components/MessageTable.astro";
+import MetricCard from "../components/MetricCard.astro";
+import StatusChip from "../components/StatusChip.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { messages, serviceEntries } from "../data/fixtures";
+
+const programMetrics = [
+  { label: "Messages 24h", value: "42,890", note: "local + indexed preview fixture", tone: "success", badge: "+12%", progress: 68 },
+  { label: "Decode coverage", value: "99.1%", note: "trusted IDL", tone: "brand", badge: "Sails", progress: 99 },
+  { label: "Executable balance", value: "2.8k", note: "wVARA · 22h runway", tone: "warn", badge: "Watch", progress: 36 },
+  { label: "Error rate", value: "0.04%", note: "mostly validation errors", tone: "success", badge: "Low", progress: 8 }
+] as const;
+---
+
+<BaseLayout title="Program detail" active="programs">
+  <main class="layout">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow">Program</div>
+        <h1>CLOB OrderBook / ETH-USDC</h1>
+        <p class="lede">Program pages read like typed application profiles: identity, trust, health, services, recent activity, and actions.</p>
+      </div>
+      <div class="chip-row">
+        <StatusChip kind="programHealth" value="active" />
+        <StatusChip kind="trust" value="verified_source" />
+        <Chip tone="info" label="Direct RPC" />
+      </div>
+    </section>
+
+    <section class="grid four">
+      {programMetrics.map((metric) => <MetricCard metric={metric} />)}
+    </section>
+
+    <section class="grid sidebar" style="margin-top:18px">
+      <div class="stack">
+        <Card title="Sails interface" description="Tabs are static in Milestone 0; later islands will drive the active view.">
+          <Fragment slot="action">
+            <div class="tabs"><a class="tab active">Services</a><a class="tab">Events</a><a class="tab">IDL</a><a class="tab">Read/Write</a></div>
+          </Fragment>
+          <div class="table">
+            <div class="table-head" style="grid-template-columns:1fr 120px 120px 1fr"><span>Entry</span><span>Kind</span><span>Codec</span><span>Identifiers</span></div>
+            {serviceEntries.map(([name, kind, codec, identifiers]) => (
+              <div class="table-row" style="grid-template-columns:1fr 120px 120px 1fr">
+                <div class="cell-stack"><span class="cell-main mono">{name}</span><span class="cell-sub">Typed Sails route metadata</span></div>
+                <Chip tone={kind === "Event" ? "brand" : kind === "Query" ? "steel" : "info"} label={kind} compact />
+                <Chip label={codec} compact />
+                <span class="hash">{identifiers}</span>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        <Card title="Recent activity" description="Same message table component as the stream page.">
+          <Fragment slot="action"><Button href="/messages" size="sm">View all</Button></Fragment>
+          <MessageTable messages={messages.slice(0, 2)} compact />
+        </Card>
+      </div>
+
+      <aside class="stack">
+        <Card pad body={false} className="stack">
+          <h3>Identity</h3>
+          <dl>
+            <div class="kv"><dt>Program ID</dt><dd class="hash">0x4f8c8f...a241</dd></div>
+            <div class="kv"><dt>Code ID</dt><dd class="hash">0x91be77...7bd2</dd></div>
+            <div class="kv"><dt>IDL hash</dt><dd class="hash">0xf13a44...9c02</dd></div>
+            <div class="kv"><dt>IDL source</dt><dd><Chip tone="brand" label="Embedded + registry" compact /></dd></div>
+            <div class="kv"><dt>Created</dt><dd>#18,201,443</dd></div>
+          </dl>
+        </Card>
+        <Card pad body={false} className="stack">
+          <h3>Developer actions</h3>
+          <Button variant="primary">Read state</Button>
+          <Button>Send message</Button>
+          <Button>Download IDL</Button>
+          <Button href="/decode">Open Decode Lab</Button>
+        </Card>
+        <Card title="SDK snippet">
+          <pre class="code-block">const program = await SailsProgram.fromIdl(idl);
+program.setProgramId("0x4f8c8f...a241");
+const tx = program.services.OrderBook.functions.place_limit_order(order);</pre>
+        </Card>
+      </aside>
+    </section>
+  </main>
+</BaseLayout>

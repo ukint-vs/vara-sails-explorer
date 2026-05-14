@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blocks · Vara Sails Explorer</title>
+  <meta name="description" content="Client-first Sails-aware explorer mock for Vara Network and Gear programs." />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="app.js"></script>
+</head>
+<body>
+<div class="app-shell">
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="logo" href="index.html" aria-label="Vara Sails Explorer home">
+      <span class="logo-mark">V</span>
+      <span class="logo-copy">Vara Sails Explorer<small>Direct RPC first · indexed later</small></span>
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="index.html" class="">Overview</a><a href="blocks.html" class="active">Blocks</a><a href="messages.html" class="">Messages</a><a href="program-detail.html" class="">Programs</a><a href="decode-tool.html" class="">Decode</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn small" href="settings.html">RPC: Vara Mainnet</a>
+      <button class="btn small ghost" data-theme-toggle type="button">Light</button>
+      <button class="btn primary">Connect wallet</button>
+      <button class="btn square mobile-menu" aria-label="Open menu">☰</button>
+    </div>
+  </div>
+</div>
+<div class="status-strip" aria-label="Live explorer status">
+  <div class="status-tile"><span class="label">Data source</span><span class="chip info"><span class="dot"></span>Direct RPC</span></div>
+  <div class="status-tile"><span class="label">Best / finalized</span><span class="value mono">#18,427,057 / #18,427,054</span></div>
+  <div class="status-tile"><span class="label">Node health</span><span class="chip success"><span class="dot"></span>38 ms</span></div>
+  <div class="status-tile"><span class="label">Local cache</span><span class="value">512 blocks · 10k msgs</span></div>
+</div>
+
+
+<main class="layout">
+  <section class="page-head">
+    <div>
+      <div class="eyebrow">Blocks</div>
+      <h1>Canonical chain context for live messages.</h1>
+      <p class="lede">Blocks remain familiar, but the page prioritizes Gear/Sails activity and local finality state.</p>
+    </div>
+    <div class="toolbar"><input class="input" data-local-filter placeholder="Filter local blocks" /><button class="btn">Jump to block</button></div>
+  </section>
+  <section class="card">
+    <div class="card-head"><div><h3>Latest blocks</h3><div class="desc">Block rows show message volume, decode quality, and finality status.</div></div><span class="chip info">Direct RPC</span></div>
+    <div class="table blocks">
+      <div class="table-head"><span>Block</span><span>Age</span><span>Hash</span><span>Messages</span><span>Decode</span><span>Finality</span></div>
+      <a class="table-row" href="#" data-searchable><div class="cell-stack"><span class="cell-main mono">#18,427,057</span><span class="cell-sub">best head</span></div><span>4s ago</span><span class="hash">0x9aE218…41bb</span><span>23</span><span class="chip brand">22 decoded</span><span class="chip info">Best block</span></a>
+      <a class="table-row" href="#" data-searchable><div class="cell-stack"><span class="cell-main mono">#18,427,056</span><span class="cell-sub">candidate</span></div><span>7s ago</span><span class="hash">0x3cF0aa…8d12</span><span>18</span><span class="chip brand">18 decoded</span><span class="chip info">Best block</span></a>
+      <a class="table-row" href="#" data-searchable><div class="cell-stack"><span class="cell-main mono">#18,427,055</span><span class="cell-sub">candidate</span></div><span>10s ago</span><span class="hash">0xb1aD22…5cc2</span><span>31</span><span class="chip warn">4 missing IDL</span><span class="chip info">Best block</span></a>
+      <a class="table-row" href="#" data-searchable><div class="cell-stack"><span class="cell-main mono">#18,427,054</span><span class="cell-sub">canonical</span></div><span>13s ago</span><span class="hash">0xCE9100…22a0</span><span>14</span><span class="chip brand">14 decoded</span><span class="chip success">Finalized</span></a>
+      <a class="table-row" href="#" data-searchable><div class="cell-stack"><span class="cell-main mono">#18,427,053</span><span class="cell-sub">canonical</span></div><span>16s ago</span><span class="hash">0x281000…e7e0</span><span>9</span><span class="chip brand">9 decoded</span><span class="chip success">Finalized</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">Product mock v2 · Static HTML refactor · UI states are modeled for Direct RPC first and Indexed Mode later.</footer>
+</div>
+</body>
+</html>

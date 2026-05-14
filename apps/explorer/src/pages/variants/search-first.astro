@@ -1,0 +1,40 @@
+---
+import Card from "../../components/Card.astro";
+import Chip from "../../components/Chip.astro";
+import MessageTable from "../../components/MessageTable.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { messages } from "../../data/fixtures";
+---
+
+<BaseLayout title="Search-first variant" active="compare" variant="search-first">
+  <main class="layout">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow">Variant D</div>
+        <h1>Start with the hash, then explain the object.</h1>
+        <p class="lede">This direction is for users arriving with a message ID, block hash, program ID, code ID, account, or raw payload.</p>
+      </div>
+    </section>
+
+    <section class="card search-card">
+      <div class="search-box">
+        <input aria-label="Search-first lookup" placeholder="Paste message ID, block hash, program ID, code ID, account, function, event, or raw bytes" />
+        <span class="shortcut">/</span>
+      </div>
+      <div class="chip-row">
+        <Chip label="Message ID" />
+        <Chip label="Block hash" />
+        <Chip label="Program ID" />
+        <Chip label="Code ID" />
+        <Chip label="Raw Sails bytes" />
+      </div>
+      <div class="callout info">Direct RPC can resolve live/local objects. Indexed mode is required for arbitrary historical message lookup.</div>
+    </section>
+
+    <section style="margin-top:18px">
+      <Card title="Recent decoded messages" description="Search-first still needs a live context below the input.">
+        <MessageTable messages={messages.slice(0, 3)} compact />
+      </Card>
+    </section>
+  </main>
+</BaseLayout>

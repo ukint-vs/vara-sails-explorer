@@ -1,0 +1,38 @@
+---
+import BlockTable from "../../components/BlockTable.astro";
+import Card from "../../components/Card.astro";
+import Chip from "../../components/Chip.astro";
+import MetricCard from "../../components/MetricCard.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { blocks, metrics } from "../../data/fixtures";
+---
+
+<BaseLayout title="Operator variant" active="compare" variant="operator">
+  <main class="layout">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow">Variant B</div>
+        <h1>Operator console · htop for on-chain activity.</h1>
+        <p class="lede">A dense network watch surface for best/finalized heads, decode success rate, error clusters, and top active programs.</p>
+      </div>
+      <div class="chip-row"><Chip tone="success" label="Healthy" dot /><Chip tone="warn" label="3 block lag" /></div>
+    </section>
+
+    <section class="grid four">
+      {metrics.map((metric) => <MetricCard metric={metric} />)}
+    </section>
+
+    <section class="grid two" style="margin-top:18px">
+      <Card title="Live tail · last blocks" description="Blocks update from Direct RPC in Milestone 1.">
+        <BlockTable blocks={blocks} />
+      </Card>
+      <Card title="Decode failures" description="Operator mode puts failures near throughput.">
+        <div class="stack">
+          <div class="mini-row"><span class="hash">missing_idl</span><span>Unknown code ID in local cache</span><Chip tone="warn" label="231" /></div>
+          <div class="mini-row"><span class="hash">bad_header</span><span>Malformed Sails magic or length</span><Chip tone="danger" label="17" /></div>
+          <div class="mini-row"><span class="hash">codec_mismatch</span><span>Entry is ethabi-only for SCALE path</span><Chip tone="warn" label="4" /></div>
+        </div>
+      </Card>
+    </section>
+  </main>
+</BaseLayout>

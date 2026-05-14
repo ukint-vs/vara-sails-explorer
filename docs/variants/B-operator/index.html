@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vara Sails Explorer · Operator's Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body class="v-operator">
+
+<div class="header-bar">
+  <a class="logo" href="../../index.html">
+    <div class="logo-mark"></div>
+    <div class="logo-word">vara.eth<span class="accent">/sails</span></div>
+  </a>
+  <nav class="header-nav">
+    <a class="nav-item active" href="index.html">[HOME]</a>
+    <a class="nav-item" href="../../messages-list.html">[PROGRAMS]</a>
+    <a class="nav-item" href="../../messages-list.html">[MESSAGES]</a>
+    <a class="nav-item" href="../../messages-list.html">[CODES]</a>
+    <a class="nav-item" href="../../decode-tool.html">[DECODE]</a>
+  </nav>
+  <div class="header-right">
+    <div class="network-chip">
+      <div class="vara-mark"></div>
+      VARA · MAINNET
+    </div>
+    <button class="account-pill">CONNECT WALLET</button>
+  </div>
+</div>
+
+<main class="main" style="max-width: 1440px;">
+
+  <!-- Top status bar: live indicators -->
+  <div class="op-statusbar">
+    <div class="seg"><span class="k">tail</span><span class="v blink">LIVE</span></div>
+    <div class="seg"><span class="k">head</span><span class="v">#18,427,019</span></div>
+    <div class="seg"><span class="k">block time</span><span class="v">2.84s</span></div>
+    <div class="seg"><span class="k">msgs/blk avg</span><span class="v">6.7</span></div>
+    <div class="seg"><span class="k">decoded</span><span class="v">99.4%</span></div>
+    <div class="seg"><span class="k">errors 1h</span><span class="v">14</span></div>
+    <div class="seg"><span class="k">indexer lag</span><span class="v">0</span></div>
+    <div class="seg"><span class="k">conn</span><span class="v">wss://rpc.vara.network</span></div>
+  </div>
+
+  <!-- Live tail table -->
+  <div class="section-head" style="margin-top: 16px;">
+    <h2>Live tail · last 12 blocks</h2>
+    <span class="faint">streaming · auto-pin on hover</span>
+  </div>
+  <div class="panel" style="padding: 0;">
+    <table class="tail-table">
+      <thead>
+        <tr>
+          <th style="width: 110px;">block</th>
+          <th style="width: 90px;">ts</th>
+          <th style="width: 50px;">msgs</th>
+          <th>breakdown</th>
+          <th style="width: 320px;">top program</th>
+          <th style="width: 90px;">gas Mwasm</th>
+          <th style="width: 70px;">err</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="num">#18,427,019</td><td>14:08:22</td><td class="num">8</td>
+          <td><span class="micro m-call">CALL 4</span><span class="micro m-query">QUERY 2</span><span class="micro m-event">EVENT 2</span></td>
+          <td>Counter <span class="faint">0x4a3f...d128</span></td>
+          <td class="num">142</td><td class="num">0</td></tr>
+        <tr><td class="num">#18,427,018</td><td>14:08:19</td><td class="num">11</td>
+          <td><span class="micro m-call">CALL 6</span><span class="micro m-event">EVENT 4</span><span class="micro m-query">QUERY 1</span></td>
+          <td>Vft-Manager <span class="faint">0xb201...4f7a</span></td>
+          <td class="num">388</td><td class="num">0</td></tr>
+        <tr><td class="num">#18,427,017</td><td>14:08:16</td><td class="num">6</td>
+          <td><span class="micro m-call">CALL 3</span><span class="micro m-event">EVENT 2</span><span class="micro m-query">QUERY 1</span></td>
+          <td>Dex-Pool <span class="faint">0x6f1c...e21b</span></td>
+          <td class="num">221</td><td class="num">0</td></tr>
+        <tr><td class="num">#18,427,016</td><td>14:08:13</td><td class="num">5</td>
+          <td><span class="micro m-call">CALL 2</span><span class="micro m-query">QUERY 3</span></td>
+          <td>Counter <span class="faint">0x4a3f...d128</span></td>
+          <td class="num">71</td><td class="num">0</td></tr>
+        <tr><td class="num">#18,427,015</td><td>14:08:10</td><td class="num">9</td>
+          <td><span class="micro m-call">CALL 4</span><span class="micro m-event">EVENT 3</span><span class="micro m-error">ERR 1</span><span class="micro m-query">QUERY 1</span></td>
+          <td>Counter <span class="faint">0x4a3f...d128</span></td>
+          <td class="num">298</td><td class="num">1</td></tr>
+        <tr><td class="num">#18,427,014</td><td>14:08:07</td><td class="num">7</td>
+          <td><span class="micro m-call">CALL 3</span><span class="micro m-event">EVENT 3</span><span class="micro m-query">QUERY 1</span></td>
+          <td>Rmrk-Resource <span class="faint">0xdc8e...19a3</span></td>
+          <td class="num">184</td><td class="num">0</td></tr>
+        <tr><td class="num">#18,427,013</td><td>14:08:04</td><td class="num">12</td>
+          <td><span class="micro m-call">CALL 7</span><span class="micro m-event">EVENT 4</span><span class="micro m-query">QUERY 1</span></td>
+          <td>Vft-Manager <span class="faint">0xb201...4f7a</span></td>
+          <td class="num">412</td><td class="num">0</td></tr>
+        <tr><td class="num">#18,427,012</td><td>14:08:01</td><td class="num">4</td>
+          <td><span class="micro m-call">CALL 2</span><span class="micro m-query">QUERY 2</span></td>
+          <td>Bridge-Builtin <span class="faint">0x0083...0001</span></td>
+          <td class="num">88</td><td class="num">0</td></tr>
+        <tr><td class="num">#18,427,011</td><td>14:07:58</td><td class="num">10</td>
+          <td><span class="micro m-call">CALL 5</span><span class="micro m-event">EVENT 4</span><span class="micro m-query">QUERY 1</span></td>
+          <td>Dex-Pool <span class="faint">0x6f1c...e21b</span></td>
+          <td class="num">344</td><td class="num">0</td></tr>
+        <tr><td class="num">#18,427,010</td><td>14:07:55</td><td class="num">3</td>
+          <td><span class="micro m-call">CTOR 1</span><span class="micro m-event">EVENT 2</span></td>
+          <td>Counter <span class="faint">0x4a3f...d128</span></td>
+          <td class="num">52</td><td class="num">0</td></tr>
+        <tr><td class="num">#18,427,009</td><td>14:07:52</td><td class="num">6</td>
+          <td><span class="micro m-call">CALL 3</span><span class="micro m-event">EVENT 2</span><span class="micro m-query">QUERY 1</span></td>
+          <td>Vft-Manager <span class="faint">0xb201...4f7a</span></td>
+          <td class="num">201</td><td class="num">0</td></tr>
+        <tr><td class="num">#18,427,008</td><td>14:07:49</td><td class="num">8</td>
+          <td><span class="micro m-call">CALL 4</span><span class="micro m-event">EVENT 3</span><span class="micro m-query">QUERY 1</span></td>
+          <td>Dex-Pool <span class="faint">0x6f1c...e21b</span></td>
+          <td class="num">266</td><td class="num">0</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Density chart -->
+  <div class="section-head">
+    <h2>Message density · last 30 blocks</h2>
+    <span class="faint">y: msgs/block · x: block N</span>
+  </div>
+  <div class="density-chart">
+    <div class="bar" style="height: 38%"></div>
+    <div class="bar" style="height: 42%"></div>
+    <div class="bar" style="height: 71%"></div>
+    <div class="bar" style="height: 58%"></div>
+    <div class="bar" style="height: 33%"></div>
+    <div class="bar" style="height: 49%"></div>
+    <div class="bar" style="height: 61%"></div>
+    <div class="bar" style="height: 87%"></div>
+    <div class="bar" style="height: 54%"></div>
+    <div class="bar" style="height: 25%"></div>
+    <div class="bar" style="height: 41%"></div>
+    <div class="bar" style="height: 73%"></div>
+    <div class="bar" style="height: 92%"></div>
+    <div class="bar" style="height: 66%"></div>
+    <div class="bar" style="height: 38%"></div>
+    <div class="bar" style="height: 55%"></div>
+    <div class="bar" style="height: 47%"></div>
+    <div class="bar" style="height: 71%"></div>
+    <div class="bar" style="height: 84%"></div>
+    <div class="bar" style="height: 62%"></div>
+    <div class="bar" style="height: 28%"></div>
+    <div class="bar" style="height: 49%"></div>
+    <div class="bar" style="height: 77%"></div>
+    <div class="bar" style="height: 41%"></div>
+    <div class="bar" style="height: 58%"></div>
+    <div class="bar" style="height: 36%"></div>
+    <div class="bar" style="height: 88%"></div>
+    <div class="bar" style="height: 47%"></div>
+    <div class="bar" style="height: 71%"></div>
+    <div class="bar cur" style="height: 67%"></div>
+  </div>
+  <div class="chart-axis">
+    <span>−30 blk</span><span>−15 blk</span><span>now</span>
+  </div>
+
+  <!-- Active programs pinned -->
+  <div class="section-head">
+    <h2>Active programs · last 60 blocks</h2>
+    <a class="btn-bracket" href="../../messages-list.html">VIEW ALL</a>
+  </div>
+  <div class="pin-grid">
+    <a class="pin-card" href="../../program-detail.html">
+      <div class="pin-head">
+        <span class="pin-name">Counter</span>
+        <span class="pin-id">0x4a3f...d128</span>
+      </div>
+      <div class="pin-stat"><span>msgs 60blk</span><span class="n">142</span></div>
+      <div class="pin-stat"><span>errs</span><span class="n">1</span></div>
+      <div class="spark">
+        <i style="height: 40%"></i><i style="height: 55%"></i><i style="height: 30%"></i>
+        <i style="height: 70%"></i><i style="height: 45%"></i><i style="height: 60%"></i>
+        <i style="height: 85%"></i><i style="height: 50%"></i><i style="height: 75%"></i>
+        <i style="height: 40%"></i><i style="height: 65%"></i><i style="height: 90%"></i>
+        <i style="height: 55%"></i><i style="height: 70%"></i>
+      </div>
+    </a>
+    <a class="pin-card" href="../../program-detail.html">
+      <div class="pin-head">
+        <span class="pin-name">Vft-Manager</span>
+        <span class="pin-id">0xb201...4f7a</span>
+      </div>
+      <div class="pin-stat"><span>msgs 60blk</span><span class="n">388</span></div>
+      <div class="pin-stat"><span>errs</span><span class="n">0</span></div>
+      <div class="spark">
+        <i style="height: 60%"></i><i style="height: 75%"></i><i style="height: 85%"></i>
+        <i style="height: 70%"></i><i style="height: 90%"></i><i style="height: 80%"></i>
+        <i style="height: 65%"></i><i style="height: 88%"></i><i style="height: 95%"></i>
+        <i style="height: 75%"></i><i style="height: 82%"></i><i style="height: 70%"></i>
+        <i style="height: 88%"></i><i style="height: 92%"></i>
+      </div>
+    </a>
+    <a class="pin-card" href="../../program-detail.html">
+      <div class="pin-head">
+        <span class="pin-name">Dex-Pool</span>
+        <span class="pin-id">0x6f1c...e21b</span>
+      </div>
+      <div class="pin-stat"><span>msgs 60blk</span><span class="n">221</span></div>
+      <div class="pin-stat"><span>errs</span><span class="n">0</span></div>
+      <div class="spark">
+        <i style="height: 50%"></i><i style="height: 65%"></i><i style="height: 45%"></i>
+        <i style="height: 80%"></i><i style="height: 55%"></i><i style="height: 70%"></i>
+        <i style="height: 60%"></i><i style="height: 75%"></i><i style="height: 50%"></i>
+        <i style="height: 85%"></i><i style="height: 60%"></i><i style="height: 70%"></i>
+        <i style="height: 55%"></i><i style="height: 80%"></i>
+      </div>
+    </a>
+    <a class="pin-card" href="../../program-detail.html">
+      <div class="pin-head">
+        <span class="pin-name">Bridge-Builtin</span>
+        <span class="pin-id">0x0083...0001</span>
+      </div>
+      <div class="pin-stat"><span>msgs 60blk</span><span class="n">88</span></div>
+      <div class="pin-stat"><span>errs</span><span class="n">0</span></div>
+      <div class="spark">
+        <i style="height: 30%"></i><i style="height: 25%"></i><i style="height: 40%"></i>
+        <i style="height: 35%"></i><i style="height: 50%"></i><i style="height: 30%"></i>
+        <i style="height: 45%"></i><i style="height: 28%"></i><i style="height: 60%"></i>
+        <i style="height: 35%"></i><i style="height: 40%"></i><i style="height: 50%"></i>
+        <i style="height: 32%"></i><i style="height: 45%"></i>
+      </div>
+    </a>
+  </div>
+
+</main>
+
+<footer class="footer">
+  Built on Sails-RS <span class="sep">·</span> Indexed by sails-indexer <span class="sep">·</span> Open source
+</footer>
+
+</body>
+</html>

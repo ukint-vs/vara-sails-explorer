@@ -1,0 +1,34 @@
+---
+interface Props {
+  href?: string;
+  variant?: "default" | "primary" | "ghost";
+  size?: "sm" | "md";
+  square?: boolean;
+  type?: "button" | "submit" | "reset";
+  ariaLabel?: string;
+  dataCopy?: string;
+}
+
+const {
+  href,
+  variant = "default",
+  size = "md",
+  square = false,
+  type = "button",
+  ariaLabel,
+  dataCopy
+} = Astro.props;
+const classes = ["btn", variant, size === "sm" && "small", square && "square"];
+---
+
+{
+  href ? (
+    <a class:list={classes} href={href} aria-label={ariaLabel} data-copy={dataCopy}>
+      <slot />
+    </a>
+  ) : (
+    <button class:list={classes} type={type} aria-label={ariaLabel} data-copy={dataCopy}>
+      <slot />
+    </button>
+  )
+}

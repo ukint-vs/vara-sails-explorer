@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Overview · Vara Sails Explorer</title>
+  <meta name="description" content="Client-first Sails-aware explorer mock for Vara Network and Gear programs." />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="app.js"></script>
+</head>
+<body>
+<div class="app-shell">
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="logo" href="index.html" aria-label="Vara Sails Explorer home">
+      <span class="logo-mark">V</span>
+      <span class="logo-copy">Vara Sails Explorer<small>Direct RPC first · indexed later</small></span>
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="index.html" class="active">Overview</a><a href="blocks.html" class="">Blocks</a><a href="messages.html" class="">Messages</a><a href="program-detail.html" class="">Programs</a><a href="decode-tool.html" class="">Decode</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn small" href="settings.html">RPC: Vara Mainnet</a>
+      <button class="btn small ghost" data-theme-toggle type="button">Light</button>
+      <button class="btn primary">Connect wallet</button>
+      <button class="btn square mobile-menu" aria-label="Open menu">☰</button>
+    </div>
+  </div>
+</div>
+<div class="status-strip" aria-label="Live explorer status">
+  <div class="status-tile"><span class="label">Data source</span><span class="chip info"><span class="dot"></span>Direct RPC</span></div>
+  <div class="status-tile"><span class="label">Best / finalized</span><span class="value mono">#18,427,057 / #18,427,054</span></div>
+  <div class="status-tile"><span class="label">Node health</span><span class="chip success"><span class="dot"></span>38 ms</span></div>
+  <div class="status-tile"><span class="label">Local cache</span><span class="value">512 blocks · 10k msgs</span></div>
+</div>
+
+
+<main class="layout">
+  <section class="page-head">
+    <div>
+      <div class="eyebrow">Production refactor</div>
+      <h1>Make Gear programs readable as products, not just hashes.</h1>
+      <p class="lede">A client-first Vara explorer that connects directly to a node, watches live messages, and uses Sails IDL/header decoding to explain calls, replies, errors, events, and program interfaces.</p>
+    </div>
+    <div class="chip-row">
+      <span class="chip info"><span class="dot"></span>Direct RPC mode</span>
+      <span class="chip brand"><span class="dot"></span>Sails-aware</span>
+      <span class="chip neutral"><span class="dot"></span>Indexed mode ready</span>
+    </div>
+  </section>
+
+  <section class="hero-grid">
+    <div class="card search-card">
+      <div>
+        <h2>Search the live network</h2>
+        <p class="lede">Paste a block, message ID, program ID, code ID, account, function name, event name, or raw Sails payload.</p>
+      </div>
+      <div class="search-box">
+        <input aria-label="Explorer search" placeholder="0x message, program, codeId, account, function/event, or raw payload" />
+        <span class="shortcut">/</span>
+      </div>
+      <div class="chip-row">
+        <span class="chip neutral">Block</span>
+        <span class="chip neutral">Message</span>
+        <span class="chip neutral">Program</span>
+        <span class="chip neutral">Code ID</span>
+        <span class="chip neutral">Raw payload</span>
+      </div>
+      <div class="callout info"><strong>Direct mode behavior:</strong> live blocks and local-cache messages open immediately. Old arbitrary message lookup is labeled as an indexed-mode feature, not shown as a broken search result.</div>
+    </div>
+
+    <aside class="card pad stack">
+      <div class="split-actions">
+        <div>
+          <h3>Current session</h3>
+          <p class="muted">Readable scope for this client.</p>
+        </div>
+        <span class="chip success"><span class="dot"></span>Healthy</span>
+      </div>
+      <dl>
+        <div class="kv"><dt>Network</dt><dd>Vara Mainnet</dd></div>
+        <div class="kv"><dt>Data source</dt><dd><span class="chip info"><span class="dot"></span>Direct RPC</span></dd></div>
+        <div class="kv"><dt>Cache window</dt><dd>512 blocks · local only</dd></div>
+        <div class="kv"><dt>Decode source</dt><dd>Embedded IDL + registry + user IDL</dd></div>
+      </dl>
+    </aside>
+  </section>
+
+  <section class="grid four" style="margin-top:18px">
+    <div class="card metric"><div class="top"><span>Live messages</span><span class="chip success">+487/s</span></div><div class="num">20,416</div><div class="note">local session · last 512 blocks</div><div class="bar"><span style="width:72%"></span></div></div>
+    <div class="card metric"><div class="top"><span>Decode coverage</span><span class="chip brand">Sails</span></div><div class="num">91.6%</div><div class="note">decoded with trusted or embedded IDL</div><div class="bar"><span style="width:91%"></span></div></div>
+    <div class="card metric"><div class="top"><span>Active programs</span><span class="chip info">24h</span></div><div class="num">1,284</div><div class="note">12 newly seen in cache</div><div class="bar"><span style="width:58%"></span></div></div>
+    <div class="card metric"><div class="top"><span>Finality lag</span><span class="chip success">Normal</span></div><div class="num">3</div><div class="note">best to finalized blocks</div><div class="bar"><span style="width:24%"></span></div></div>
+  </section>
+
+  <section class="grid sidebar" style="margin-top:18px">
+    <div class="card">
+      <div class="card-head"><div><h3>Live Sails message stream</h3><div class="desc">Rows use labeled execution, decode, and finality states. No unlabeled color dots.</div></div><a class="btn small" href="messages.html">Open messages</a></div>
+      <div class="table messages compact">
+        <div class="table-head"><span>Time</span><span>Execution</span><span>Program</span><span>Decoded activity</span><span>Decode</span><span>Finality</span><span>Block</span></div>
+        
+<a class="table-row" href="message-detail.html" data-searchable>
+  <div class="cell-stack"><span class="cell-main mono">14:08:56</span><span class="cell-sub">4s ago</span></div>
+  <div><span class="chip success"><span class="dot"></span>Executed</span></div>
+  <div class="cell-stack"><span class="cell-main">CLOB OrderBook</span><span class="cell-sub mono">0x4f8c…a241</span></div>
+  <div class="cell-stack"><span class="cell-main">place_limit_order(side: Buy, qty: 2.4)</span><span class="cell-sub">OrderAccepted · 1 partial fill</span></div>
+  <div><span class="chip brand"><span class="dot"></span>Decoded</span></div>
+  <div><span class="chip info"><span class="dot"></span>Pre-confirmed</span></div>
+  <div class="hash">#18,427,057</div>
+</a>
+<a class="table-row" href="message-detail.html" data-searchable>
+  <div class="cell-stack"><span class="cell-main mono">14:08:53</span><span class="cell-sub">7s ago</span></div>
+  <div><span class="chip success"><span class="dot"></span>Replied</span></div>
+  <div class="cell-stack"><span class="cell-main">Counter</span><span class="cell-sub mono">0x91bb…c008</span></div>
+  <div class="cell-stack"><span class="cell-main">increment(delta: 1)</span><span class="cell-sub">Reply Ok(new_value: 42)</span></div>
+  <div><span class="chip brand"><span class="dot"></span>Decoded</span></div>
+  <div><span class="chip success"><span class="dot"></span>Finalized</span></div>
+  <div class="hash">#18,427,056</div>
+</a>
+<a class="table-row" href="message-detail.html" data-searchable>
+  <div class="cell-stack"><span class="cell-main mono">14:08:49</span><span class="cell-sub">11s ago</span></div>
+  <div><span class="chip warn"><span class="dot"></span>Waiting</span></div>
+  <div class="cell-stack"><span class="cell-main">Vault</span><span class="cell-sub mono">0xa810…902b</span></div>
+  <div class="cell-stack"><span class="cell-main">withdraw(token: USDC, amount: 500)</span><span class="cell-sub">Pending finality gate</span></div>
+  <div><span class="chip brand"><span class="dot"></span>Decoded</span></div>
+  <div><span class="chip info"><span class="dot"></span>Included</span></div>
+  <div class="hash">#18,427,055</div>
+</a>
+<a class="table-row" href="message-detail.html" data-searchable>
+  <div class="cell-stack"><span class="cell-main mono">14:08:42</span><span class="cell-sub">18s ago</span></div>
+  <div><span class="chip danger"><span class="dot"></span>Failed</span></div>
+  <div class="cell-stack"><span class="cell-main">Unknown program</span><span class="cell-sub mono">0x19ee…77bd</span></div>
+  <div class="cell-stack"><span class="cell-main">raw payload · no trusted IDL</span><span class="cell-sub">Header parsed, interface not found</span></div>
+  <div><span class="chip warn"><span class="dot"></span>Missing IDL</span></div>
+  <div><span class="chip success"><span class="dot"></span>Finalized</span></div>
+  <div class="hash">#18,427,052</div>
+</a>
+<a class="table-row" href="message-detail.html" data-searchable>
+  <div class="cell-stack"><span class="cell-main mono">14:08:37</span><span class="cell-sub">23s ago</span></div>
+  <div><span class="chip success"><span class="dot"></span>Event</span></div>
+  <div class="cell-stack"><span class="cell-main">Arkanoid Game</span><span class="cell-sub mono">0xc711…8d00</span></div>
+  <div class="cell-stack"><span class="cell-main">ScoreUpdated(player, score)</span><span class="cell-sub">Sails event frame</span></div>
+  <div><span class="chip brand"><span class="dot"></span>Decoded</span></div>
+  <div><span class="chip success"><span class="dot"></span>Finalized</span></div>
+  <div class="hash">#18,427,051</div>
+</a>
+
+      </div>
+    </div>
+
+    <aside class="stack">
+      <div class="card pad stack">
+        <h3>UX model</h3>
+        <div class="doc-list">
+          <div class="doc-item"><span class="doc-icon">1</span><div><div class="doc-title">Meaning first</div><div class="doc-copy">Show <strong>Counter.increment(1)</strong> before raw bytes.</div></div></div>
+          <div class="doc-item"><span class="doc-icon">2</span><div><div class="doc-title">Trust is explicit</div><div class="doc-copy">Decode source, IDL provenance, and finality are separate badges.</div></div></div>
+          <div class="doc-item"><span class="doc-icon">3</span><div><div class="doc-title">Direct vs indexed</div><div class="doc-copy">Local cache limits are disclosed instead of hidden.</div></div></div>
+        </div>
+      </div>
+      <div class="card pad stack">
+        <div class="split-actions"><h3>Decode quality</h3><span class="chip warn">4 unknown</span></div>
+        <dl>
+          <div class="kv"><dt>Decoded</dt><dd>18,704</dd></div>
+          <div class="kv"><dt>Missing IDL</dt><dd>1,291</dd></div>
+          <div class="kv"><dt>Header issue</dt><dd>23</dd></div>
+          <div class="kv"><dt>Codec mismatch</dt><dd>4</dd></div>
+        </dl>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<footer class="footer">Product mock v2 · Static HTML refactor · UI states are modeled for Direct RPC first and Indexed Mode later.</footer>
+</div>
+</body>
+</html>

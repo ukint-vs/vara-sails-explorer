@@ -1,0 +1,38 @@
+---
+import Button from "../components/Button.astro";
+import Card from "../components/Card.astro";
+import Chip from "../components/Chip.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { variants } from "../data/fixtures";
+---
+
+<BaseLayout title="Variant comparison" active="compare">
+  <main class="layout">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow">Mockup directions</div>
+        <h1>Keep the four source directions visible while extracting one component system.</h1>
+        <p class="lede">
+          Milestone 0 preserves the terminal, operator, documentarian, and search-first ideas as route-level variants.
+          The production pages borrow from all four without flattening the source material.
+        </p>
+      </div>
+      <Chip tone="brand" label="All variants represented" />
+    </section>
+
+    <section class="variant-grid">
+      {
+        variants.map((variant) => (
+          <Card title={variant.name} description={variant.caption} className="variant-card">
+            <Fragment slot="action"><Button href={variant.route} size="sm">Open full</Button></Fragment>
+            <div class="variant-preview">
+              <div class="chip-row"><Chip tone="info" label={variant.role} /><Chip label={variant.slug} /></div>
+              <div class="mini-row"><span class="hash">14:08:56</span><span>{variant.caption}</span><Chip tone="brand" label="Decoded" compact /></div>
+              <div class="mini-row"><span class="hash">#18,427,057</span><span>Direct RPC · local cache window</span><Chip tone="success" label="Healthy" compact /></div>
+            </div>
+          </Card>
+        ))
+      }
+    </section>
+  </main>
+</BaseLayout>

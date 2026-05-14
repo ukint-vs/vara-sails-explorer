@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vara Sails Explorer · Learn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body class="v-documentarian">
+
+<div class="header-bar">
+  <a class="logo" href="../../index.html">
+    <div class="logo-mark"></div>
+    <div class="logo-word">vara.eth<span class="accent">/sails</span></div>
+  </a>
+  <nav class="header-nav">
+    <a class="nav-item active" href="index.html">[HOME]</a>
+    <a class="nav-item" href="../../messages-list.html">[PROGRAMS]</a>
+    <a class="nav-item" href="../../messages-list.html">[MESSAGES]</a>
+    <a class="nav-item" href="../../messages-list.html">[CODES]</a>
+    <a class="nav-item" href="../../decode-tool.html">[DECODE]</a>
+  </nav>
+  <div class="header-right">
+    <div class="network-chip">
+      <div class="vara-mark"></div>
+      VARA · MAINNET
+    </div>
+    <button class="account-pill">CONNECT WALLET</button>
+  </div>
+</div>
+
+<section class="hero">
+  <h1>Read any program on <span class="accent">Vara</span>, without a registry.</h1>
+  <p class="lede">
+    A <strong>Sails program</strong> is a WASM actor on Gear Protocol that <strong>carries its own
+    interface description</strong> inside the binary &mdash; in a custom section named <code class="mono-data">sails:idl</code>.
+    This explorer reads that section straight from the chain, then decodes every call, query, event,
+    and error against it. No off-chain ABI database. No verification step. The chain is the source of truth.
+  </p>
+
+  <div class="doc-grid">
+    <div class="doc-card">
+      <h3>What's an interface_id?</h3>
+      <p>
+        Every <span class="ic">#[service]</span> in a Sails program gets a deterministic
+        <strong>64-bit fingerprint</strong> computed from its canonical IDL. Two services with the same
+        public surface produce the same id, on any chain, any compiler.
+      </p>
+      <p>
+        On the wire, the first 8 bytes of every message after the <span class="ic">"GM"</span>
+        magic identify <em>which service inside the program</em> is being addressed. The explorer
+        uses it to look up the right ABI without guessing.
+      </p>
+    </div>
+    <div class="doc-card">
+      <h3>What's a route_idx?</h3>
+      <p>
+        A service exposes an ordered list of exported functions. The <span class="ic">route_idx</span>
+        is just the <strong>position</strong> of the called function in that list &mdash; one byte,
+        zero-based.
+      </p>
+      <p>
+        Combined with <span class="ic">interface_id</span> it pins exactly one function, even when
+        functions are renamed, reordered between deploys, or shared across services. We resolve it
+        against the IDL embedded in the program's WASM at the moment of decode.
+      </p>
+    </div>
+  </div>
+
+  <div class="section-head" style="max-width: 1024px; margin: 48px auto 16px;">
+    <h2>How decoding works</h2>
+  </div>
+  <div class="ascii-diagram" style="max-width: 1024px; margin: 0 auto;">
+       <span class="m">┌─────────────────────┐</span>          <span class="m">┌─────────────────────┐</span>          <span class="m">┌─────────────────────┐</span>
+       <span class="m">│</span>  on-chain WASM blob <span class="m">│</span>          <span class="m">│</span>     sails:idl       <span class="m">│</span>          <span class="m">│</span>    IDL text (utf8) <span class="m">│</span>
+       <span class="m">│</span>  <span class="g">0x91be...7af2</span>      <span class="m">│</span>  <span class="m">───▶</span>  <span class="m">│</span>  custom section     <span class="m">│</span>  <span class="m">───▶</span>  <span class="m">│</span>  <span class="g">service Counter {</span>  <span class="m">│</span>
+       <span class="m">│</span>  via code_id        <span class="m">│</span>          <span class="m">│</span>  scanned & extracted<span class="m">│</span>          <span class="m">│</span>    <span class="g">Increment(...)</span>  <span class="m">│</span>
+       <span class="m">└─────────────────────┘</span>          <span class="m">└─────────────────────┘</span>          <span class="m">└──────────┬──────────┘</span>
+                                                                                  <span class="m">│</span>
+                                                                                  <span class="m">▼</span>
+       <span class="m">┌─────────────────────┐</span>          <span class="m">┌─────────────────────┐</span>          <span class="m">┌─────────────────────┐</span>
+       <span class="m">│</span>   typed UI (here)   <span class="m">│</span>          <span class="m">│</span>   decoded payload   <span class="m">│</span>          <span class="m">│</span>   parsed IDL AST    <span class="m">│</span>
+       <span class="m">│</span>  <span class="g">Counter::Increment</span> <span class="m">│</span>  <span class="m">◀───</span>  <span class="m">│</span>  <span class="g">{ delta: 5 } -> 42</span> <span class="m">│</span>  <span class="m">◀───</span>  <span class="m">│</span>  v2 parser (Pest)    <span class="m">│</span>
+       <span class="m">│</span>  args, reply, gas   <span class="m">│</span>          <span class="m">│</span>  SCALE + IDL types  <span class="m">│</span>          <span class="m">│</span>  ServiceMeta        <span class="m">│</span>
+       <span class="m">└─────────────────────┘</span>          <span class="m">└─────────────────────┘</span>          <span class="m">└─────────────────────┘</span>
+  </div>
+
+  <div class="cta-block" style="max-width: 1024px; margin: 32px auto 0;">
+    <div class="cta-text">
+      <strong>Try it.</strong> Open a real Sails program &mdash; <span class="mono-data">Counter</span> at
+      <span class="hash">0x4a3f...d128</span> &mdash; and walk through its 2 services, 7 functions, and
+      a live message we just decoded.
+    </div>
+    <a class="btn btn-primary lg" href="../../program-detail.html">EXPLORE COUNTER</a>
+  </div>
+</section>
+
+<main class="main below-fold">
+
+  <div class="section-head">
+    <h2>Recent activity · for the curious</h2>
+    <a class="btn-bracket" href="../../messages-list.html">VIEW ALL</a>
+  </div>
+
+  <div class="panel">
+    <div class="activity-feed">
+      <a class="activity-row" href="../../message-detail.html">
+        <span class="faint">14:08:22</span>
+        <span class="kind-badge kind-call">CALL</span>
+        <span><span class="muted">Counter::</span><span style="color:var(--t-100);font-weight:700">Increment</span><span class="faint">(delta: 5)</span></span>
+        <span class="hash">0x9b4c...0c44</span>
+        <span class="right faint">#18,427,019</span>
+      </a>
+      <a class="activity-row" href="../../message-detail.html">
+        <span class="faint">14:08:21</span>
+        <span class="kind-badge kind-event">EVENT</span>
+        <span><span class="muted">Vft::</span><span style="color:var(--t-100);font-weight:700">Transfer</span><span class="faint">(from, to, amount)</span></span>
+        <span class="hash">0xa1de...77f0</span>
+        <span class="right faint">#18,427,018</span>
+      </a>
+      <a class="activity-row" href="../../message-detail.html">
+        <span class="faint">14:08:19</span>
+        <span class="kind-badge kind-call">CALL</span>
+        <span><span class="muted">Vft-Manager::</span><span style="color:var(--t-100);font-weight:700">Mint</span><span class="faint">(to, amount: 1_000_000)</span></span>
+        <span class="hash">0x3f7b...2d11</span>
+        <span class="right faint">#18,427,017</span>
+      </a>
+      <a class="activity-row" href="../../message-detail.html">
+        <span class="faint">14:08:14</span>
+        <span class="kind-badge kind-error">ERROR</span>
+        <span><span class="muted">Counter::</span><span style="color:var(--t-100);font-weight:700">Increment</span><span class="faint"> reverted: Overflow { current: u32::MAX }</span></span>
+        <span class="hash">0xee01...91a4</span>
+        <span class="right faint">#18,427,015</span>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  Built on Sails-RS <span class="sep">·</span> Indexed by sails-indexer <span class="sep">·</span> Open source
+</footer>
+
+</body>
+</html>

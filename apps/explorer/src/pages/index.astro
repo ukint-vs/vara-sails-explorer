@@ -1,0 +1,106 @@
+---
+import BlockTable from "../components/BlockTable.astro";
+import Button from "../components/Button.astro";
+import Card from "../components/Card.astro";
+import Chip from "../components/Chip.astro";
+import MessageTable from "../components/MessageTable.astro";
+import MetricCard from "../components/MetricCard.astro";
+import ProgramTable from "../components/ProgramTable.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { blocks, messages, metrics, programs } from "../data/fixtures";
+---
+
+<BaseLayout title="Overview" active="overview">
+  <main class="layout">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow">Production refactor</div>
+        <h1>Make Gear programs readable as products, not just hashes.</h1>
+        <p class="lede">
+          A client-first Vara explorer shell that models live blocks, local-cache messages, Sails IDL trust,
+          and exact decode states before the Direct RPC adapter is wired in.
+        </p>
+      </div>
+      <div class="chip-row">
+        <Chip tone="info" label="Direct RPC mode" dot />
+        <Chip tone="brand" label="Sails-aware" dot />
+        <Chip tone="neutral" label="Indexed mode ready" dot />
+      </div>
+    </section>
+
+    <section class="hero-grid">
+      <div class="card search-card">
+        <div>
+          <h2>Search the live network</h2>
+          <p class="lede">
+            Paste a block, message ID, program ID, code ID, account, function name, event name, or raw Sails payload.
+          </p>
+        </div>
+        <div class="search-box">
+          <input aria-label="Explorer search" placeholder="0xb8a4... message, #18427057 block, program ID, code ID, or raw bytes" />
+          <span class="shortcut">/</span>
+        </div>
+        <div class="chip-row">
+          <Chip label="Block" />
+          <Chip label="Message" />
+          <Chip label="Program" />
+          <Chip label="Code ID" />
+          <Chip label="Raw payload" />
+        </div>
+        <div class="callout info">
+          <strong>Direct mode behavior:</strong> live blocks and local-cache messages open immediately. Old arbitrary
+          message lookup is labeled as an indexed-mode feature, not shown as a broken search result.
+        </div>
+      </div>
+
+      <Card pad body={false} className="stack">
+        <div class="split-actions">
+          <div>
+            <h3>Readable scope for this client</h3>
+            <p class="lede">Local cache · last 512 blocks</p>
+          </div>
+          <Chip tone="success" label="Healthy" dot />
+        </div>
+        <dl>
+          <div class="kv"><dt>Network</dt><dd>Vara Mainnet</dd></div>
+          <div class="kv"><dt>Data source</dt><dd><Chip tone="info" label="Direct RPC" dot compact /></dd></div>
+          <div class="kv"><dt>Cache window</dt><dd>512 blocks · local only</dd></div>
+          <div class="kv"><dt>Decode source</dt><dd>Embedded IDL + registry + user IDL</dd></div>
+        </dl>
+        <div class="toolbar">
+          <Button href="/decode" variant="primary">Open Decode Lab</Button>
+          <Button href="/compare">Review variants</Button>
+        </div>
+      </Card>
+    </section>
+
+    <section class="grid four" style="margin-top:18px">
+      {metrics.map((metric) => <MetricCard metric={metric} />)}
+    </section>
+
+    <section class="grid sidebar" style="margin-top:18px">
+      <div class="stack">
+        <Card title="Live Sails message stream" description="Rows use labeled execution, decode, and finality states.">
+          <Fragment slot="action"><Button href="/messages" size="sm">Open messages</Button></Fragment>
+          <MessageTable messages={messages.slice(0, 3)} compact />
+        </Card>
+        <Card title="Recent blocks" description="Block rows include Gear message and Sails decode context.">
+          <BlockTable blocks={blocks.slice(0, 3)} />
+        </Card>
+      </div>
+      <aside class="stack">
+        <Card title="Recently active programs" description="Program cards become typed app profiles once RPC lands.">
+          <ProgramTable programs={programs} />
+        </Card>
+        <Card pad body={false} className="stack">
+          <h3>Direct RPC honesty</h3>
+          <p class="lede">
+            This milestone keeps historical/global claims out of the UI. Global search, account history,
+            and permanent message pages belong to indexed mode.
+          </p>
+        </Card>
+      </aside>
+    </section>
+  </main>
+  <footer class="footer">Milestone 0 · Astro shell · Static fixtures · Design system extraction.</footer>
+</BaseLayout>

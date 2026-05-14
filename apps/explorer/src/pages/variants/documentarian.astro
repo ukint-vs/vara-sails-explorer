@@ -1,0 +1,46 @@
+---
+import Card from "../../components/Card.astro";
+import Chip from "../../components/Chip.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Documentarian variant" active="compare" variant="documentarian">
+  <main class="layout">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow">Variant C</div>
+        <h1>Read any program on Vara, without starting from protocol jargon.</h1>
+        <p class="lede">This direction teaches what a program, code ID, Sails IDL, interface ID, entry ID, and route index mean while still exposing raw data.</p>
+      </div>
+      <Chip tone="brand" label="Explain first" />
+    </section>
+
+    <section class="grid three">
+      <Card pad body={false} className="stack">
+        <Chip tone="info" label="Program" />
+        <h2>A deployed Gear actor.</h2>
+        <p class="lede">Programs receive messages, keep state, emit replies/events, and are identified by actor IDs.</p>
+      </Card>
+      <Card pad body={false} className="stack">
+        <Chip tone="steel" label="Code ID" />
+        <h2>Hash of uploaded Wasm code.</h2>
+        <p class="lede">Multiple programs can share one code ID, so code pages become the natural place for IDL and source trust.</p>
+      </Card>
+      <Card pad body={false} className="stack">
+        <Chip tone="brand" label="Sails IDL" />
+        <h2>The typed interface.</h2>
+        <p class="lede">IDL lets the explorer decode calls, replies, errors, constructors, events, and route metadata locally.</p>
+      </Card>
+    </section>
+
+    <section style="margin-top:18px">
+      <Card title="How decoding works" description="The documentarian mode explains header fields before showing bytes.">
+        <div class="doc-list">
+          <div class="doc-item"><span class="doc-icon">1</span><div><div class="doc-title">Read header</div><div class="doc-copy">Validate magic, version, header length, route index, and reserved byte.</div></div></div>
+          <div class="doc-item"><span class="doc-icon">2</span><div><div class="doc-title">Resolve entry</div><div class="doc-copy">Use interface_id, entry_id, and route_idx against the trusted IDL route map.</div></div></div>
+          <div class="doc-item"><span class="doc-icon">3</span><div><div class="doc-title">Decode payload</div><div class="doc-copy">Decode SCALE bytes only when the entry codec supports that path.</div></div></div>
+        </div>
+      </Card>
+    </section>
+  </main>
+</BaseLayout>

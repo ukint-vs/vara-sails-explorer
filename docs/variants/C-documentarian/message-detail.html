@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Message 0x9b4c...0c44 · Story</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body>
+
+<div class="header-bar">
+  <a class="logo" href="../../index.html">
+    <div class="logo-mark"></div>
+    <div class="logo-word">vara.eth<span class="accent">/sails</span></div>
+  </a>
+  <nav class="header-nav">
+    <a class="nav-item" href="../../index.html">[HOME]</a>
+    <a class="nav-item" href="../../messages-list.html">[PROGRAMS]</a>
+    <a class="nav-item active" href="../../messages-list.html">[MESSAGES]</a>
+    <a class="nav-item" href="../../messages-list.html">[CODES]</a>
+    <a class="nav-item" href="../../decode-tool.html">[DECODE]</a>
+  </nav>
+  <div class="header-right">
+    <div class="network-chip">
+      <div class="vara-mark"></div>
+      VARA · MAINNET
+    </div>
+    <button class="account-pill">CONNECT WALLET</button>
+  </div>
+</div>
+
+<main class="main">
+
+  <div class="section-head" style="margin-top:24px; max-width: 720px; margin-left: auto; margin-right: auto;">
+    <h2><a class="faint" href="../../messages-list.html">messages</a> / 0x9b4c...0c44 · story</h2>
+    <div style="display:flex; gap:8px;">
+      <a class="btn-bracket" href="../../message-detail.html">A1 STACKED</a>
+      <a class="btn-bracket" href="../B-operator/message-detail.html">A2 SPLIT</a>
+    </div>
+  </div>
+
+  <article class="story-detail">
+
+    <div class="prose">
+      <p>
+        <span class="ic">0xdA17...1ec7</span> called <strong>Counter::Increment</strong><span style="color:var(--t-50)">(delta: <span class="ic">5</span>)</span> on the <strong>Counter</strong> program
+        <span style="color:var(--t-50)">(<span class="ic">0x4a3f...d128</span>, codeId <span class="ic">0x91be...7af2</span>)</span>,
+        routed to interface <span class="ic">0x7a8f3c2b94d016ee</span> at <span class="ic">route_idx=1</span>.
+      </p>
+      <p>
+        The call landed in block <strong>#18,427,019</strong> at <strong>14:08:22 UTC</strong> and was finalized one block later.
+        It returned <strong><span class="ic">u32(42)</span></strong> in block <span class="ic">#18,427,020</span> after burning
+        <span class="ic">17.4M wasm-gas</span> out of a <span class="ic">50M</span> limit, with no value transferred.
+      </p>
+      <p>
+        The reply was <strong>Success</strong>. The Counter then emitted one event &mdash;
+        <strong>Counter::Incremented</strong><span style="color:var(--t-50)">{ by: <span class="ic">5</span>, new_value: <span class="ic">42</span> }</span> &mdash;
+        which the indexer decoded against the same <span class="ic">sails:idl</span> section embedded in the program's WASM.
+      </p>
+      <p>
+        End to end, the explorer spent <strong>142µs</strong> decoding 20 bytes &mdash; 16 bytes of Sails header plus a 4-byte
+        SCALE-encoded <span class="ic">u32</span>. No trailing bytes. No ambiguity.
+      </p>
+
+      <div class="status-line">
+        <span><span class="k faint">status</span> <span class="v">OK</span></span>
+        <span><span class="k faint">decode</span> <span class="v">142µs</span></span>
+        <span><span class="k faint">bytes</span> <span class="v">20/20</span></span>
+        <span><span class="k faint">gas</span> <span class="v">17.4M</span></span>
+      </div>
+    </div>
+
+    <details class="section">
+      <summary><span>Args (decoded)</span><span class="faint">delta: u32</span></summary>
+      <div class="section-body">
+        <div class="json-tree"><span class="punct">{</span>
+  <span class="key">"delta"</span><span class="punct">:</span> <span class="num">5</span>
+<span class="punct">}</span></div>
+      </div>
+    </details>
+
+    <details class="section">
+      <summary><span>Reply</span><span class="faint">u32(42)</span></summary>
+      <div class="section-body">
+        <div class="json-tree"><span class="punct">{</span>
+  <span class="key">"entry"</span><span class="punct">:</span> <span class="punct">{</span>
+    <span class="key">"service"</span><span class="punct">:</span> <span class="str">"Counter"</span><span class="punct">,</span>
+    <span class="key">"fn"</span><span class="punct">:</span> <span class="str">"Increment"</span>
+  <span class="punct">},</span>
+  <span class="key">"result"</span><span class="punct">:</span> <span class="num">42</span>
+<span class="punct">}</span></div>
+      </div>
+    </details>
+
+    <details class="section">
+      <summary><span>Raw bytes</span><span class="faint">20 B</span></summary>
+      <div class="section-body">
+        <div class="raw-body" style="padding:0;">
+          <div class="hex-line"><span class="label">magic</span><span class="bytes">47 4d</span> <span class="faint">"GM"</span></div>
+          <div class="hex-line"><span class="label">version</span><span class="bytes">01</span></div>
+          <div class="hex-line"><span class="label">hlen</span><span class="bytes">10</span> <span class="faint">16 bytes</span></div>
+          <div class="hex-line"><span class="label">interface_id</span><span class="bytes">ee 16 d0 94 2b 3c 8f 7a</span></div>
+          <div class="hex-line"><span class="label">entry_id</span><span class="bytes">2f 81</span></div>
+          <div class="hex-line"><span class="label">route_idx</span><span class="bytes">01</span></div>
+          <div class="hex-line"><span class="label">reserved</span><span class="bytes">00</span></div>
+          <div class="hex-line"><span class="label">payload</span><span class="bytes">05 00 00 00</span> <span class="faint">u32(5)</span></div>
+        </div>
+      </div>
+    </details>
+
+    <details class="section">
+      <summary><span>Gas</span><span class="faint">17,402,118 / 50,000,000</span></summary>
+      <div class="section-body">
+        <dl class="kv-grid">
+          <dt>gas limit</dt><dd class="mono-data">50,000,000</dd>
+          <dt>gas used</dt><dd class="mono-data">17,402,118 <span class="faint">(34.8%)</span></dd>
+          <dt>value</dt><dd class="mono-data">0.000000000000 TVARA</dd>
+          <dt>reply deposit</dt><dd class="mono-data">0</dd>
+        </dl>
+      </div>
+    </details>
+
+    <details class="section">
+      <summary><span>Reply chain &amp; events</span><span class="faint">1 reply, 1 event</span></summary>
+      <div class="section-body">
+        <p style="margin:0 0 12px; font-size:12px; color: var(--t-75);">
+          The call's effect chain, in order:
+        </p>
+        <ul style="margin:0; padding-left: 18px; font-size: 12px; line-height: 1.9;">
+          <li>CALL <span style="color:var(--t-100);font-weight:700">Counter::Increment</span> <span class="hash">0x9b4c...0c44</span></li>
+          <li>REPLY <span class="mono-data">u32(42)</span> <span class="hash">0x9b4c...0c45</span> <span class="faint">(block +1)</span></li>
+          <li>EVENT <span style="color:var(--t-100);font-weight:700">Counter::Incremented</span><span class="faint">{ by: 5, new_value: 42 }</span></li>
+        </ul>
+      </div>
+    </details>
+
+  </article>
+
+</main>
+
+<footer class="footer">
+  Built on Sails-RS <span class="sep">·</span> Indexed by sails-indexer <span class="sep">·</span> Open source
+</footer>
+
+</body>
+</html>

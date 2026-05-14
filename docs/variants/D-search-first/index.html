@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vara Sails Explorer · Search</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body class="v-search-first">
+
+<div class="header-bar">
+  <a class="logo" href="../../index.html">
+    <div class="logo-mark"></div>
+    <div class="logo-word">vara.eth<span class="accent">/sails</span></div>
+  </a>
+  <nav class="header-nav">
+    <a class="nav-item active" href="index.html">[HOME]</a>
+    <a class="nav-item" href="../../messages-list.html">[PROGRAMS]</a>
+    <a class="nav-item" href="../../messages-list.html">[MESSAGES]</a>
+    <a class="nav-item" href="../../messages-list.html">[CODES]</a>
+    <a class="nav-item" href="../../decode-tool.html">[DECODE]</a>
+  </nav>
+  <div class="header-right">
+    <div class="network-chip">
+      <div class="vara-mark"></div>
+      VARA · MAINNET
+    </div>
+    <button class="account-pill">CONNECT WALLET</button>
+  </div>
+</div>
+
+<section class="search-stage">
+  <form class="search-prompt" onsubmit="return false;">
+    <span class="prefix">&gt;</span>
+    <input id="q" type="text" placeholder="0x4a3f...   or   Counter::Increment   or   program: vNFT" autofocus />
+    <span class="kbd">⏎</span>
+  </form>
+
+  <div class="scope-chips">
+    <button class="scope active">Programs <span class="n">· 412</span></button>
+    <button class="scope">Messages <span class="n">· 8.2M</span></button>
+    <button class="scope">Events <span class="n">· 3.1M</span></button>
+    <button class="scope">Codes <span class="n">· 188</span></button>
+  </div>
+
+  <div class="hint-row">
+    paste a tx hash, programId, codeId, or type a function/event name &mdash; try
+    <span class="ic">Counter::Increment</span> &middot; <span class="ic">0xdA17...1ec7</span> &middot; <span class="ic">vft</span>
+  </div>
+</section>
+
+<section class="below-strip">
+  <div class="ticker">
+    <span class="n">147</span> messages in the last block <span class="faint">·</span>
+    head <span class="n">#18,427,019</span> <span class="faint">·</span>
+    indexer lag <span class="n">0</span>
+  </div>
+
+  <div class="section-head" style="margin-top: 0;">
+    <h2>Recently active programs</h2>
+    <a class="btn-bracket" href="../../messages-list.html">VIEW ALL</a>
+  </div>
+
+  <div class="mini-tile-grid">
+    <a class="mini-tile" href="../../program-detail.html">
+      <div class="nm">Counter</div>
+      <div class="id">0x4a3f...d128</div>
+      <div class="ct">2,481 msgs 24h</div>
+    </a>
+    <a class="mini-tile" href="../../program-detail.html">
+      <div class="nm">Vft-Manager</div>
+      <div class="id">0xb201...4f7a</div>
+      <div class="ct">18,927 msgs 24h</div>
+    </a>
+    <a class="mini-tile" href="../../program-detail.html">
+      <div class="nm">Rmrk-Resource</div>
+      <div class="id">0xdc8e...19a3</div>
+      <div class="ct">934 msgs 24h</div>
+    </a>
+    <a class="mini-tile" href="../../program-detail.html">
+      <div class="nm">Bridge-Builtin</div>
+      <div class="id">0x0083...0001</div>
+      <div class="ct">5,612 msgs 24h</div>
+    </a>
+    <a class="mini-tile" href="../../program-detail.html">
+      <div class="nm">Dex-Pool</div>
+      <div class="id">0x6f1c...e21b</div>
+      <div class="ct">3,108 msgs 24h</div>
+    </a>
+    <a class="mini-tile" href="../../program-detail.html">
+      <div class="nm">Multisig</div>
+      <div class="id">0xae71...c509</div>
+      <div class="ct">217 msgs 24h</div>
+    </a>
+  </div>
+</section>
+
+<footer class="footer">
+  Built on Sails-RS <span class="sep">·</span> Indexed by sails-indexer <span class="sep">·</span> Open source
+</footer>
+
+<script>
+  // Cycle placeholder text to hint at supported query shapes.
+  (function () {
+    var input = document.getElementById('q');
+    if (!input) return;
+    var samples = [
+      '0x4a3f...d128',
+      'Counter::Increment',
+      'program: vNFT',
+      '0x9b4c...0c44   (a message hash)',
+      'event: Transfer',
+      'codeId: 0x91be...7af2'
+    ];
+    var i = 0;
+    setInterval(function () {
+      if (document.activeElement === input || input.value) return;
+      i = (i + 1) % samples.length;
+      input.setAttribute('placeholder', samples[i]);
+    }, 2200);
+  })();
+</script>
+
+</body>
+</html>

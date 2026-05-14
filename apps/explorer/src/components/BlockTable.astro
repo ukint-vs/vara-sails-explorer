@@ -1,0 +1,36 @@
+---
+import type { ExplorerBlock } from "../data/types";
+import StatusChip from "./StatusChip.astro";
+
+interface Props {
+  blocks: ExplorerBlock[];
+}
+
+const { blocks } = Astro.props;
+---
+
+<div class="table blocks">
+  <div class="table-head">
+    <span>Block</span>
+    <span>Time</span>
+    <span>Hash</span>
+    <span>Finality</span>
+    <span>Gear messages</span>
+    <span>Sails decoded</span>
+  </div>
+  {
+    blocks.map((block) => (
+      <a class="table-row" href="/blocks" data-searchable>
+        <div class="cell-main mono">{block.number}</div>
+        <div class="cell-sub mono">{block.timestamp}</div>
+        <div class="hash">{block.hash}</div>
+        <div><StatusChip kind="finality" value={block.finality} compact /></div>
+        <div class="cell-stack">
+          <span class="cell-main">{block.gearMessages}</span>
+          <span class="cell-sub">{block.extrinsics} extrinsics · {block.events} events</span>
+        </div>
+        <div class="cell-main">{block.decodedSails}/{block.gearMessages}</div>
+      </a>
+    ))
+  }
+</div>

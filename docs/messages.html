@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Messages · Vara Sails Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="theme.js"></script>
+</head>
+<body>
+
+<div class="header-bar">
+  <a class="logo" href="index.html">
+    <div class="logo-mark"></div>
+    <div class="logo-word">vara.eth<span class="accent">/sails</span></div>
+  </a>
+  <button class="hamburger" aria-label="menu" onclick="document.querySelector('.header-nav').classList.toggle('open')"></button>
+  <nav class="header-nav">
+    <a class="nav-item" href="index.html">[HOME]</a>
+    <a class="nav-item" href="blocks.html">[BLOCKS]</a>
+    <a class="nav-item nav-active" href="messages.html">[MESSAGES]</a>
+    <a class="nav-item" href="index.html#top-programs" title="// programs index TBD">[PROGRAMS]</a>
+    <a class="nav-item" href="#" title="// codes index TBD">[CODES]</a>
+    <a class="nav-item" href="decode-tool.html">[DECODE]</a>
+  </nav>
+  <div class="header-search">
+    <input id="header-q" placeholder="0xmessageId — also serves the jump-to box below" autocomplete="off" />
+    <span class="kbd-hint">/</span>
+  </div>
+  <div class="header-right">
+    <details class="net-wrap">
+      <summary class="network-chip">
+        <div class="vara-mark"></div>
+        VARA · MAINNET
+      </summary>
+      <div class="net-menu">
+        <div class="net-opt active"><span class="dot green"></span><span class="name">VARA · MAINNET</span><span class="check">[✓]</span></div>
+        <div class="net-opt"><span class="dot green"></span><span class="name">VARA · TESTNET</span></div>
+        <div class="net-opt"><span class="dot amber"></span><span class="name">LOCAL · DEV</span></div>
+        <div class="net-opt"><span class="dot muted"></span><span class="name">[+ ADD CUSTOM RPC]</span></div>
+      </div>
+    </details>
+    <button class="theme-toggle" data-theme-toggle aria-label="toggle theme" title="// click to switch theme">[LIGHT]</button>
+    <details class="wallet-wrap">
+      <summary class="account-pill">[CONNECT WALLET]</summary>
+      <div class="wallet-menu">
+        <div class="w-head">pick a wallet</div>
+        <div class="w-opt"><span class="ic"></span> Polkadot{.js}</div>
+        <div class="w-opt"><span class="ic"></span> Talisman</div>
+        <div class="w-opt"><span class="ic"></span> SubWallet</div>
+        <div class="w-opt"><span class="ic"></span> Nova</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- Persistent network-stats mini-row -->
+<section class="netstats mini">
+  <div class="netstat">
+    <span class="k"><span class="live-dot"></span>MSG/S</span>
+    <span class="v">487</span>
+    <span class="sub">peak: <span class="n">1,247</span></span>
+  </div>
+  <div class="netstat">
+    <span class="k">TOTAL MESSAGES</span>
+    <span class="v">20,416</span>
+    <span class="sub">24h running</span>
+  </div>
+  <div class="netstat">
+    <span class="k">ACTIVE PROGRAMS</span>
+    <span class="v">1,284</span>
+    <span class="sub"><span class="n">+12</span> today</span>
+  </div>
+  <div class="netstat">
+    <span class="k">ERROR RATE</span>
+    <span class="v">0.23%</span>
+    <span class="sub">err <span class="n">47</span> / <span class="n">20,416</span></span>
+  </div>
+</section>
+
+<main class="main" style="margin-top: 0; padding-top: 0;">
+
+  <div class="page-head">
+    <h1>MESSAGES (NETWORK)</h1>
+    <div class="right">
+      <span class="refresh-chip">auto-refresh · last: <span class="n">3s ago</span></span>
+      <button class="btn-export">EXPORT CSV</button>
+    </div>
+  </div>
+
+  <div class="panel" style="border-top: none; border-radius: 0;">
+    <div class="filter-bar">
+      <button class="btn-chip active">ALL</button>
+      <button class="btn-chip">CALL</button>
+      <button class="btn-chip">QUERY</button>
+      <button class="btn-chip">EVENT</button>
+      <button class="btn-chip">CTOR</button>
+      <button class="btn-chip">ERROR</button>
+
+      <select class="select" style="margin-left: 12px;">
+        <option>PROGRAM — ALL</option>
+        <option>Counter</option>
+        <option>Vft-Manager</option>
+        <option>Dex-Pool</option>
+        <option>Rmrk-Resource</option>
+        <option>Bridge-Builtin</option>
+        <option>Multisig</option>
+        <option>Auditor</option>
+      </select>
+
+      <select class="select">
+        <option>FUNCTION — ALL</option>
+        <option>Increment</option>
+        <option>Transfer</option>
+        <option>Swap</option>
+        <option>BalanceOf</option>
+        <option>Mint</option>
+      </select>
+
+      <select class="select">
+        <option>DECODE — ALL</option>
+        <option>OK</option>
+        <option>NON-OK</option>
+        <option>TRAILING-BYTES</option>
+        <option>NO-ENTRY</option>
+        <option>AMBIGUOUS-ROUTE</option>
+      </select>
+
+      <select class="select">
+        <option>LAST 1h</option>
+        <option>LAST 24h</option>
+        <option>LAST 7d</option>
+        <option>ALL TIME</option>
+      </select>
+
+      <input class="search-input" placeholder="filter by source actor..." style="margin-left:auto; height: 36px; flex: 0 0 240px;" />
+    </div>
+
+    <table class="data">
+      <thead>
+        <tr>
+          <th>HASH</th>
+          <th>AGE</th>
+          <th>KIND</th>
+          <th>PROGRAM</th>
+          <th>FUNCTION / EVENT</th>
+          <th>SOURCE</th>
+          <th>BLOCK ↕</th>
+          <th>STATUS</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x9b4c...0c44</a><span class="icon copy-ic" data-copy="0x9b4cf18a3d2e10ab9d1cea4fe72b1f8a8c0a2914b3d57f29c4f9e1b0a76d0c44">⎘</span><span class="tip"><span class="k">messageId · canonical</span>0x9b4cf18a3d2e10ab9d1cea4fe72b1f8a8c0a2914b3d57f29c4f9e1b0a76d0c44</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:56Z">4s ago<span class="tip">2026-05-14 14:08:56 UTC<span class="age">#18,427,057</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0x4a3f...d128</a><span class="icon copy-ic" data-copy="0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128">⎘</span></span> <span class="faint">· Counter</span></td>
+          <td class="fn">Increment <span class="muted faint" style="font-weight:400;">(delta: 5)</span></td>
+          <td><span class="addr"><span class="h">0xdA17...1ec7</span><span class="icon copy-ic" data-copy="0xdA17e3f5c419b002afb8e6e9c4f10a2299c1fbe7c0d1244c2110a98b5e7a1ec7">⎘</span></span></td>
+          <td class="mono-data">18,427,057</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0xa1de...77f0</a><span class="icon copy-ic" data-copy="0xa1de00112233445566778899aabbccddeeff00112233445566778899aab77f0">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:53Z">7s ago<span class="tip">2026-05-14 14:08:53 UTC<span class="age">#18,427,056</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-event">EVENT</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0xb201...4f7a</a><span class="icon copy-ic" data-copy="0xb2014a0e7f5b1d22c8e0f31b7e9a40b8c2901e6dd4e0a1c0ff20a3e7d4e54f7a">⎘</span></span> <span class="faint">· Vft-Manager</span></td>
+          <td class="fn">Transfer <span class="muted faint" style="font-weight:400;">{ from, to, amount }</span></td>
+          <td><span class="addr"><span class="h">0xa1de...77f0</span><span class="icon copy-ic" data-copy="0xa1de00112233445566778899aabbccddeeff00112233445566778899aab77f0">⎘</span></span></td>
+          <td class="mono-data">18,427,056</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0xfa10...0099</a><span class="icon copy-ic" data-copy="0xfa100011223344556677889900aabbccddeeff0011223344556677889900099">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:50Z">10s ago<span class="tip">2026-05-14 14:08:50 UTC<span class="age">#18,427,055</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0x6f1c...e21b</a><span class="icon copy-ic" data-copy="0x6f1c0a01b22e30c40b50e60f70a81c92e3a4b5c6d7e8f90a1b2c3d4e5f6e21b">⎘</span></span> <span class="faint">· Dex-Pool</span></td>
+          <td class="fn">Swap <span class="muted faint" style="font-weight:400;">(token_in, token_out, amount)</span></td>
+          <td><span class="addr"><span class="h">0xfa10...0099</span><span class="icon copy-ic" data-copy="0xfa100011223344556677889900aabbccddeeff0011223344556677889900099">⎘</span></span></td>
+          <td class="mono-data">18,427,055</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0xee01...91a4</a><span class="icon copy-ic" data-copy="0xee010011223344556677889900aabbccddeeff001122334455667788991a4">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:47Z">13s ago<span class="tip">2026-05-14 14:08:47 UTC<span class="age">#18,427,054</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-error">ERROR</span><span class="stat-dot err"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0x4a3f...d128</a><span class="icon copy-ic" data-copy="0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128">⎘</span></span> <span class="faint">· Counter</span></td>
+          <td class="fn">Increment <span class="muted faint" style="font-weight:400;">(delta: 1) → Overflow { current: u32::MAX }</span></td>
+          <td><span class="addr"><span class="h">0xee01...91a4</span><span class="icon copy-ic" data-copy="0xee010011223344556677889900aabbccddeeff001122334455667788991a4">⎘</span></span></td>
+          <td class="mono-data">18,427,054</td>
+          <td><span class="pill pill-err">PANIC</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0xcc4f...8e22</a><span class="icon copy-ic" data-copy="0xcc4f0011223344556677889900aabbccddeeff001122334455667788998e22">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:44Z">16s ago<span class="tip">2026-05-14 14:08:44 UTC<span class="age">#18,427,053</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-event">EVENT</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0xdc8e...19a3</a><span class="icon copy-ic" data-copy="0xdc8e6440a1f02ed11b3e8f8c0a1b2c3d4e5f60718293a4b5c6d7e8f90a1b19a3">⎘</span></span> <span class="faint">· Rmrk-Resource</span></td>
+          <td class="fn">ResourceAdded <span class="muted faint" style="font-weight:400;">{ token_id, resource_id }</span></td>
+          <td><span class="addr"><span class="h">0xcc4f...8e22</span><span class="icon copy-ic" data-copy="0xcc4f0011223344556677889900aabbccddeeff001122334455667788998e22">⎘</span></span></td>
+          <td class="mono-data">18,427,053</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <!-- decode_status != ok: trailing-bytes -->
+        <tr class="decode-unknown" onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x77ec...4b81</a><span class="icon copy-ic" data-copy="0x77ec0011223344556677889900aabbccddeeff00112233445566778899004b81">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:41Z">19s ago<span class="tip">2026-05-14 14:08:41 UTC<span class="age">#18,427,052</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot warn"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0x4a3f...d128</a><span class="icon copy-ic" data-copy="0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128">⎘</span></span> <span class="faint">· Counter</span></td>
+          <td class="muted">Unknown payload <span class="faint">— route_idx=1, entry_id=0x812f</span></td>
+          <td><span class="addr"><span class="h">0x77ec...4b81</span><span class="icon copy-ic" data-copy="0x77ec0011223344556677889900aabbccddeeff00112233445566778899004b81">⎘</span></span></td>
+          <td class="mono-data">18,427,052</td>
+          <td><span class="pill pill-warn">TRAILING-BYTES</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x7a22...c5ff</a><span class="icon copy-ic" data-copy="0x7a220011223344556677889900aabbccddeeff00112233445566778899c5ff">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:38Z">22s ago<span class="tip">2026-05-14 14:08:38 UTC<span class="age">#18,427,051</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-query">QUERY</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0xb201...4f7a</a><span class="icon copy-ic" data-copy="0xb2014a0e7f5b1d22c8e0f31b7e9a40b8c2901e6dd4e0a1c0ff20a3e7d4e54f7a">⎘</span></span> <span class="faint">· Vft-Manager</span></td>
+          <td class="fn">BalanceOf <span class="muted faint" style="font-weight:400;">(account)</span></td>
+          <td><span class="addr"><span class="h">0x7a22...c5ff</span><span class="icon copy-ic" data-copy="0x7a220011223344556677889900aabbccddeeff00112233445566778899c5ff">⎘</span></span></td>
+          <td class="mono-data">18,427,051</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x3f7b...2d11</a><span class="icon copy-ic" data-copy="0x3f7b00aabbccddeeff0011223344556677889900aabbccddeeff00112233d11">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:35Z">25s ago<span class="tip">2026-05-14 14:08:35 UTC<span class="age">#18,427,050</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0xb201...4f7a</a><span class="icon copy-ic" data-copy="0xb2014a0e7f5b1d22c8e0f31b7e9a40b8c2901e6dd4e0a1c0ff20a3e7d4e54f7a">⎘</span></span> <span class="faint">· Vft-Manager</span></td>
+          <td class="fn">Mint <span class="muted faint" style="font-weight:400;">(to, amount: 1_000_000)</span></td>
+          <td><span class="addr"><span class="h">0x3f7b...2d11</span><span class="icon copy-ic" data-copy="0x3f7b00aabbccddeeff0011223344556677889900aabbccddeeff00112233d11">⎘</span></span></td>
+          <td class="mono-data">18,427,050</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <!-- decode_status != ok: no-entry -->
+        <tr class="decode-unknown" onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x4a3f...d128</a><span class="icon copy-ic" data-copy="0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:32Z">28s ago<span class="tip">2026-05-14 14:08:32 UTC<span class="age">#18,427,049</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-event">EVENT</span><span class="stat-dot muted"></span></span></td>
+          <td class="muted">— <span class="faint">unknown program</span></td>
+          <td class="muted">Unknown payload <span class="faint">— interface_id=0x3e29a1d77c40bf12</span></td>
+          <td><span class="addr"><span class="h">0x4a3f...d128</span><span class="icon copy-ic" data-copy="0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128">⎘</span></span></td>
+          <td class="mono-data">18,427,049</td>
+          <td><span class="pill pill-warn">NO-ENTRY</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x002c...41ab</a><span class="icon copy-ic" data-copy="0x002c0011223344556677889900aabbccddeeff0011223344556677889941ab">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:29Z">31s ago<span class="tip">2026-05-14 14:08:29 UTC<span class="age">#18,427,048</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-ctor">CTOR</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0x4a3f...d128</a><span class="icon copy-ic" data-copy="0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128">⎘</span></span> <span class="faint">· Counter</span></td>
+          <td class="fn">New <span class="muted faint" style="font-weight:400;">(initial: 0)</span></td>
+          <td><span class="addr"><span class="h">0xdA17...1ec7</span><span class="icon copy-ic" data-copy="0xdA17e3f5c419b002afb8e6e9c4f10a2299c1fbe7c0d1244c2110a98b5e7a1ec7">⎘</span></span></td>
+          <td class="mono-data">18,427,048</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <!-- decode_status != ok: ambiguous-route -->
+        <tr class="decode-unknown" onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x66a2...7700</a><span class="icon copy-ic" data-copy="0x66a200112233445566778899aabbccddeeff00112233445566778899007700">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:26Z">34s ago<span class="tip">2026-05-14 14:08:26 UTC<span class="age">#18,427,047</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot warn"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0x4a3f...d128</a><span class="icon copy-ic" data-copy="0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128">⎘</span></span> <span class="faint">· Counter</span></td>
+          <td class="muted">Unknown payload <span class="faint">— ambiguous route (route_idx=0)</span></td>
+          <td><span class="addr"><span class="h">0x66a2...7700</span><span class="icon copy-ic" data-copy="0x66a200112233445566778899aabbccddeeff00112233445566778899007700">⎘</span></span></td>
+          <td class="mono-data">18,427,047</td>
+          <td><span class="pill pill-warn">AMBIGUOUS-ROUTE</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x88b1...0540</a><span class="icon copy-ic" data-copy="0x88b10011223344556677889900aabbccddeeff001122334455667788990540">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:23Z">37s ago<span class="tip">2026-05-14 14:08:23 UTC<span class="age">#18,427,046</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0x0083...0001</a><span class="icon copy-ic" data-copy="0x0083000000000000000000000000000000000000000000000000000000000001">⎘</span></span> <span class="faint">· Bridge-Builtin</span></td>
+          <td class="fn">Bridge <span class="muted faint" style="font-weight:400;">(dest_chain: eth, amount)</span></td>
+          <td><span class="addr"><span class="h">0xdA17...1ec7</span><span class="icon copy-ic" data-copy="0xdA17e3f5c419b002afb8e6e9c4f10a2299c1fbe7c0d1244c2110a98b5e7a1ec7">⎘</span></span></td>
+          <td class="mono-data">18,427,046</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0xc100...22d0</a><span class="icon copy-ic" data-copy="0xc1000011223344556677889900aabbccddeeff00112233445566778899022d0">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:20Z">40s ago<span class="tip">2026-05-14 14:08:20 UTC<span class="age">#18,427,045</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-event">EVENT</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0x6f1c...e21b</a><span class="icon copy-ic" data-copy="0x6f1c0a01b22e30c40b50e60f70a81c92e3a4b5c6d7e8f90a1b2c3d4e5f6e21b">⎘</span></span> <span class="faint">· Dex-Pool</span></td>
+          <td class="fn">Swapped <span class="muted faint" style="font-weight:400;">{ user, in: 100, out: 98 }</span></td>
+          <td><span class="addr"><span class="h">0xfa10...0099</span><span class="icon copy-ic" data-copy="0xfa100011223344556677889900aabbccddeeff0011223344556677889900099">⎘</span></span></td>
+          <td class="mono-data">18,427,045</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x11a8...77c2</a><span class="icon copy-ic" data-copy="0x11a80011223344556677889900aabbccddeeff0011223344556677889977c2">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:17Z">43s ago<span class="tip">2026-05-14 14:08:17 UTC<span class="age">#18,427,044</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-event">EVENT</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0xb201...4f7a</a><span class="icon copy-ic" data-copy="0xb2014a0e7f5b1d22c8e0f31b7e9a40b8c2901e6dd4e0a1c0ff20a3e7d4e54f7a">⎘</span></span> <span class="faint">· Vft-Manager</span></td>
+          <td class="fn">Minted <span class="muted faint" style="font-weight:400;">{ to, amount: 1_000_000 }</span></td>
+          <td><span class="addr"><span class="h">0x3f7b...2d11</span><span class="icon copy-ic" data-copy="0x3f7b00aabbccddeeff0011223344556677889900aabbccddeeff00112233d11">⎘</span></span></td>
+          <td class="mono-data">18,427,044</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x2244...88aa</a><span class="icon copy-ic" data-copy="0x22440011223344556677889900aabbccddeeff0011223344556677889988aa">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:14Z">46s ago<span class="tip">2026-05-14 14:08:14 UTC<span class="age">#18,427,043</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0xae71...c509</a><span class="icon copy-ic" data-copy="0xae710000000000000000000000000000000000000000000000000000000c509">⎘</span></span> <span class="faint">· Multisig</span></td>
+          <td class="fn">Propose <span class="muted faint" style="font-weight:400;">(call: 0x...)</span></td>
+          <td><span class="addr"><span class="h">0xdA17...1ec7</span><span class="icon copy-ic" data-copy="0xdA17e3f5c419b002afb8e6e9c4f10a2299c1fbe7c0d1244c2110a98b5e7a1ec7">⎘</span></span></td>
+          <td class="mono-data">18,427,043</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x5601...ab09</a><span class="icon copy-ic" data-copy="0x56010011223344556677889900aabbccddeeff00112233445566778899ab09">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:11Z">49s ago<span class="tip">2026-05-14 14:08:11 UTC<span class="age">#18,427,042</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-query">QUERY</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0x4a3f...d128</a><span class="icon copy-ic" data-copy="0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128">⎘</span></span> <span class="faint">· Counter</span></td>
+          <td class="fn">Value <span class="muted faint" style="font-weight:400;">()</span></td>
+          <td><span class="addr"><span class="h">0x91c0...0a01</span><span class="icon copy-ic" data-copy="0x91c00011223344556677889900aabbccddeeff00112233445566778899000a01">⎘</span></span></td>
+          <td class="mono-data">18,427,042</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x9881...12cc</a><span class="icon copy-ic" data-copy="0x98810011223344556677889900aabbccddeeff001122334455667788991212cc">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:08Z">52s ago<span class="tip">2026-05-14 14:08:08 UTC<span class="age">#18,427,041</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-event">EVENT</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0xb201...4f7a</a><span class="icon copy-ic" data-copy="0xb2014a0e7f5b1d22c8e0f31b7e9a40b8c2901e6dd4e0a1c0ff20a3e7d4e54f7a">⎘</span></span> <span class="faint">· Vft-Manager</span></td>
+          <td class="fn">Approval <span class="muted faint" style="font-weight:400;">{ owner, spender, amount }</span></td>
+          <td><span class="addr"><span class="h">0x7a22...c5ff</span><span class="icon copy-ic" data-copy="0x7a220011223344556677889900aabbccddeeff00112233445566778899c5ff">⎘</span></span></td>
+          <td class="mono-data">18,427,041</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0xae20...0c70</a><span class="icon copy-ic" data-copy="0xae200011223344556677889900aabbccddeeff00112233445566778899000c70">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:05Z">55s ago<span class="tip">2026-05-14 14:08:05 UTC<span class="age">#18,427,040</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0x4a3f...d128</a><span class="icon copy-ic" data-copy="0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128">⎘</span></span> <span class="faint">· Counter</span></td>
+          <td class="fn">Increment <span class="muted faint" style="font-weight:400;">(delta: 12)</span></td>
+          <td><span class="addr"><span class="h">0xdA17...1ec7</span><span class="icon copy-ic" data-copy="0xdA17e3f5c419b002afb8e6e9c4f10a2299c1fbe7c0d1244c2110a98b5e7a1ec7">⎘</span></span></td>
+          <td class="mono-data">18,427,040</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x44dd...2233</a><span class="icon copy-ic" data-copy="0x44dd0011223344556677889900aabbccddeeff001122334455667788992233">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:02Z">58s ago<span class="tip">2026-05-14 14:08:02 UTC<span class="age">#18,427,039</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-event">EVENT</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0xb201...4f7a</a><span class="icon copy-ic" data-copy="0xb2014a0e7f5b1d22c8e0f31b7e9a40b8c2901e6dd4e0a1c0ff20a3e7d4e54f7a">⎘</span></span> <span class="faint">· Vft-Manager</span></td>
+          <td class="fn">Burned <span class="muted faint" style="font-weight:400;">{ from, amount }</span></td>
+          <td><span class="addr"><span class="h">0x7a22...c5ff</span><span class="icon copy-ic" data-copy="0x7a220011223344556677889900aabbccddeeff00112233445566778899c5ff">⎘</span></span></td>
+          <td class="mono-data">18,427,039</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0xbb99...0011</a><span class="icon copy-ic" data-copy="0xbb990011223344556677889900aabbccddeeff001122334455667788990011">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:07:59Z">1m ago<span class="tip">2026-05-14 14:07:59 UTC<span class="age">#18,427,038</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0x6f1c...e21b</a><span class="icon copy-ic" data-copy="0x6f1c0a01b22e30c40b50e60f70a81c92e3a4b5c6d7e8f90a1b2c3d4e5f6e21b">⎘</span></span> <span class="faint">· Dex-Pool</span></td>
+          <td class="fn">AddLiquidity <span class="muted faint" style="font-weight:400;">(amount_a, amount_b)</span></td>
+          <td><span class="addr"><span class="h">0xfa10...0099</span><span class="icon copy-ic" data-copy="0xfa100011223344556677889900aabbccddeeff0011223344556677889900099">⎘</span></span></td>
+          <td class="mono-data">18,427,038</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0xff10...5500</a><span class="icon copy-ic" data-copy="0xff100011223344556677889900aabbccddeeff001122334455667788995500">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:07:56Z">1m ago<span class="tip">2026-05-14 14:07:56 UTC<span class="age">#18,427,037</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-event">EVENT</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0xdc8e...19a3</a><span class="icon copy-ic" data-copy="0xdc8e6440a1f02ed11b3e8f8c0a1b2c3d4e5f60718293a4b5c6d7e8f90a1b19a3">⎘</span></span> <span class="faint">· Rmrk-Resource</span></td>
+          <td class="fn">EquipperChanged <span class="muted faint" style="font-weight:400;">{ token, equipper }</span></td>
+          <td><span class="addr"><span class="h">0xcc4f...8e22</span><span class="icon copy-ic" data-copy="0xcc4f0011223344556677889900aabbccddeeff001122334455667788998e22">⎘</span></span></td>
+          <td class="mono-data">18,427,037</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x83ee...c2c2</a><span class="icon copy-ic" data-copy="0x83ee0011223344556677889900aabbccddeeff00112233445566778899c2c2">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:07:53Z">1m ago<span class="tip">2026-05-14 14:07:53 UTC<span class="age">#18,427,036</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0xae71...c509</a><span class="icon copy-ic" data-copy="0xae710000000000000000000000000000000000000000000000000000000c509">⎘</span></span> <span class="faint">· Multisig</span></td>
+          <td class="fn">Approve <span class="muted faint" style="font-weight:400;">(proposal_id: 0x82)</span></td>
+          <td><span class="addr"><span class="h">0x82c0...4400</span><span class="icon copy-ic" data-copy="0x82c00011223344556677889900aabbccddeeff001122334455667788994400">⎘</span></span></td>
+          <td class="mono-data">18,427,036</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x21aa...0099</a><span class="icon copy-ic" data-copy="0x21aa0011223344556677889900aabbccddeeff001122334455667788990099">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:07:50Z">1m ago<span class="tip">2026-05-14 14:07:50 UTC<span class="age">#18,427,035</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-query">QUERY</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0xab19...ce20</a><span class="icon copy-ic" data-copy="0xab190011223344556677889900aabbccddeeff00112233445566778899ce20">⎘</span></span> <span class="faint">· Auditor</span></td>
+          <td class="fn">History <span class="muted faint" style="font-weight:400;">(limit: 50)</span></td>
+          <td><span class="addr"><span class="h">0xab19...ce20</span><span class="icon copy-ic" data-copy="0xab190011223344556677889900aabbccddeeff00112233445566778899ce20">⎘</span></span></td>
+          <td class="mono-data">18,427,035</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0x55cc...d100</a><span class="icon copy-ic" data-copy="0x55cc0011223344556677889900aabbccddeeff00112233445566778899d100">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:07:47Z">1m ago<span class="tip">2026-05-14 14:07:47 UTC<span class="age">#18,427,034</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0x0083...0001</a><span class="icon copy-ic" data-copy="0x0083000000000000000000000000000000000000000000000000000000000001">⎘</span></span> <span class="faint">· Bridge-Builtin</span></td>
+          <td class="fn">Withdraw <span class="muted faint" style="font-weight:400;">(amount, dest)</span></td>
+          <td><span class="addr"><span class="h">0xdA17...1ec7</span><span class="icon copy-ic" data-copy="0xdA17e3f5c419b002afb8e6e9c4f10a2299c1fbe7c0d1244c2110a98b5e7a1ec7">⎘</span></span></td>
+          <td class="mono-data">18,427,034</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><span class="addr"><a class="h" href="message-detail.html">0xd700...88e1</a><span class="icon copy-ic" data-copy="0xd7000011223344556677889900aabbccddeeff0011223344556677889988e1">⎘</span></span></td>
+          <td><time class="rel" datetime="2026-05-14T14:07:44Z">1m ago<span class="tip">2026-05-14 14:07:44 UTC<span class="age">#18,427,033</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-event">EVENT</span><span class="stat-dot ok"></span></span></td>
+          <td><span class="addr"><a class="h" href="program-detail.html">0x4a3f...d128</a><span class="icon copy-ic" data-copy="0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128">⎘</span></span> <span class="faint">· Counter</span></td>
+          <td class="fn">Incremented <span class="muted faint" style="font-weight:400;">{ by: 12, new_value: 54 }</span></td>
+          <td><span class="addr"><span class="h">0xdA17...1ec7</span><span class="icon copy-ic" data-copy="0xdA17e3f5c419b002afb8e6e9c4f10a2299c1fbe7c0d1244c2110a98b5e7a1ec7">⎘</span></span></td>
+          <td class="mono-data">18,427,033</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <div class="pagination-v2">
+      <div class="pg-nav">
+        <span class="pg-btn disabled">&lt; PREV</span>
+        <span class="pg-loc">PAGE <span class="n">1</span> OF <span class="n">816,632</span></span>
+        <span class="pg-btn">NEXT &gt;</span>
+      </div>
+      <div class="pg-jump">
+        <span class="lbl">jump to message — or use header search above</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="banner" style="margin-top: 16px;">
+    Rows marked <span class="pill pill-warn" style="margin: 0 4px; vertical-align: middle;">UNKNOWN</span> are messages the dispatcher couldn't decode against the program's IDL. Raw bytes are preserved for retroactive diagnosis. Common reasons: <span class="mono-data">trailing-bytes</span> (IDL drift), <span class="mono-data">no-entry</span> (unknown entry_id), <span class="mono-data">ambiguous-route</span> (route_idx=0 with multi-instance services).
+  </div>
+
+</main>
+
+<div class="sails-band">
+  Self-describing programs · IDL embedded in every WASM · No registry · Decoded by <span class="mono-data">sails-js</span>
+  → indexed by <span class="mono-data">sails-indexer</span>
+  <span class="sep">·</span>
+  <a class="learn" href="#">LEARN MORE</a>
+</div>
+
+<footer class="footer">
+  <div class="f-left">
+    <span class="wordmark">VARA EXPLORER</span>
+    <span class="sep">·</span>
+    <span class="faint">Mainnet</span>
+    <span class="sep">·</span>
+    <span class="faint">v0.1.0</span>
+    <span class="sep">·</span>
+    <a href="#">API</a>
+    <span class="sep">·</span>
+    <a href="#">Docs</a>
+    <span class="sep">·</span>
+    <a href="#">GitHub</a>
+  </div>
+  <div class="f-right tip-meta">
+    <span class="tip-dot"></span>
+    tip: <span class="n">#18,427,057</span> <span class="sep">·</span> <span class="n">4s</span> ago
+  </div>
+</footer>
+
+<script>
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-copy]');
+  if (!t) return;
+  e.preventDefault();
+  e.stopPropagation();
+  navigator.clipboard?.writeText(t.getAttribute('data-copy'));
+  t.classList.add('copied');
+  const prev = t.textContent;
+  if (t.classList.contains('copy-ic')) t.textContent = '✓';
+  setTimeout(() => { t.classList.remove('copied'); if (t.classList.contains('copy-ic')) t.textContent = prev; }, 900);
+});
+const samples = ["0x9b4cf18a...0c44  // messageId", "Counter::Increment", "AMBIGUOUS-ROUTE", "trailing-bytes", "source: 0xdA17...1ec7"];
+let si = 0;
+const hq = document.getElementById('header-q');
+setInterval(() => { si = (si + 1) % samples.length; if (hq && document.activeElement !== hq) hq.placeholder = samples[si]; }, 2600);
+document.addEventListener('keydown', (e) => {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') { e.preventDefault(); hq?.focus(); }
+});
+document.addEventListener('click', (e) => {
+  document.querySelectorAll('details[open]').forEach(d => { if (!d.contains(e.target)) d.removeAttribute('open'); });
+});
+
+// Filter chip toggle (visual only).
+document.querySelectorAll('.filter-bar .btn-chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('.filter-bar .btn-chip').forEach(s => s.classList.remove('active'));
+    c.classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Decode · Vara Sails Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="header-bar">
+  <a class="logo" href="index.html">
+    <div class="logo-mark"></div>
+    <div class="logo-word">vara.eth<span class="accent">/sails</span></div>
+  </a>
+  <nav class="header-nav">
+    <a class="nav-item" href="index.html">[HOME]</a>
+    <a class="nav-item" href="blocks.html">[BLOCKS]</a>
+    <a class="nav-item" href="messages.html">[MESSAGES]</a>
+    <a class="nav-item" href="index.html#top-programs" title="// programs index TBD">[PROGRAMS]</a>
+    <a class="nav-item" href="#" title="// codes index TBD">[CODES]</a>
+    <a class="nav-item nav-active" href="decode-tool.html">[DECODE]</a>
+  </nav>
+  <div class="header-right">
+    <div class="network-chip">
+      <div class="vara-mark"></div>
+      VARA · MAINNET
+    </div>
+    <button class="account-pill">CONNECT WALLET</button>
+  </div>
+</div>
+
+<main class="main">
+
+  <div class="section-head" style="margin-top:24px;">
+    <h2>Decode · raw header + payload</h2>
+  </div>
+
+  <div class="banner">
+    Loads the program's IDL via <span class="mono-data">extractIdlFromWasm</span> from on-chain <span class="mono-data">codeStorage</span>. Decodes entirely in your browser. Useful for in-flight debugging before messages hit the indexer.
+  </div>
+
+  <div class="panel">
+    <div class="panel-body">
+      <form class="decode-form" onsubmit="return false;">
+
+        <div>
+          <label class="field-label">PROGRAM ID <span class="faint" style="text-transform:none; letter-spacing:0;">— fetches codeId, downloads WASM, extracts IDL</span></label>
+          <textarea class="code-input" rows="1" placeholder="0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128">0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128</textarea>
+        </div>
+
+        <div>
+          <label class="field-label">RAW HEADER + PAYLOAD <span class="faint" style="text-transform:none; letter-spacing:0;">— 16-byte Sails header followed by SCALE-encoded payload</span></label>
+          <textarea class="code-input" rows="5" placeholder="47 4d 01 10 ee 16 d0 94 2b 3c 8f 7a 2f 81 01 00 05 00 00 00">47 4d 01 10 ee 16 d0 94 2b 3c 8f 7a 2f 81 01 00 05 00 00 00</textarea>
+        </div>
+
+        <div>
+          <label class="field-label">EXPECTED ENTRY <span class="faint" style="text-transform:none; letter-spacing:0;">— optional. If set, dispatcher verifies (interface_id, entry_id, route_idx) match.</span></label>
+          <textarea class="code-input" rows="1" placeholder="Counter::Increment (route_idx=1)"></textarea>
+        </div>
+
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button class="btn btn-primary lg">DECODE</button>
+          <button class="btn-chip">RESET</button>
+          <span class="faint" style="margin-left: auto; font-size:11px;">Method: <span class="mono-data">decodeCall</span> · expected envelope: v1 SCALE</span>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Result preview (illustrative) -->
+  <div class="section-head" style="margin-top:32px;">
+    <h2>Result · preview</h2>
+    <span class="pill pill-ok">DECODED · OK</span>
+  </div>
+
+  <div class="detail-grid">
+    <div>
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Resolved entry</span>
+          <span class="faint">from <span class="mono-data">program.resolveEntry(header)</span></span>
+        </div>
+        <div class="panel-body">
+          <dl class="kv-grid">
+            <dt>kind</dt><dd><span class="kind-badge kind-call">CALL</span> <span class="muted">(command)</span></dd>
+            <dt>service</dt><dd><span class="mono-data">Counter</span></dd>
+            <dt>function</dt><dd><span class="mono-data">Increment</span></dd>
+            <dt>interface_id</dt><dd class="hash">0x7a8f3c2b94d016ee</dd>
+            <dt>entry_id</dt><dd class="hash">0x812f</dd>
+            <dt>route_idx</dt><dd class="mono-data">1</dd>
+            <dt>signature</dt><dd><span class="muted">Increment(delta: <span class="mono-data">u32</span>) → <span class="mono-data">u32</span></span></dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <div class="panel-header">
+          <span class="panel-title">Decoded args</span>
+          <span class="faint">SCALE → typed</span>
+        </div>
+        <div class="panel-body">
+          <div class="json-tree"><span class="punct">{</span>
+  <span class="key">"delta"</span><span class="punct">:</span> <span class="num">5</span>
+<span class="punct">}</span></div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <div class="panel-header">
+          <span class="panel-title">Annotated bytes</span>
+          <span class="faint">consumedLen: <span class="mono-data">20 / 20</span> · no trailing bytes</span>
+        </div>
+        <div class="panel-body">
+          <div class="raw-body" style="padding:0;">
+            <div class="hex-line"><span class="label">magic</span><span class="bytes">47 4d</span> <span class="faint">"GM"</span></div>
+            <div class="hex-line"><span class="label">version</span><span class="bytes">01</span></div>
+            <div class="hex-line"><span class="label">hlen</span><span class="bytes">10</span> <span class="faint">16 bytes</span></div>
+            <div class="hex-line"><span class="label">interface_id</span><span class="bytes">ee 16 d0 94 2b 3c 8f 7a</span></div>
+            <div class="hex-line"><span class="label">entry_id</span><span class="bytes">2f 81</span></div>
+            <div class="hex-line"><span class="label">route_idx</span><span class="bytes">01</span></div>
+            <div class="hex-line"><span class="label">reserved</span><span class="bytes">00</span></div>
+            <div class="hex-line"><span class="label">payload</span><span class="bytes">05 00 00 00</span> <span class="faint">u32(5)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="rail">
+      <div class="panel-header" style="border-bottom:1px solid var(--border)">
+        <span class="panel-title">Program IDL · cached</span>
+      </div>
+      <div class="tail-row">
+        <div class="faint">codeId</div>
+        <div class="hash" style="font-size:10px;">0x91be...7af2</div>
+      </div>
+      <div class="tail-row">
+        <div class="faint">idl version</div>
+        <div class="mono-data">v2</div>
+      </div>
+      <div class="tail-row">
+        <div class="faint">extraction</div>
+        <div class="muted">sails:idl section · 1,204 bytes (deflated)</div>
+      </div>
+      <div class="tail-row">
+        <div class="faint">cached</div>
+        <div class="muted">37 seconds ago</div>
+      </div>
+      <div class="tail-row">
+        <a class="btn-bracket" href="program-detail.html">VIEW PROGRAM</a>
+      </div>
+
+      <div class="panel-header" style="border-top:1px solid var(--border)">
+        <span class="panel-title">Try a different method</span>
+      </div>
+      <div class="tail-row">
+        <button class="btn-chip" style="margin: 2px;">decodeCall</button>
+        <button class="btn-chip" style="margin: 2px;">decodeReply</button>
+        <button class="btn-chip" style="margin: 2px;">decodeError</button>
+        <button class="btn-chip" style="margin: 2px;">decodeEvent</button>
+        <button class="btn-chip" style="margin: 2px;">decodeCtor</button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="banner" style="margin-top:32px;">
+    Decoded data is <span class="mono-data">untrusted</span>. Do not pass it into security-sensitive operations without revalidation. SailsProgram instances are constructed once per CodeId and reused for all decodes. Adversarial WASM is safe to feed — the section walker never validates function bodies, and decompression is capped at 1 MB.
+  </div>
+
+</main>
+
+<footer class="footer">
+  Built on Sails-RS <span class="sep">·</span> Indexed by sails-indexer <span class="sep">·</span> Open source
+</footer>
+
+</body>
+</html>

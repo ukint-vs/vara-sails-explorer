@@ -1,0 +1,28 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  pad?: boolean;
+  body?: boolean;
+  className?: string;
+}
+
+const { title, description, pad = false, body = true, className = "" } = Astro.props;
+---
+
+<section class:list={["card", pad && "pad", className]}>
+  {
+    title && (
+      <div class="card-head">
+        <div>
+          <h3>{title}</h3>
+          {description && <div class="desc">{description}</div>}
+        </div>
+        <slot name="action" />
+      </div>
+    )
+  }
+  <div class:list={[body && "card-body", !body && "card-slot"]}>
+    <slot />
+  </div>
+</section>

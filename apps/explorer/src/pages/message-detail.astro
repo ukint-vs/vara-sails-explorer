@@ -1,0 +1,98 @@
+---
+import Button from "../components/Button.astro";
+import Card from "../components/Card.astro";
+import StatusChip from "../components/StatusChip.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { messages } from "../data/fixtures";
+
+const message = messages[0];
+---
+
+<BaseLayout title="Message detail" active="messages">
+  <main class="layout">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow">Message detail</div>
+        <h1>Decoded call, execution path, and trust context.</h1>
+        <p class="lede">The detail page explains what happened before showing raw protocol bytes.</p>
+      </div>
+      <div class="chip-row">
+        <StatusChip kind="execution" value={message.execution} />
+        <StatusChip kind="decode" value={message.decode} />
+        <StatusChip kind="finality" value={message.finality} />
+      </div>
+    </section>
+
+    <section class="grid wide-sidebar">
+      <div class="stack">
+        <div class="card hero-summary">
+          <div class="summary-line">
+            <span class="muted-word">{message.caller}</span> called <span class="mono">OrderBook.place_limit_order</span>
+            and received <span class="mono">OrderAccepted(order_id: 48192)</span>.
+          </div>
+          <div class="chip-row">
+            <StatusChip kind="execution" value={message.execution} prefix="Execution" />
+            <StatusChip kind="decode" value={message.decode} prefix="Decode" />
+            <StatusChip kind="finality" value={message.finality} prefix="Finality" />
+            <StatusChip kind="dataSource" value={message.dataSource} prefix="Source" />
+          </div>
+        </div>
+
+        <Card title="Lifecycle" description="Protocol lifecycle stays separate from decode quality.">
+          <div class="timeline">
+            <div class="step done"><span class="step-marker">1</span><div><div class="step-title">Submitted</div><div class="step-copy">Extrinsic accepted by the selected Vara RPC endpoint.</div></div><span class="step-time">14:08:55</span></div>
+            <div class="step done"><span class="step-marker">2</span><div><div class="step-title">Included</div><div class="step-copy">Message observed in block {message.block}.</div></div><span class="step-time">+1.2s</span></div>
+            <div class="step done"><span class="step-marker">3</span><div><div class="step-title">Executed</div><div class="step-copy">Program emitted OrderAccepted and TradeExecuted.</div></div><span class="step-time">+1.4s</span></div>
+            <div class="step current"><span class="step-marker">4</span><div><div class="step-title">Pre-confirmed</div><div class="step-copy">Signed result available; waiting for finalized block confirmation.</div></div><span class="step-time">now</span></div>
+            <div class="step"><span class="step-marker">5</span><div><div class="step-title">Finalized</div><div class="step-copy">Expected after finalized head passes the message block.</div></div><span class="step-time">pending</span></div>
+          </div>
+        </Card>
+
+        <Card title="Decoded call" description="Sails IDL makes the payload human-readable.">
+          <Fragment slot="action"><Button size="sm" dataCopy="OrderBook.place_limit_order({ side: 'Buy', price: 1850, quantity: 2.4 })">Copy call</Button></Fragment>
+          <pre class="code-block"><span class="comment">// service: OrderBook · route_idx: 1 · entry_id: 7</span>
+&#123;
+  <span class="key">"method"</span>: <span class="str">"place_limit_order"</span>,
+  <span class="key">"args"</span>: &#123;
+    <span class="key">"side"</span>: <span class="str">"Buy"</span>,
+    <span class="key">"price"</span>: <span class="num">1850_000000</span>,
+    <span class="key">"quantity"</span>: <span class="num">2400000000000000000</span>,
+    <span class="key">"time_in_force"</span>: <span class="str">"GTC"</span>
+  &#125;
+&#125;</pre>
+        </Card>
+
+        <Card title="Sails header and bytes" description="Annotated bytes are useful, but secondary to decoded meaning.">
+          <div class="byte-grid">
+            <div class="byte-line"><strong>magic</strong><span class="bytes">53 41 49 4c · version 01 · header_len 10</span><span>valid</span></div>
+            <div class="byte-line"><strong>entry</strong><span class="bytes">interface_id 0x8b7d9c11 · entry_id 07</span><span>place_limit_order</span></div>
+            <div class="byte-line"><strong>route</strong><span class="bytes">route_idx 01 · reserved 00</span><span>OrderBook</span></div>
+            <div class="byte-line"><strong>payload</strong><span class="bytes">{message.payload}</span><span>SCALE</span></div>
+          </div>
+        </Card>
+      </div>
+
+      <aside class="stack">
+        <Card pad body={false} className="stack">
+          <h3>Identifiers</h3>
+          <dl>
+            <div class="kv"><dt>Message ID</dt><dd><span class="hash">{message.id}</span> <button class="copy" data-copy={message.id}>Copy</button></dd></div>
+            <div class="kv"><dt>Program</dt><dd>{message.program}</dd></div>
+            <div class="kv"><dt>Program ID</dt><dd class="hash">{message.programId}</dd></div>
+            <div class="kv"><dt>Code ID</dt><dd class="hash">{message.codeId}</dd></div>
+            <div class="kv"><dt>Block</dt><dd>{message.block}</dd></div>
+            <div class="kv"><dt>Caller</dt><dd class="hash">{message.caller}</dd></div>
+          </dl>
+        </Card>
+        <Card pad body={false} className="stack">
+          <h3>Trust checks</h3>
+          <div class="doc-list">
+            <div class="doc-item"><span class="doc-icon">1</span><div><div class="doc-title">Header valid</div><div class="doc-copy">Magic, version, length, and reserved byte passed.</div></div></div>
+            <div class="doc-item"><span class="doc-icon">2</span><div><div class="doc-title">IDL verified</div><div class="doc-copy">Embedded IDL hash matches code registry.</div></div></div>
+            <div class="doc-item"><span class="doc-icon">3</span><div><div class="doc-title">Not finalized yet</div><div class="doc-copy">Execution remains provisional until finalized head advances.</div></div></div>
+          </div>
+        </Card>
+      </aside>
+    </section>
+  </main>
+</BaseLayout>

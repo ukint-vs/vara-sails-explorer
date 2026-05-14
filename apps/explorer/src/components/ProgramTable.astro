@@ -1,0 +1,34 @@
+---
+import type { ExplorerProgram } from "../data/types";
+import StatusChip from "./StatusChip.astro";
+
+interface Props {
+  programs: ExplorerProgram[];
+}
+
+const { programs } = Astro.props;
+---
+
+<div class="table programs">
+  <div class="table-head">
+    <span>Program</span>
+    <span>Health</span>
+    <span>Trust</span>
+    <span>Decode</span>
+    <span>Messages</span>
+  </div>
+  {
+    programs.map((program) => (
+      <a class="table-row" href="/program-detail" data-searchable>
+        <div class="cell-stack">
+          <span class="cell-main">{program.name}</span>
+          <span class="cell-sub mono">{program.programId}</span>
+        </div>
+        <StatusChip kind="programHealth" value={program.health} compact />
+        <StatusChip kind="trust" value={program.trust} compact />
+        <div class="cell-main">{program.decodeCoverage}</div>
+        <div class="cell-main mono">{program.messages24h}</div>
+      </a>
+    ))
+  }
+</div>

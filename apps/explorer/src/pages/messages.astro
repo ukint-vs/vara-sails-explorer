@@ -1,0 +1,43 @@
+---
+import Button from "../components/Button.astro";
+import Card from "../components/Card.astro";
+import Chip from "../components/Chip.astro";
+import MessageTable from "../components/MessageTable.astro";
+import StatePanel from "../components/StatePanel.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { messages } from "../data/fixtures";
+---
+
+<BaseLayout title="Messages" active="messages">
+  <main class="layout">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow">Messages</div>
+        <h1>Direct RPC and local-cache message stream.</h1>
+        <p class="lede">
+          Each row separates execution state from decode quality so failed programs and failed explorer decoding never look the same.
+        </p>
+      </div>
+      <div class="chip-row">
+        <Chip tone="info" label="Local cache only" />
+        <Chip tone="brand" label="Header-first decode" />
+      </div>
+    </section>
+
+    <Card title="Local message window" description="Filter the static fixture rows the same way the real local IndexedDB search will work.">
+      <Fragment slot="action">
+        <div class="toolbar">
+          <input class="input" data-local-filter aria-label="Filter local messages" placeholder="Filter program, caller, status..." />
+          <Button href="/decode" size="sm">Decode raw bytes</Button>
+        </div>
+      </Fragment>
+      <MessageTable messages={messages} />
+    </Card>
+
+    <section class="state-grid" aria-label="Message stream states">
+      <StatePanel state="loading" title="Connecting to selected RPC" description="Skeleton rows preserve the table shape while the Direct RPC stream opens." />
+      <StatePanel state="empty" title="No local messages match the filter" description="Clear the filter or wait for the local cache window to capture new Gear messages." />
+      <StatePanel state="error" title="RPC stream interrupted" description="Keep cached rows visible and show the endpoint error inline instead of replacing the whole page." />
+    </section>
+  </main>
+</BaseLayout>

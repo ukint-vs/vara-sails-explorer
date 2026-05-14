@@ -1,0 +1,41 @@
+---
+import BlockTable from "../components/BlockTable.astro";
+import Card from "../components/Card.astro";
+import Chip from "../components/Chip.astro";
+import MetricCard from "../components/MetricCard.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { blocks } from "../data/fixtures";
+
+const blockMetrics = [
+  { label: "Blocks cached", value: "512", note: "direct RPC session", tone: "info", badge: "Local", progress: 64 },
+  { label: "Gear messages", value: "20.4k", note: "across cached blocks", tone: "success", badge: "Live", progress: 76 },
+  { label: "Decoded Sails", value: "18.7k", note: "structured status per payload", tone: "brand", badge: "91.6%", progress: 92 },
+  { label: "Failures", value: "1.7k", note: "mostly missing IDL", tone: "warn", badge: "Explain", progress: 21 }
+] as const;
+---
+
+<BaseLayout title="Blocks" active="blocks">
+  <main class="layout">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow">Blocks</div>
+        <h1>Live block tail with Sails-specific decode context.</h1>
+        <p class="lede">Direct mode treats this as a local window, not a global block archive.</p>
+      </div>
+      <div class="chip-row">
+        <Chip tone="info" label="Best block" dot />
+        <Chip tone="success" label="Finalized" dot />
+      </div>
+    </section>
+
+    <section class="grid four">
+      {blockMetrics.map((metric) => <MetricCard metric={metric} />)}
+    </section>
+
+    <section style="margin-top:18px">
+      <Card title="Block stream" description="Fetched block, event, extrinsic, and Gear message summaries.">
+        <BlockTable blocks={blocks} />
+      </Card>
+    </section>
+  </main>
+</BaseLayout>

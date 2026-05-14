@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Messages · Vara Sails Explorer</title>
+  <meta name="description" content="Client-first Sails-aware explorer mock for Vara Network and Gear programs." />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="app.js"></script>
+</head>
+<body>
+<div class="app-shell">
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="logo" href="index.html" aria-label="Vara Sails Explorer home">
+      <span class="logo-mark">V</span>
+      <span class="logo-copy">Vara Sails Explorer<small>Direct RPC first · indexed later</small></span>
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="index.html" class="">Overview</a><a href="blocks.html" class="">Blocks</a><a href="messages.html" class="active">Messages</a><a href="program-detail.html" class="">Programs</a><a href="decode-tool.html" class="">Decode</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn small" href="settings.html">RPC: Vara Mainnet</a>
+      <button class="btn small ghost" data-theme-toggle type="button">Light</button>
+      <button class="btn primary">Connect wallet</button>
+      <button class="btn square mobile-menu" aria-label="Open menu">☰</button>
+    </div>
+  </div>
+</div>
+<div class="status-strip" aria-label="Live explorer status">
+  <div class="status-tile"><span class="label">Data source</span><span class="chip info"><span class="dot"></span>Direct RPC</span></div>
+  <div class="status-tile"><span class="label">Best / finalized</span><span class="value mono">#18,427,057 / #18,427,054</span></div>
+  <div class="status-tile"><span class="label">Node health</span><span class="chip success"><span class="dot"></span>38 ms</span></div>
+  <div class="status-tile"><span class="label">Local cache</span><span class="value">512 blocks · 10k msgs</span></div>
+</div>
+
+
+<main class="layout">
+  <section class="page-head">
+    <div>
+      <div class="eyebrow">Messages</div>
+      <h1>Live Gear message stream</h1>
+      <p class="lede">Direct RPC view over current and locally cached activity. Indexed mode can be plugged into the same table for historical search later.</p>
+    </div>
+    <div class="toolbar">
+      <input class="input" data-local-filter placeholder="Filter local messages" />
+      <button class="btn">Export JSON</button>
+    </div>
+  </section>
+  <section class="card">
+    <div class="card-head">
+      <div><h3>Local stream</h3><div class="desc">Execution, decode, and finality are intentionally separate.</div></div>
+      <div class="chip-row"><span class="chip info">Direct RPC</span><span class="chip neutral">Last 512 blocks</span></div>
+    </div>
+    <div class="table messages">
+      <div class="table-head"><span>Time</span><span>Execution</span><span>Program</span><span>Decoded activity</span><span>Decode</span><span>Finality</span><span>Block</span></div>
+      
+<a class="table-row" href="message-detail.html" data-searchable>
+  <div class="cell-stack"><span class="cell-main mono">14:08:56</span><span class="cell-sub">4s ago</span></div>
+  <div><span class="chip success"><span class="dot"></span>Executed</span></div>
+  <div class="cell-stack"><span class="cell-main">CLOB OrderBook</span><span class="cell-sub mono">0x4f8c…a241</span></div>
+  <div class="cell-stack"><span class="cell-main">place_limit_order(side: Buy, qty: 2.4)</span><span class="cell-sub">OrderAccepted · 1 partial fill</span></div>
+  <div><span class="chip brand"><span class="dot"></span>Decoded</span></div>
+  <div><span class="chip info"><span class="dot"></span>Pre-confirmed</span></div>
+  <div class="hash">#18,427,057</div>
+</a>
+<a class="table-row" href="message-detail.html" data-searchable>
+  <div class="cell-stack"><span class="cell-main mono">14:08:53</span><span class="cell-sub">7s ago</span></div>
+  <div><span class="chip success"><span class="dot"></span>Replied</span></div>
+  <div class="cell-stack"><span class="cell-main">Counter</span><span class="cell-sub mono">0x91bb…c008</span></div>
+  <div class="cell-stack"><span class="cell-main">increment(delta: 1)</span><span class="cell-sub">Reply Ok(new_value: 42)</span></div>
+  <div><span class="chip brand"><span class="dot"></span>Decoded</span></div>
+  <div><span class="chip success"><span class="dot"></span>Finalized</span></div>
+  <div class="hash">#18,427,056</div>
+</a>
+<a class="table-row" href="message-detail.html" data-searchable>
+  <div class="cell-stack"><span class="cell-main mono">14:08:49</span><span class="cell-sub">11s ago</span></div>
+  <div><span class="chip warn"><span class="dot"></span>Waiting</span></div>
+  <div class="cell-stack"><span class="cell-main">Vault</span><span class="cell-sub mono">0xa810…902b</span></div>
+  <div class="cell-stack"><span class="cell-main">withdraw(token: USDC, amount: 500)</span><span class="cell-sub">Pending finality gate</span></div>
+  <div><span class="chip brand"><span class="dot"></span>Decoded</span></div>
+  <div><span class="chip info"><span class="dot"></span>Included</span></div>
+  <div class="hash">#18,427,055</div>
+</a>
+<a class="table-row" href="message-detail.html" data-searchable>
+  <div class="cell-stack"><span class="cell-main mono">14:08:42</span><span class="cell-sub">18s ago</span></div>
+  <div><span class="chip danger"><span class="dot"></span>Failed</span></div>
+  <div class="cell-stack"><span class="cell-main">Unknown program</span><span class="cell-sub mono">0x19ee…77bd</span></div>
+  <div class="cell-stack"><span class="cell-main">raw payload · no trusted IDL</span><span class="cell-sub">Header parsed, interface not found</span></div>
+  <div><span class="chip warn"><span class="dot"></span>Missing IDL</span></div>
+  <div><span class="chip success"><span class="dot"></span>Finalized</span></div>
+  <div class="hash">#18,427,052</div>
+</a>
+<a class="table-row" href="message-detail.html" data-searchable>
+  <div class="cell-stack"><span class="cell-main mono">14:08:37</span><span class="cell-sub">23s ago</span></div>
+  <div><span class="chip success"><span class="dot"></span>Event</span></div>
+  <div class="cell-stack"><span class="cell-main">Arkanoid Game</span><span class="cell-sub mono">0xc711…8d00</span></div>
+  <div class="cell-stack"><span class="cell-main">ScoreUpdated(player, score)</span><span class="cell-sub">Sails event frame</span></div>
+  <div><span class="chip brand"><span class="dot"></span>Decoded</span></div>
+  <div><span class="chip success"><span class="dot"></span>Finalized</span></div>
+  <div class="hash">#18,427,051</div>
+</a>
+
+      <a class="table-row" href="message-detail.html" data-searchable>
+        <div class="cell-stack"><span class="cell-main mono">14:08:33</span><span class="cell-sub">27s ago</span></div>
+        <div><span class="chip warn"><span class="dot"></span>Queued</span></div>
+        <div class="cell-stack"><span class="cell-main">CLOB Vault</span><span class="cell-sub mono">0x8f31…109e</span></div>
+        <div class="cell-stack"><span class="cell-main">deposit(token: WETH, amount: 0.8)</span><span class="cell-sub">Awaiting vault credit</span></div>
+        <div><span class="chip brand"><span class="dot"></span>Decoded</span></div>
+        <div><span class="chip info"><span class="dot"></span>Best block</span></div>
+        <div class="hash">#18,427,050</div>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">Product mock v2 · Static HTML refactor · UI states are modeled for Direct RPC first and Indexed Mode later.</footer>
+</div>
+</body>
+</html>

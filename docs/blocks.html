@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blocks · Vara Sails Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="theme.js"></script>
+</head>
+<body>
+
+<div class="header-bar">
+  <a class="logo" href="index.html">
+    <div class="logo-mark"></div>
+    <div class="logo-word">vara.eth<span class="accent">/sails</span></div>
+  </a>
+  <button class="hamburger" aria-label="menu" onclick="document.querySelector('.header-nav').classList.toggle('open')"></button>
+  <nav class="header-nav">
+    <a class="nav-item" href="index.html">[HOME]</a>
+    <a class="nav-item nav-active" href="blocks.html">[BLOCKS]</a>
+    <a class="nav-item" href="messages.html">[MESSAGES]</a>
+    <a class="nav-item" href="index.html#top-programs" title="// programs index TBD">[PROGRAMS]</a>
+    <a class="nav-item" href="#" title="// codes index TBD">[CODES]</a>
+    <a class="nav-item" href="decode-tool.html">[DECODE]</a>
+  </nav>
+  <div class="header-search">
+    <input id="header-q" placeholder="search block #, validator, hash..." autocomplete="off" />
+    <span class="kbd-hint">/</span>
+  </div>
+  <div class="header-right">
+    <details class="net-wrap">
+      <summary class="network-chip">
+        <div class="vara-mark"></div>
+        VARA · MAINNET
+      </summary>
+      <div class="net-menu">
+        <div class="net-opt active"><span class="dot green"></span><span class="name">VARA · MAINNET</span><span class="check">[✓]</span></div>
+        <div class="net-opt"><span class="dot green"></span><span class="name">VARA · TESTNET</span></div>
+        <div class="net-opt"><span class="dot amber"></span><span class="name">LOCAL · DEV</span></div>
+        <div class="net-opt"><span class="dot muted"></span><span class="name">[+ ADD CUSTOM RPC]</span></div>
+      </div>
+    </details>
+    <button class="theme-toggle" data-theme-toggle aria-label="toggle theme" title="// click to switch theme">[LIGHT]</button>
+    <details class="wallet-wrap">
+      <summary class="account-pill">[CONNECT WALLET]</summary>
+      <div class="wallet-menu">
+        <div class="w-head">pick a wallet</div>
+        <div class="w-opt"><span class="ic"></span> Polkadot{.js}</div>
+        <div class="w-opt"><span class="ic"></span> Talisman</div>
+        <div class="w-opt"><span class="ic"></span> SubWallet</div>
+        <div class="w-opt"><span class="ic"></span> Nova</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- Persistent network-stats mini-row -->
+<section class="netstats mini">
+  <div class="netstat">
+    <span class="k"><span class="live-dot"></span>BLOCK</span>
+    <span class="v">#18,427,057</span>
+    <span class="sub"><span class="n">4s ago</span> · 3.0s/blk</span>
+  </div>
+  <div class="netstat">
+    <span class="k">FINALIZED</span>
+    <span class="v">#18,427,054</span>
+    <span class="sub">lag: <span class="n">3</span></span>
+  </div>
+  <div class="netstat">
+    <span class="k">MSG/S</span>
+    <span class="v">487</span>
+    <span class="sub">peak: <span class="n">1,247</span></span>
+  </div>
+  <div class="netstat">
+    <span class="k">VALIDATORS ONLINE</span>
+    <span class="v">7 / 7</span>
+    <span class="sub">all active · 100%</span>
+  </div>
+</section>
+
+<main class="main" style="margin-top: 0; padding-top: 0;">
+
+  <div class="page-head">
+    <h1>BLOCKS</h1>
+    <div class="right">
+      <span class="refresh-chip">auto-refresh · last: <span class="n">4s ago</span></span>
+      <button class="btn-export">EXPORT CSV</button>
+    </div>
+  </div>
+
+  <div class="panel" style="border-top: none; border-radius: 0;">
+    <div class="filter-bar">
+      <select class="select">
+        <option>VALIDATOR — ALL</option>
+        <option>0x9aE2...41bb</option>
+        <option>0x3cF0...8d12</option>
+        <option>0xb1aD...5cc2</option>
+        <option>0xCE91...22a0</option>
+        <option>0x2810...e7e0</option>
+        <option>0x77f2...ab09</option>
+        <option>0x14Bc...0033</option>
+      </select>
+      <select class="select">
+        <option>LAST 1h</option>
+        <option>LAST 6h</option>
+        <option>LAST 24h</option>
+        <option>LAST 7d</option>
+      </select>
+      <select class="select">
+        <option>STATUS — ALL</option>
+        <option>FINALIZED</option>
+        <option>PENDING</option>
+      </select>
+      <input class="search-input" placeholder="filter by validator address..." style="margin-left:auto; height: 36px; flex: 0 0 260px;" />
+    </div>
+
+    <table class="blocks">
+      <thead>
+        <tr>
+          <th>BLOCK ↕</th>
+          <th>AGE</th>
+          <th>VALIDATOR</th>
+          <th>MSGS</th>
+          <th class="right">GAS USED ↕</th>
+          <th>HASH</th>
+          <th>STATUS</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,057</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:56Z">4s ago<span class="tip">2026-05-14 14:08:56 UTC<span class="age">tip</span></span></time></td>
+          <td><span class="addr"><span class="h">0x9aE2...41bb</span><span class="icon copy-ic" data-copy="0x9aE218ff77a3c50e9c1b2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d141bb">⎘</span><span class="tip"><span class="k">validator</span>0x9aE218ff77a3c50e9c1b2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d141bb</span></span></td>
+          <td class="msgcell">23 <span class="breakdown"><span class="ok">18 call</span> · 5 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">412 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x71fc...02ab</span><span class="icon copy-ic" data-copy="0x71fcaabbccddeeff00112233445566778899aabbccddeeff001122334402ab">⎘</span></span></td>
+          <td><span class="pill pill-warn">PENDING</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,056</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:53Z">7s ago<span class="tip">2026-05-14 14:08:53 UTC<span class="age">1 block ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x3cF0...8d12</span><span class="icon copy-ic" data-copy="0x3cF0aa11bb22cc33dd44ee55ff66001122334455667788990011223344558d12">⎘</span></span></td>
+          <td class="msgcell">18 <span class="breakdown">14 call · 4 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">320 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x8a02...4f10</span><span class="icon copy-ic" data-copy="0x8a020011223344556677889900aabbccddeeff00112233445566778899004f10">⎘</span></span></td>
+          <td><span class="pill pill-warn">PENDING</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,055</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:50Z">10s ago<span class="tip">2026-05-14 14:08:50 UTC<span class="age">2 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0xb1aD...5cc2</span><span class="icon copy-ic" data-copy="0xb1aD2200334455667788990011223344556677889900112233445566775cc2">⎘</span></span></td>
+          <td class="msgcell">31 <span class="breakdown">22 call · 8 ev · <span class="err">1 err</span></span></td>
+          <td class="right gas">561 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x4011...9a23</span><span class="icon copy-ic" data-copy="0x401100aabbccddeeff0011223344556677889900aabbccddeeff0011229a23">⎘</span></span></td>
+          <td><span class="pill pill-warn">PENDING</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,054</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:47Z">13s ago<span class="tip">2026-05-14 14:08:47 UTC<span class="age">3 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0xCE91...22a0</span><span class="icon copy-ic" data-copy="0xCE91006677889900112233445566778899001122334455667788990022a0">⎘</span></span></td>
+          <td class="msgcell">14 <span class="breakdown">11 call · 3 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">248 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0xb44e...d701</span><span class="icon copy-ic" data-copy="0xb44e0011223344556677889900aabbccddeeff00112233445566778899d701">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,053</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:44Z">16s ago<span class="tip">2026-05-14 14:08:44 UTC<span class="age">4 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x2810...e7e0</span><span class="icon copy-ic" data-copy="0x28100099aabbccddeeff0011223344556677889900aabbccddeeff0011e7e0">⎘</span></span></td>
+          <td class="msgcell">9 <span class="breakdown">7 call · 2 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">181 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x0a8c...2e2e</span><span class="icon copy-ic" data-copy="0x0a8c1122334455667788990011223344556677889900aabbccddeeff112e2e">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,052</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:41Z">19s ago<span class="tip">2026-05-14 14:08:41 UTC<span class="age">5 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x9aE2...41bb</span><span class="icon copy-ic" data-copy="0x9aE218ff77a3c50e9c1b2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d141bb">⎘</span></span></td>
+          <td class="msgcell">27 <span class="breakdown">21 call · 6 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">488 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x39ab...c111</span><span class="icon copy-ic" data-copy="0x39ab0099aabbccddeeff0011223344556677889900aabbccddeeff0011c111">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,051</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:38Z">22s ago<span class="tip">2026-05-14 14:08:38 UTC<span class="age">6 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x77f2...ab09</span><span class="icon copy-ic" data-copy="0x77f200112233445566778899aabbccddeeff00112233445566778899aab09">⎘</span></span></td>
+          <td class="msgcell">21 <span class="breakdown">16 call · 5 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">372 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x5577...a009</span><span class="icon copy-ic" data-copy="0x55770099aabbccddeeff0011223344556677889900aabbccddeeff001100a009">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,050</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:35Z">25s ago<span class="tip">2026-05-14 14:08:35 UTC<span class="age">7 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x3cF0...8d12</span><span class="icon copy-ic" data-copy="0x3cF0aa11bb22cc33dd44ee55ff66001122334455667788990011223344558d12">⎘</span></span></td>
+          <td class="msgcell">12 <span class="breakdown">10 call · 2 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">221 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x66c1...e801</span><span class="icon copy-ic" data-copy="0x66c10011223344556677889900aabbccddeeff00112233445566778899e801">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,049</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:32Z">28s ago<span class="tip">2026-05-14 14:08:32 UTC<span class="age">8 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0xb1aD...5cc2</span><span class="icon copy-ic" data-copy="0xb1aD2200334455667788990011223344556677889900112233445566775cc2">⎘</span></span></td>
+          <td class="msgcell">19 <span class="breakdown">15 call · 4 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">340 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x1f04...22d8</span><span class="icon copy-ic" data-copy="0x1f040011223344556677889900aabbccddeeff0011223344556677889922d8">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,048</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:29Z">31s ago<span class="tip">2026-05-14 14:08:29 UTC<span class="age">9 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0xCE91...22a0</span><span class="icon copy-ic" data-copy="0xCE91006677889900112233445566778899001122334455667788990022a0">⎘</span></span></td>
+          <td class="msgcell">25 <span class="breakdown">20 call · 5 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">439 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0xaa01...90a4</span><span class="icon copy-ic" data-copy="0xaa010011223344556677889900aabbccddeeff001122334455667788990090a4">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,047</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:26Z">34s ago<span class="tip">2026-05-14 14:08:26 UTC<span class="age">10 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x2810...e7e0</span><span class="icon copy-ic" data-copy="0x28100099aabbccddeeff0011223344556677889900aabbccddeeff0011e7e0">⎘</span></span></td>
+          <td class="msgcell">7 <span class="breakdown">5 call · 2 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">142 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x9001...11b9</span><span class="icon copy-ic" data-copy="0x90010099aabbccddeeff0011223344556677889900aabbccddeeff00111b9">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,046</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:23Z">37s ago<span class="tip">2026-05-14 14:08:23 UTC<span class="age">11 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x14Bc...0033</span><span class="icon copy-ic" data-copy="0x14Bc00112233445566778899aabbccddeeff00112233445566778899000033">⎘</span></span></td>
+          <td class="msgcell">33 <span class="breakdown">25 call · 7 ev · <span class="err">1 err</span></span></td>
+          <td class="right gas">601 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0xc40f...ee18</span><span class="icon copy-ic" data-copy="0xc40f0011223344556677889900aabbccddeeff00112233445566778899ee18">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,045</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:20Z">40s ago<span class="tip">2026-05-14 14:08:20 UTC<span class="age">12 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x9aE2...41bb</span><span class="icon copy-ic" data-copy="0x9aE218ff77a3c50e9c1b2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d141bb">⎘</span></span></td>
+          <td class="msgcell">16 <span class="breakdown">13 call · 3 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">288 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x12dd...7702</span><span class="icon copy-ic" data-copy="0x12dd0011223344556677889900aabbccddeeff001122334455667788997702">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,044</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:17Z">43s ago<span class="tip">2026-05-14 14:08:17 UTC<span class="age">13 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x3cF0...8d12</span><span class="icon copy-ic" data-copy="0x3cF0aa11bb22cc33dd44ee55ff66001122334455667788990011223344558d12">⎘</span></span></td>
+          <td class="msgcell">22 <span class="breakdown">17 call · 5 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">401 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x77b0...c0aa</span><span class="icon copy-ic" data-copy="0x77b00011223344556677889900aabbccddeeff00112233445566778899c0aa">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,043</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:14Z">46s ago<span class="tip">2026-05-14 14:08:14 UTC<span class="age">14 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x77f2...ab09</span><span class="icon copy-ic" data-copy="0x77f200112233445566778899aabbccddeeff00112233445566778899aab09">⎘</span></span></td>
+          <td class="msgcell">11 <span class="breakdown">9 call · 2 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">204 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0xee2a...b08f</span><span class="icon copy-ic" data-copy="0xee2a0011223344556677889900aabbccddeeff00112233445566778899b08f">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,042</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:11Z">49s ago<span class="tip">2026-05-14 14:08:11 UTC<span class="age">15 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0xCE91...22a0</span><span class="icon copy-ic" data-copy="0xCE91006677889900112233445566778899001122334455667788990022a0">⎘</span></span></td>
+          <td class="msgcell">28 <span class="breakdown">22 call · 6 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">512 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x0188...2200</span><span class="icon copy-ic" data-copy="0x01880011223344556677889900aabbccddeeff001122334455667788992200">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,041</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:08Z">52s ago<span class="tip">2026-05-14 14:08:08 UTC<span class="age">16 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x14Bc...0033</span><span class="icon copy-ic" data-copy="0x14Bc00112233445566778899aabbccddeeff00112233445566778899000033">⎘</span></span></td>
+          <td class="msgcell">17 <span class="breakdown">13 call · 4 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">311 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x49a8...3300</span><span class="icon copy-ic" data-copy="0x49a80011223344556677889900aabbccddeeff001122334455667788993300">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,040</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:05Z">55s ago<span class="tip">2026-05-14 14:08:05 UTC<span class="age">17 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0xb1aD...5cc2</span><span class="icon copy-ic" data-copy="0xb1aD2200334455667788990011223344556677889900112233445566775cc2">⎘</span></span></td>
+          <td class="msgcell">20 <span class="breakdown">15 call · 5 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">358 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x6fb0...9018</span><span class="icon copy-ic" data-copy="0x6fb00011223344556677889900aabbccddeeff001122334455667788999018">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,039</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:08:02Z">58s ago<span class="tip">2026-05-14 14:08:02 UTC<span class="age">18 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x9aE2...41bb</span><span class="icon copy-ic" data-copy="0x9aE218ff77a3c50e9c1b2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d141bb">⎘</span></span></td>
+          <td class="msgcell">13 <span class="breakdown">10 call · 3 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">232 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x2380...4411</span><span class="icon copy-ic" data-copy="0x23800011223344556677889900aabbccddeeff001122334455667788994411">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,038</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:07:59Z">1m ago<span class="tip">2026-05-14 14:07:59 UTC<span class="age">19 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x3cF0...8d12</span><span class="icon copy-ic" data-copy="0x3cF0aa11bb22cc33dd44ee55ff66001122334455667788990011223344558d12">⎘</span></span></td>
+          <td class="msgcell">24 <span class="breakdown">19 call · 5 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">435 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0xb711...c80a</span><span class="icon copy-ic" data-copy="0xb7110011223344556677889900aabbccddeeff00112233445566778899c80a">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,037</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:07:56Z">1m ago<span class="tip">2026-05-14 14:07:56 UTC<span class="age">20 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x77f2...ab09</span><span class="icon copy-ic" data-copy="0x77f200112233445566778899aabbccddeeff00112233445566778899aab09">⎘</span></span></td>
+          <td class="msgcell">18 <span class="breakdown">14 call · 4 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">327 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x5e02...60f0</span><span class="icon copy-ic" data-copy="0x5e020011223344556677889900aabbccddeeff0011223344556677889960f0">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,036</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:07:53Z">1m ago<span class="tip">2026-05-14 14:07:53 UTC<span class="age">21 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x2810...e7e0</span><span class="icon copy-ic" data-copy="0x28100099aabbccddeeff0011223344556677889900aabbccddeeff0011e7e0">⎘</span></span></td>
+          <td class="msgcell">8 <span class="breakdown">7 call · 1 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">160 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0xcc20...1010</span><span class="icon copy-ic" data-copy="0xcc200011223344556677889900aabbccddeeff001122334455667788991010">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,035</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:07:50Z">1m ago<span class="tip">2026-05-14 14:07:50 UTC<span class="age">22 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0xCE91...22a0</span><span class="icon copy-ic" data-copy="0xCE91006677889900112233445566778899001122334455667788990022a0">⎘</span></span></td>
+          <td class="msgcell">30 <span class="breakdown">24 call · 6 ev · <span class="err">2 err</span></span></td>
+          <td class="right gas">582 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x9a01...22cc</span><span class="icon copy-ic" data-copy="0x9a010011223344556677889900aabbccddeeff0011223344556677889922cc">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,034</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:07:47Z">1m ago<span class="tip">2026-05-14 14:07:47 UTC<span class="age">23 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0xb1aD...5cc2</span><span class="icon copy-ic" data-copy="0xb1aD2200334455667788990011223344556677889900112233445566775cc2">⎘</span></span></td>
+          <td class="msgcell">15 <span class="breakdown">11 call · 4 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">275 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0x0b22...4400</span><span class="icon copy-ic" data-copy="0x0b220011223344556677889900aabbccddeeff001122334455667788994400">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+        <tr>
+          <td><a class="bn" href="#">#18,427,033</a></td>
+          <td><time class="rel" datetime="2026-05-14T14:07:44Z">1m ago<span class="tip">2026-05-14 14:07:44 UTC<span class="age">24 blocks ago</span></span></time></td>
+          <td><span class="addr"><span class="h">0x14Bc...0033</span><span class="icon copy-ic" data-copy="0x14Bc00112233445566778899aabbccddeeff00112233445566778899000033">⎘</span></span></td>
+          <td class="msgcell">26 <span class="breakdown">20 call · 6 ev · <span class="ok">0 err</span></span></td>
+          <td class="right gas">478 <span class="u">Mgas</span></td>
+          <td><span class="addr"><span class="h">0xab44...5577</span><span class="icon copy-ic" data-copy="0xab440011223344556677889900aabbccddeeff001122334455667788995577">⎘</span></span></td>
+          <td><span class="pill pill-ok">FINALIZED</span></td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <div class="pagination-v2">
+      <div class="pg-nav">
+        <span class="pg-btn disabled">&lt; PREV</span>
+        <span class="pg-loc">PAGE <span class="n">1</span> OF <span class="n">4,217</span></span>
+        <span class="pg-btn">NEXT &gt;</span>
+      </div>
+      <div class="pg-jump">
+        <span class="lbl">jump to block</span>
+        <input placeholder="#18,427,xxx or 0xhash..." />
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="sails-band">
+  Self-describing programs · IDL embedded in every WASM · No registry · Decoded by <span class="mono-data">sails-js</span>
+  → indexed by <span class="mono-data">sails-indexer</span>
+  <span class="sep">·</span>
+  <a class="learn" href="#">LEARN MORE</a>
+</div>
+
+<footer class="footer">
+  <div class="f-left">
+    <span class="wordmark">VARA EXPLORER</span>
+    <span class="sep">·</span>
+    <span class="faint">Mainnet</span>
+    <span class="sep">·</span>
+    <span class="faint">v0.1.0</span>
+    <span class="sep">·</span>
+    <a href="#">API</a>
+    <span class="sep">·</span>
+    <a href="#">Docs</a>
+    <span class="sep">·</span>
+    <a href="#">GitHub</a>
+  </div>
+  <div class="f-right tip-meta">
+    <span class="tip-dot"></span>
+    tip: <span class="n">#18,427,057</span> <span class="sep">·</span> <span class="n">4s</span> ago
+  </div>
+</footer>
+
+<script>
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-copy]');
+  if (!t) return;
+  e.preventDefault();
+  e.stopPropagation();
+  navigator.clipboard?.writeText(t.getAttribute('data-copy'));
+  t.classList.add('copied');
+  const prev = t.textContent;
+  if (t.classList.contains('copy-ic')) t.textContent = '✓';
+  setTimeout(() => { t.classList.remove('copied'); if (t.classList.contains('copy-ic')) t.textContent = prev; }, 900);
+});
+const samples = ["#18,427,057", "0x9aE2...41bb  // validator", "validator: 0xCE91...22a0", "block: 18427054"];
+let si = 0;
+const hq = document.getElementById('header-q');
+setInterval(() => { si = (si + 1) % samples.length; if (hq && document.activeElement !== hq) hq.placeholder = samples[si]; }, 2600);
+document.addEventListener('keydown', (e) => {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') { e.preventDefault(); hq?.focus(); }
+});
+document.addEventListener('click', (e) => {
+  document.querySelectorAll('details[open]').forEach(d => { if (!d.contains(e.target)) d.removeAttribute('open'); });
+});
+</script>
+
+</body>
+</html>

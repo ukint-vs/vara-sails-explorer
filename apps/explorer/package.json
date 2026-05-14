@@ -1,0 +1,29 @@
+{
+  "name": "@sails-explorer/explorer",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check && vitest run",
+    "test": "vitest run",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@astrojs/react": "^5.0.5",
+    "astro": "^6.3.3",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.8.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
+  }
+}

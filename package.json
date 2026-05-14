@@ -1,0 +1,15 @@
+{
+  "name": "sails-explorer-workspace",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.29.3",
+  "scripts": {
+    "dev": "pnpm --filter @sails-explorer/explorer dev",
+    "build": "pnpm --filter @sails-explorer/explorer build",
+    "preview": "pnpm --filter @sails-explorer/explorer preview",
+    "check": "pnpm --filter @sails-explorer/explorer check",
+    "test": "pnpm --filter @sails-explorer/explorer test",
+    "test:e2e": "pnpm --filter @sails-explorer/explorer test:e2e"
+  }
+}

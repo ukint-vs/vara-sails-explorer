@@ -1,0 +1,45 @@
+---
+import type { ExplorerMessage } from "../data/types";
+import StatusChip from "./StatusChip.astro";
+
+interface Props {
+  messages: ExplorerMessage[];
+  compact?: boolean;
+}
+
+const { messages, compact = false } = Astro.props;
+---
+
+<div class:list={["table", "messages", compact && "compact"]}>
+  <div class="table-head">
+    <span>Time</span>
+    <span>Execution</span>
+    <span>Program</span>
+    <span>Decoded activity</span>
+    <span>Decode</span>
+    <span>Finality</span>
+    <span>Block</span>
+  </div>
+  {
+    messages.map((message) => (
+      <a class="table-row" href="/message-detail" data-searchable>
+        <div class="cell-stack">
+          <span class="cell-main mono">{message.time}</span>
+          <span class="cell-sub">{message.age}</span>
+        </div>
+        <div><StatusChip kind="execution" value={message.execution} compact /></div>
+        <div class="cell-stack">
+          <span class="cell-main">{message.program}</span>
+          <span class="cell-sub mono">{message.programId}</span>
+        </div>
+        <div class="cell-stack">
+          <span class="cell-main">{message.activity}</span>
+          <span class="cell-sub">{message.result}</span>
+        </div>
+        <div><StatusChip kind="decode" value={message.decode} compact /></div>
+        <div><StatusChip kind="finality" value={message.finality} compact /></div>
+        <div class="hash">{message.block}</div>
+      </a>
+    ))
+  }
+</div>

@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Message 0x9b4c...0c44 · Vara Sails Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="theme.js"></script>
+</head>
+<body>
+
+<div class="header-bar">
+  <a class="logo" href="index.html">
+    <div class="logo-mark"></div>
+    <div class="logo-word">vara.eth<span class="accent">/sails</span></div>
+  </a>
+  <button class="hamburger" aria-label="menu" onclick="document.querySelector('.header-nav').classList.toggle('open')"></button>
+  <nav class="header-nav">
+    <a class="nav-item" href="index.html">[HOME]</a>
+    <a class="nav-item" href="blocks.html">[BLOCKS]</a>
+    <a class="nav-item nav-active" href="messages.html">[MESSAGES]</a>
+    <a class="nav-item" href="index.html#top-programs" title="// programs index TBD">[PROGRAMS]</a>
+    <a class="nav-item" href="#" title="// codes index TBD">[CODES]</a>
+    <a class="nav-item" href="decode-tool.html">[DECODE]</a>
+  </nav>
+  <div class="header-search">
+    <input id="header-q" placeholder="search programId, messageId, codeId, fn..." autocomplete="off" />
+    <span class="kbd-hint">/</span>
+  </div>
+  <div class="header-right">
+    <details class="net-wrap">
+      <summary class="network-chip">
+        <div class="vara-mark"></div>
+        VARA · MAINNET
+      </summary>
+      <div class="net-menu">
+        <div class="net-opt active"><span class="dot green"></span><span class="name">VARA · MAINNET</span><span class="check">[✓]</span></div>
+        <div class="net-opt"><span class="dot green"></span><span class="name">VARA · TESTNET</span></div>
+        <div class="net-opt"><span class="dot amber"></span><span class="name">LOCAL · DEV</span></div>
+        <div class="net-opt"><span class="dot muted"></span><span class="name">[+ ADD CUSTOM RPC]</span></div>
+      </div>
+    </details>
+    <button class="theme-toggle" data-theme-toggle aria-label="toggle theme" title="// click to switch theme">[LIGHT]</button>
+    <details class="wallet-wrap">
+      <summary class="account-pill">[CONNECT WALLET]</summary>
+      <div class="wallet-menu">
+        <div class="w-head">pick a wallet</div>
+        <div class="w-opt"><span class="ic"></span> Polkadot{.js}</div>
+        <div class="w-opt"><span class="ic"></span> Talisman</div>
+        <div class="w-opt"><span class="ic"></span> SubWallet</div>
+        <div class="w-opt"><span class="ic"></span> Nova</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<main class="main">
+
+  <div class="section-head" style="margin-top:24px;">
+    <h2><a class="faint" href="messages-list.html">messages</a> / 0x9b4c...0c44</h2>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button class="btn-chip" onclick="toggleJson()">JSON VIEW</button>
+      <details class="share">
+        <summary class="btn-bracket" style="cursor:pointer;">SHARE</summary>
+        <div class="share-pop">
+          <div class="perma"></div>
+          <div class="url-row">
+            <span class="url">vara-explorer.io/message/0x9b4c...0c44</span>
+            <span class="copy" data-copy="https://vara-explorer.io/message/0x9b4cf18a3d2e10ab9d1cea4fe72b1f8a8c0a2914b3d57f29c4f9e1b0a76d0c44">[COPY]</span>
+          </div>
+          <div class="share-chips">
+            <span class="chip">X</span>
+            <span class="chip">CAST</span>
+            <span class="chip">FARCASTER</span>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Top metadata bar -->
+  <div class="panel">
+    <div class="panel-body">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom: 16px; flex-wrap:wrap;">
+        <h1 style="margin:0; font-size:16px; font-weight:400; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+          <span class="muted">message</span>
+          <span class="addr">
+            <span class="h">0x9b4cf18a3d2e10ab9d1cea4fe72b1f8a8c0a2914b3d57f29c4f9e1b0a76d0c44</span>
+            <span class="icon copy-ic" data-copy="0x9b4cf18a3d2e10ab9d1cea4fe72b1f8a8c0a2914b3d57f29c4f9e1b0a76d0c44">⎘</span>
+            <details class="qr-modal">
+              <summary title="QR">▢</summary>
+              <div class="qr-pop">
+                <div class="qr-grid" id="qr-msg"></div>
+                <div class="qr-cap">scan messageId</div>
+              </div>
+            </details>
+          </span>
+        </h1>
+        <span class="kind-wrap">
+          <span class="pill pill-ok">REPLY · OK</span>
+        </span>
+      </div>
+
+      <dl class="kv-grid">
+        <dt>block</dt>
+        <dd class="mono-data">#18,427,019 <span class="faint">— finalized</span></dd>
+
+        <dt>timestamp</dt>
+        <dd>
+          <time class="rel" datetime="2026-05-14T14:08:22Z">38 seconds ago
+            <span class="tip">2026-05-14 14:08:22 UTC<span class="age">#18,427,019 · 38 blocks ago</span></span>
+          </time>
+        </dd>
+
+        <dt>source</dt>
+        <dd>
+          <span class="addr">
+            <a class="h" href="program-detail.html">0xdA17...1ec7</a>
+            <span class="icon copy-ic" data-copy="0xdA17e3f5c419b002afb8e6e9c4f10a2299c1fbe7c0d1244c2110a98b5e7a1ec7">⎘</span>
+            <details class="qr-modal">
+              <summary title="QR">▢</summary>
+              <div class="qr-pop"><div class="qr-grid qr-fill"></div><div class="qr-cap">scan source actorId</div></div>
+            </details>
+            <span class="tip"><span class="k">actorId · sender</span>0xdA17e3f5c419b002afb8e6e9c4f10a2299c1fbe7c0d1244c2110a98b5e7a1ec7</span>
+          </span>
+        </dd>
+
+        <dt>destination</dt>
+        <dd>
+          <span class="addr">
+            <a class="h" href="program-detail.html">0x4a3f...d128</a>
+            <span class="icon copy-ic" data-copy="0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128">⎘</span>
+            <details class="qr-modal">
+              <summary title="QR">▢</summary>
+              <div class="qr-pop"><div class="qr-grid qr-fill"></div><div class="qr-cap">scan programId</div></div>
+            </details>
+            <span class="tip"><span class="k">programId — Counter</span>0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128</span>
+          </span>
+          <span class="muted">(Counter)</span>
+        </dd>
+
+        <dt>
+          <span class="term">codeId
+            <span class="q" tabindex="0"></span>
+            <span class="tip">Blake2 hash of the program's uploaded WASM. Same WASM → same codeId. Multiple programs can share a codeId.</span>
+          </span>
+        </dt>
+        <dd>
+          <span class="addr">
+            <a class="h" href="program-detail.html">0x91be...7af2</a>
+            <span class="icon copy-ic" data-copy="0x91be0c83a7d44e1f9f55caf2017c8e8b5d7d2710f7a32c8b2f9f1099b3f37af2">⎘</span>
+            <span class="tip"><span class="k">codeId</span>0x91be0c83a7d44e1f9f55caf2017c8e8b5d7d2710f7a32c8b2f9f1099b3f37af2</span>
+          </span>
+        </dd>
+
+        <dt>gas used</dt>
+        <dd>
+          <span class="val">
+            <span class="primary">17,402,118 gas</span>
+            <span class="raw">34.8% of 50,000,000 limit</span>
+          </span>
+        </dd>
+
+        <dt>value</dt>
+        <dd>
+          <span class="val">
+            <span class="primary">0.0000 TVARA</span>
+            <span class="raw">0 planks</span>
+          </span>
+        </dd>
+
+        <dt>
+          <span class="term">reply code
+            <span class="q" tabindex="0"></span>
+            <span class="tip">Protocol-level result. 'Success' = the program returned normally. 'UserspacePanic' = handler reverted. 'OutOfGas' = exhausted gas. Determined by Gear before the dispatcher decodes.</span>
+          </span>
+        </dt>
+        <dd class="mono-data">Success</dd>
+
+        <dt>
+          <span class="term">decode status
+            <span class="q" tabindex="0"></span>
+            <span class="tip">Whether the dispatcher could fully decode this message against the program's IDL. 'ok' = clean. Other values = drift, malformed input, or forward-compat skip.</span>
+          </span>
+        </dt>
+        <dd class="mono-data">ok</dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- Function call breakdown -->
+  <div class="detail-grid">
+    <div>
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Decoded call</span>
+          <span class="faint">via <span class="mono-data">program.decodeCall(bytes)</span></span>
+        </div>
+        <div class="panel-body">
+          <p style="margin:0 0 16px; font-size:13px;">
+            Called <span class="fn">Counter::Increment</span><span class="muted">(delta: <span class="mono-data">5</span>)</span> via <span class="mono-data">route_idx=1</span>.
+          </p>
+          <dl class="kv-grid">
+            <dt>service</dt><dd><span class="mono-data">Counter</span></dd>
+            <dt>function</dt><dd><span class="mono-data">Increment</span></dd>
+
+            <dt>
+              <span class="term">interface_id
+                <span class="q" tabindex="0"></span>
+                <span class="tip">8-byte hash of the service's structural definition. Same definition across languages → same id. See docs/interface-id-spec.md.</span>
+              </span>
+            </dt>
+            <dd>
+              <span class="addr">
+                <span class="h">0x7a8f3c2b94d016ee</span>
+                <span class="icon copy-ic" data-copy="0x7a8f3c2b94d016ee">⎘</span>
+              </span>
+            </dd>
+
+            <dt>
+              <span class="term">entry_id
+                <span class="q" tabindex="0"></span>
+                <span class="tip">2-byte hash identifying which method or event of the service this message targets. Combined with interface_id, uniquely names the entrypoint.</span>
+              </span>
+            </dt>
+            <dd>
+              <span class="addr">
+                <span class="h">0x812f</span>
+                <span class="icon copy-ic" data-copy="0x812f">⎘</span>
+              </span>
+            </dd>
+
+            <dt>
+              <span class="term">route_idx
+                <span class="q" tabindex="0"></span>
+                <span class="tip">Which instance of the service this message routes to. A program can export the same service multiple times under different routes. 0 = ambiguous / legacy.</span>
+              </span>
+            </dt>
+            <dd class="mono-data">1</dd>
+          </dl>
+
+          <div style="margin-top:16px;">
+            <div class="field-label">args (decoded)</div>
+            <div class="json-tree"><span class="punct">{</span>
+  <span class="key">"delta"</span><span class="punct">:</span> <span class="num">5</span>
+<span class="punct">}</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <div class="panel-header">
+          <span class="panel-title">Decoded reply</span>
+          <span class="faint">via <span class="mono-data">program.decodeReply(bytes, expectedEntry)</span></span>
+        </div>
+        <div class="panel-body">
+          <p style="margin:0 0 16px; font-size:13px;">
+            Returned <span class="mono-data">u32(42)</span>.
+          </p>
+          <div class="json-tree"><span class="punct">{</span>
+  <span class="key">"kind"</span><span class="punct">:</span> <span class="str">"reply"</span><span class="punct">,</span>
+  <span class="key">"entry"</span><span class="punct">:</span> <span class="punct">{</span>
+    <span class="key">"service"</span><span class="punct">:</span> <span class="str">"Counter"</span><span class="punct">,</span>
+    <span class="key">"fn"</span><span class="punct">:</span> <span class="str">"Increment"</span><span class="punct">,</span>
+    <span class="key">"interfaceId"</span><span class="punct">:</span> <span class="str">"0x7a8f3c2b94d016ee"</span><span class="punct">,</span>
+    <span class="key">"entryId"</span><span class="punct">:</span> <span class="num">33071</span><span class="punct">,</span>
+    <span class="key">"route_idx"</span><span class="punct">:</span> <span class="num">1</span>
+  <span class="punct">},</span>
+  <span class="key">"result"</span><span class="punct">:</span> <span class="num">42</span>
+<span class="punct">}</span></div>
+        </div>
+      </div>
+
+      <!-- Alternate: error case sample to show failure UX -->
+      <div class="panel" style="margin-top:16px;">
+        <div class="panel-header">
+          <span class="panel-title">Error case · for reference</span>
+          <span class="faint">when ReplyCode = UserspacePanic, the indexer routes to decodeError()</span>
+        </div>
+        <div class="panel-body">
+          <p style="margin:0 0 12px; font-size:13px;">
+            Reverted with <span class="fn">Counter::Overflow</span><span class="muted"> { current: <span class="mono-data">4_294_967_295</span> }</span>
+          </p>
+          <span class="kind-wrap">
+            <span class="pill pill-err">PANIC · OVERFLOW</span>
+            <span class="stat-dot err"></span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Raw bytes -->
+      <details class="raw">
+        <summary>Raw bytes · 16-byte Sails header + SCALE payload</summary>
+        <div class="raw-body">
+          <div class="hex-line"><span class="label">magic</span><span class="bytes">47 4d</span> <span class="faint">"GM"</span></div>
+          <div class="hex-line"><span class="label">version</span><span class="bytes">01</span></div>
+          <div class="hex-line"><span class="label">hlen</span><span class="bytes">10</span> <span class="faint">16 bytes</span></div>
+          <div class="hex-line"><span class="label">interface_id</span><span class="bytes">ee 16 d0 94 2b 3c 8f 7a</span> <span class="faint">LE u64</span></div>
+          <div class="hex-line"><span class="label">entry_id</span><span class="bytes">2f 81</span> <span class="faint">LE u16</span></div>
+          <div class="hex-line"><span class="label">route_idx</span><span class="bytes">01</span></div>
+          <div class="hex-line"><span class="label">reserved</span><span class="bytes">00</span></div>
+          <div class="hex-line" style="margin-top: 16px;"><span class="label">payload</span><span class="bytes">05 00 00 00</span> <span class="faint">u32(5)</span></div>
+          <div class="hex-line"><span class="label">full</span><span class="bytes">47 4d 01 10 ee 16 d0 94 2b 3c 8f 7a 2f 81 01 00 05 00 00 00</span> <span class="icon copy-ic" data-copy="0x474d0110ee16d0942b3c8f7a2f810100050000 00">⎘</span></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- Right sidebar: reply chain -->
+    <aside class="rail">
+      <div class="panel-header" style="border-bottom:1px solid var(--border)">
+        <span class="panel-title">Reply chain</span>
+      </div>
+      <div class="tail-row">
+        <div class="top"><span class="muted">CALL · origin</span><time class="rel" datetime="2026-05-14T14:08:22Z">38s ago<span class="tip">2026-05-14 14:08:22 UTC<span class="age">#18,427,019 · 38 blocks ago</span></span></time></div>
+        <div><span class="fn">Counter::Increment</span></div>
+        <div class="addr"><span class="h">0x9b4c...0c44</span><span class="icon copy-ic" data-copy="0x9b4cf18a3d2e10ab9d1cea4fe72b1f8a8c0a2914b3d57f29c4f9e1b0a76d0c44">⎘</span></div>
+        <div class="faint" style="margin-top:4px;">from 0xdA17...1ec7</div>
+      </div>
+      <div style="text-align:center; color:var(--t-50); padding:4px 0;">↓ reply</div>
+      <div class="tail-row" style="background: var(--green-bg);">
+        <div class="top"><span class="muted">REPLY · OK</span><time class="rel" datetime="2026-05-14T14:08:23Z">37s ago<span class="tip">2026-05-14 14:08:23 UTC<span class="age">#18,427,020 · 37 blocks ago</span></span></time></div>
+        <div><span class="fn">u32(42)</span></div>
+        <div class="addr"><span class="h">0x9b4c...0c45</span><span class="icon copy-ic" data-copy="0x9b4cf18a3d2e10ab9d1cea4fe72b1f8a8c0a2914b3d57f29c4f9e1b0a76d0c45">⎘</span></div>
+        <div class="faint" style="margin-top:4px;">in block #18,427,020</div>
+      </div>
+
+      <div class="panel-header" style="border-top:1px solid var(--border)">
+        <span class="panel-title">Subsequent events</span>
+      </div>
+      <a class="tail-row" href="message-detail.html">
+        <div class="top"><span class="muted">EVENT</span><time class="rel" datetime="2026-05-14T14:08:23Z">37s ago<span class="tip">2026-05-14 14:08:23 UTC<span class="age">#18,427,020 · 37 blocks ago</span></span></time></div>
+        <div><span class="fn">Counter::Incremented</span></div>
+        <div class="faint" style="margin-top:4px;">{ by: 5, new_value: 42 }</div>
+      </a>
+    </aside>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="f-left">
+    <span class="wordmark">VARA EXPLORER</span>
+    <span class="sep">·</span>
+    <span class="faint">Mainnet</span>
+    <span class="sep">·</span>
+    <span class="faint">v0.1.0</span>
+    <span class="sep">·</span>
+    <a href="#">API</a>
+    <span class="sep">·</span>
+    <a href="#">Docs</a>
+    <span class="sep">·</span>
+    <a href="#">GitHub</a>
+  </div>
+  <div class="f-right tip-meta">
+    tip: <span class="n">#18,427,057</span> <span class="sep">·</span> <span class="n">4s</span> ago
+  </div>
+</footer>
+
+<script>
+function toggleJson() {
+  document.querySelectorAll('.json-tree').forEach(el => {
+    el.style.display = el.style.display === 'none' ? '' : 'none';
+  });
+}
+
+// Generate placeholder QR-ish grid (deterministic per element id, no library).
+function paintQr(el, seed) {
+  const N = 21;
+  let s = seed.split('').reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 1);
+  const rand = () => (s = (s * 1664525 + 1013904223) >>> 0, (s & 0xff) / 255);
+  const cells = [];
+  for (let y = 0; y < N; y++) {
+    for (let x = 0; x < N; x++) {
+      // Finder squares in three corners.
+      const inFinder = (x < 7 && y < 7) || (x >= N - 7 && y < 7) || (x < 7 && y >= N - 7);
+      let on;
+      if (inFinder) {
+        const lx = x < 7 ? x : x - (N - 7);
+        const ly = y < 7 ? y : y - (N - 7);
+        const inside = lx >= 0 && lx < 7 && ly >= 0 && ly < 7;
+        const isRing = lx === 0 || lx === 6 || ly === 0 || ly === 6;
+        const isInner = lx >= 2 && lx <= 4 && ly >= 2 && ly <= 4;
+        on = inside && (isRing || isInner);
+      } else {
+        on = rand() > 0.55;
+      }
+      cells.push(on);
+    }
+  }
+  el.innerHTML = cells.map(c => `<i class="${c ? '' : 'off'}"></i>`).join('');
+}
+document.querySelectorAll('.qr-grid').forEach((g, idx) => paintQr(g, 'msg-' + idx));
+
+// Copy to clipboard.
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-copy]');
+  if (!t) return;
+  e.preventDefault();
+  e.stopPropagation();
+  navigator.clipboard?.writeText(t.getAttribute('data-copy'));
+  t.classList.add('copied');
+  const prev = t.textContent;
+  if (t.classList.contains('copy-ic')) t.textContent = '✓';
+  setTimeout(() => { t.classList.remove('copied'); if (t.classList.contains('copy-ic')) t.textContent = prev; }, 900);
+});
+
+// Tooltip tap-toggle for mobile.
+document.querySelectorAll('.term .q').forEach(q => {
+  q.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    q.parentElement.classList.toggle('open');
+  });
+});
+
+// Search placeholder cycling.
+const samples = [
+  "0x9b4cf18a...0c44  // messageId",
+  "0x4a3f9b27...d128  // programId",
+  "Counter::Increment",
+  "Vft-Manager",
+  "0x91be...7af2  // codeId",
+];
+let i = 0;
+const hq = document.getElementById('header-q');
+setInterval(() => {
+  i = (i + 1) % samples.length;
+  if (hq && document.activeElement !== hq) hq.placeholder = samples[i];
+}, 2600);
+document.addEventListener('keydown', (e) => {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+    e.preventDefault();
+    hq?.focus();
+  }
+});
+
+// Close <details> when clicking outside.
+document.addEventListener('click', (e) => {
+  document.querySelectorAll('details[open]').forEach(d => {
+    if (!d.contains(e.target)) d.removeAttribute('open');
+  });
+});
+</script>
+
+</body>
+</html>

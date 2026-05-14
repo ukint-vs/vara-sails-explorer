@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vara Sails Explorer · Variants A/B/C/D</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="header-bar">
+  <a class="logo" href="index.html">
+    <div class="logo-mark"></div>
+    <div class="logo-word">vara.eth<span class="accent">/sails</span></div>
+  </a>
+  <nav class="header-nav">
+    <a class="nav-item" href="index.html">[HOME]</a>
+    <a class="nav-item active" href="compare.html">[COMPARE]</a>
+  </nav>
+  <div class="header-right">
+    <div class="network-chip">
+      <div class="vara-mark"></div>
+      VARA · MAINNET
+    </div>
+  </div>
+</div>
+
+<section class="compare-strip">
+  <h1>Explorer landing variants &mdash; <span class="accent">pick a direction</span></h1>
+  <p>4 directions, all within brand. Same data, same fonts, same green. Only layout and density change.</p>
+</section>
+
+<div class="compare-grid">
+
+  <div class="compare-card">
+    <div class="cc-head">
+      <span class="label"><span class="v">A</span>Brutalist terminal · the default</span>
+      <a class="btn-bracket" href="index.html" target="_blank">OPEN FULL</a>
+    </div>
+    <iframe class="cc-frame" src="index.html" title="Variant A"></iframe>
+  </div>
+
+  <div class="compare-card">
+    <div class="cc-head">
+      <span class="label"><span class="v">B</span>Operator's console · htop for on-chain</span>
+      <a class="btn-bracket" href="variants/B-operator/index.html" target="_blank">OPEN FULL</a>
+    </div>
+    <iframe class="cc-frame" src="variants/B-operator/index.html" title="Variant B"></iframe>
+  </div>
+
+  <div class="compare-card">
+    <div class="cc-head">
+      <span class="label"><span class="v">C</span>Documentarian · teach the first-time visitor</span>
+      <a class="btn-bracket" href="variants/C-documentarian/index.html" target="_blank">OPEN FULL</a>
+    </div>
+    <iframe class="cc-frame" src="variants/C-documentarian/index.html" title="Variant C"></iframe>
+  </div>
+
+  <div class="compare-card">
+    <div class="cc-head">
+      <span class="label"><span class="v">D</span>Search-first · for users arriving with a hash</span>
+      <a class="btn-bracket" href="variants/D-search-first/index.html" target="_blank">OPEN FULL</a>
+    </div>
+    <iframe class="cc-frame" src="variants/D-search-first/index.html" title="Variant D"></iframe>
+  </div>
+</div>
+
+<h2 class="compare-section-head">Message detail variants &mdash; same message, three readings</h2>
+
+<div class="compare-row">
+
+  <div class="compare-card">
+    <div class="cc-head">
+      <span class="label"><span class="v">A1</span>Stacked · current</span>
+      <a class="btn-bracket" href="message-detail.html" target="_blank">OPEN FULL</a>
+    </div>
+    <iframe class="cc-frame" src="message-detail.html" title="Variant A1"></iframe>
+  </div>
+
+  <div class="compare-card">
+    <div class="cc-head">
+      <span class="label"><span class="v">A2</span>Split-pane · hex + decoded</span>
+      <a class="btn-bracket" href="variants/B-operator/message-detail.html" target="_blank">OPEN FULL</a>
+    </div>
+    <iframe class="cc-frame" src="variants/B-operator/message-detail.html" title="Variant A2"></iframe>
+  </div>
+
+  <div class="compare-card">
+    <div class="cc-head">
+      <span class="label"><span class="v">A3</span>Story-first · prose</span>
+      <a class="btn-bracket" href="variants/C-documentarian/message-detail.html" target="_blank">OPEN FULL</a>
+    </div>
+    <iframe class="cc-frame" src="variants/C-documentarian/message-detail.html" title="Variant A3"></iframe>
+  </div>
+</div>
+
+<footer class="footer">
+  Built on Sails-RS <span class="sep">·</span> Indexed by sails-indexer <span class="sep">·</span> Open source
+</footer>
+
+<script>
+  // Reload iframes when the viewport size changes meaningfully — keeps each
+  // frame's internal layout honest at the comparison scale.
+  (function () {
+    var t;
+    var lastW = window.innerWidth;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(function () {
+        if (Math.abs(window.innerWidth - lastW) < 80) return;
+        lastW = window.innerWidth;
+        document.querySelectorAll('iframe.cc-frame').forEach(function (f) {
+          f.src = f.src;
+        });
+      }, 250);
+    });
+  })();
+</script>
+
+</body>
+</html>

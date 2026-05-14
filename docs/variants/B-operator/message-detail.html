@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Message 0x9b4c...0c44 · Split-pane</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body>
+
+<div class="header-bar">
+  <a class="logo" href="../../index.html">
+    <div class="logo-mark"></div>
+    <div class="logo-word">vara.eth<span class="accent">/sails</span></div>
+  </a>
+  <nav class="header-nav">
+    <a class="nav-item" href="../../index.html">[HOME]</a>
+    <a class="nav-item" href="../../messages-list.html">[PROGRAMS]</a>
+    <a class="nav-item active" href="../../messages-list.html">[MESSAGES]</a>
+    <a class="nav-item" href="../../messages-list.html">[CODES]</a>
+    <a class="nav-item" href="../../decode-tool.html">[DECODE]</a>
+  </nav>
+  <div class="header-right">
+    <div class="network-chip">
+      <div class="vara-mark"></div>
+      VARA · MAINNET
+    </div>
+    <button class="account-pill">CONNECT WALLET</button>
+  </div>
+</div>
+
+<main class="main">
+
+  <div class="section-head" style="margin-top:24px;">
+    <h2><a class="faint" href="../../messages-list.html">messages</a> / 0x9b4c...0c44 · split-pane</h2>
+    <div style="display:flex; gap:8px;">
+      <a class="btn-bracket" href="../../message-detail.html">A1 STACKED</a>
+      <a class="btn-bracket" href="../C-documentarian/message-detail.html">A3 STORY</a>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-body">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom: 16px;">
+        <h1 style="margin:0; font-size:15px; font-weight:400;">
+          <span class="muted">message</span> <span class="hash">0x9b4cf18a3d2e10ab...76d0c44</span>
+        </h1>
+        <span class="pill pill-ok">REPLY · OK</span>
+        <span class="faint" style="margin-left:auto;">#18,427,019 · 14:08:22 UTC · Counter <span class="hash">0x4a3f...d128</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="split-detail">
+
+    <!-- LEFT: decoded view -->
+    <div class="col">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Decoded call</span>
+          <span class="faint">program.decodeCall(bytes)</span>
+        </div>
+        <div class="panel-body">
+          <p style="margin:0 0 16px; font-size:13px;">
+            Called <span style="color:var(--t-100); font-weight:700">Counter::Increment</span><span class="muted">(delta: <span class="mono-data">5</span>)</span> via <span class="mono-data">route_idx=1</span>.
+          </p>
+          <dl class="kv-grid">
+            <dt>service</dt><dd><span class="mono-data">Counter</span></dd>
+            <dt>function</dt><dd><span class="mono-data">Increment</span></dd>
+            <dt>interface_id</dt><dd class="hash">0x7a8f3c2b94d016ee</dd>
+            <dt>entry_id</dt><dd class="hash">0x812f</dd>
+            <dt>route_idx</dt><dd class="mono-data">1</dd>
+            <dt>source</dt><dd><span class="hash">0xdA17...1ec7</span></dd>
+            <dt>gas used</dt><dd class="mono-data">17,402,118 / 50,000,000</dd>
+          </dl>
+
+          <div style="margin-top:16px;">
+            <div class="field-label">args (decoded)</div>
+            <div class="json-tree"><span class="punct">{</span>
+  <span class="key">"delta"</span><span class="punct">:</span> <span class="num">5</span>
+<span class="punct">}</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">Decoded reply</span>
+          <span class="faint">program.decodeReply(bytes, expectedEntry)</span>
+        </div>
+        <div class="panel-body">
+          <p style="margin:0 0 16px; font-size:13px;">
+            Returned <span class="mono-data">u32(42)</span> in block <span class="mono-data">#18,427,020</span>.
+          </p>
+          <div class="json-tree"><span class="punct">{</span>
+  <span class="key">"entry"</span><span class="punct">:</span> <span class="punct">{</span>
+    <span class="key">"service"</span><span class="punct">:</span> <span class="str">"Counter"</span><span class="punct">,</span>
+    <span class="key">"fn"</span><span class="punct">:</span> <span class="str">"Increment"</span><span class="punct">,</span>
+    <span class="key">"interfaceId"</span><span class="punct">:</span> <span class="str">"0x7a8f3c2b94d016ee"</span><span class="punct">,</span>
+    <span class="key">"entryId"</span><span class="punct">:</span> <span class="num">33071</span>
+  <span class="punct">},</span>
+  <span class="key">"result"</span><span class="punct">:</span> <span class="num">42</span>
+<span class="punct">}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: hex bytes always-open -->
+    <div class="col">
+      <div class="hex-pane">
+        <div class="hex-head">
+          <span>Raw bytes · 16B header + 4B SCALE payload</span>
+          <span>20 B total</span>
+        </div>
+        <div class="hex-body">
+          <div class="field-label">request</div>
+          <div class="hex-grid">
+            <span class="byte b-magic">47</span><span class="byte b-magic">4d</span><span class="byte b-version">01</span><span class="byte b-hlen">10</span>
+            <span class="byte b-iface">ee</span><span class="byte b-iface">16</span><span class="byte b-iface">d0</span><span class="byte b-iface">94</span><span class="byte b-iface">2b</span><span class="byte b-iface">3c</span><span class="byte b-iface">8f</span><span class="byte b-iface">7a</span>
+            <span class="byte b-entry">2f</span><span class="byte b-entry">81</span>
+            <span class="byte b-route">01</span>
+            <span class="byte b-reserved">00</span>
+            <span class="byte b-payload">05</span><span class="byte b-payload">00</span><span class="byte b-payload">00</span><span class="byte b-payload">00</span>
+          </div>
+
+          <div class="field-label" style="margin-top: 16px;">reply</div>
+          <div class="hex-grid">
+            <span class="byte b-magic">47</span><span class="byte b-magic">4d</span><span class="byte b-version">01</span><span class="byte b-hlen">10</span>
+            <span class="byte b-iface">ee</span><span class="byte b-iface">16</span><span class="byte b-iface">d0</span><span class="byte b-iface">94</span><span class="byte b-iface">2b</span><span class="byte b-iface">3c</span><span class="byte b-iface">8f</span><span class="byte b-iface">7a</span>
+            <span class="byte b-entry">2f</span><span class="byte b-entry">81</span>
+            <span class="byte b-route">01</span>
+            <span class="byte b-reserved">00</span>
+            <span class="byte b-payload">2a</span><span class="byte b-payload">00</span><span class="byte b-payload">00</span><span class="byte b-payload">00</span>
+          </div>
+        </div>
+
+        <div class="hex-legend">
+          <div class="li"><span class="sw" style="background: var(--green-bg); border:1px solid var(--green);"></span><span class="faint">magic / ver / hlen</span><span style="color:var(--green); margin-left:auto;">4 B</span></div>
+          <div class="li"><span class="sw" style="background: rgba(0,193,255,0.12); border:1px solid var(--s2);"></span><span class="faint">interface_id</span><span style="color:var(--s2); margin-left:auto;">8 B</span></div>
+          <div class="li"><span class="sw" style="background: rgba(140,254,121,0.12); border:1px solid var(--s7);"></span><span class="faint">entry_id</span><span style="color:var(--s7); margin-left:auto;">2 B</span></div>
+          <div class="li"><span class="sw" style="background: rgba(254,252,172,0.12); border:1px solid var(--s4);"></span><span class="faint">route_idx</span><span style="color:var(--s4); margin-left:auto;">1 B</span></div>
+          <div class="li"><span class="sw" style="background: transparent; border:1px solid var(--border-strong);"></span><span class="faint">reserved</span><span class="faint" style="margin-left:auto;">1 B</span></div>
+          <div class="li"><span class="sw" style="background: rgba(255,199,133,0.12); border:1px solid var(--s8);"></span><span class="faint">SCALE payload</span><span style="color:var(--s8); margin-left:auto;">4 B</span></div>
+        </div>
+      </div>
+
+      <div class="statusbar">
+        <div class="seg"><span class="k">decode</span><span class="v">142µs</span></div>
+        <div class="seg"><span class="k">bytes consumed</span><span class="v">20 / 20</span></div>
+        <div class="seg"><span class="k">trailing</span><span class="v">0</span></div>
+        <div class="seg"><span class="k">scheme</span><span class="v">sails-header v1</span></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  Built on Sails-RS <span class="sep">·</span> Indexed by sails-indexer <span class="sep">·</span> Open source
+</footer>
+
+</body>
+</html>

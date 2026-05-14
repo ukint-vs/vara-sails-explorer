@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Program detail · Vara Sails Explorer</title>
+  <meta name="description" content="Client-first Sails-aware explorer mock for Vara Network and Gear programs." />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="app.js"></script>
+</head>
+<body>
+<div class="app-shell">
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="logo" href="index.html" aria-label="Vara Sails Explorer home">
+      <span class="logo-mark">V</span>
+      <span class="logo-copy">Vara Sails Explorer<small>Direct RPC first · indexed later</small></span>
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="index.html" class="">Overview</a><a href="blocks.html" class="">Blocks</a><a href="messages.html" class="">Messages</a><a href="program-detail.html" class="active">Programs</a><a href="decode-tool.html" class="">Decode</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn small" href="settings.html">RPC: Vara Mainnet</a>
+      <button class="btn small ghost" data-theme-toggle type="button">Light</button>
+      <button class="btn primary">Connect wallet</button>
+      <button class="btn square mobile-menu" aria-label="Open menu">☰</button>
+    </div>
+  </div>
+</div>
+<div class="status-strip" aria-label="Live explorer status">
+  <div class="status-tile"><span class="label">Data source</span><span class="chip info"><span class="dot"></span>Direct RPC</span></div>
+  <div class="status-tile"><span class="label">Best / finalized</span><span class="value mono">#18,427,057 / #18,427,054</span></div>
+  <div class="status-tile"><span class="label">Node health</span><span class="chip success"><span class="dot"></span>38 ms</span></div>
+  <div class="status-tile"><span class="label">Local cache</span><span class="value">512 blocks · 10k msgs</span></div>
+</div>
+
+
+<main class="layout">
+  <section class="page-head">
+    <div>
+      <div class="eyebrow">Program</div>
+      <h1>CLOB OrderBook / ETH-USDC</h1>
+      <p class="lede">Program pages should read like a typed application profile: identity, trust, health, services, recent activity, and actions.</p>
+    </div>
+    <div class="chip-row"><span class="chip success">Active</span><span class="chip brand">Verified IDL</span><span class="chip info">Direct RPC</span></div>
+  </section>
+
+  <section class="grid four">
+    <div class="card metric"><div class="top"><span>Messages 24h</span><span class="chip success">+12%</span></div><div class="num">42,890</div><div class="note">local + indexed preview</div><div class="bar"><span style="width:68%"></span></div></div>
+    <div class="card metric"><div class="top"><span>Decode coverage</span><span class="chip brand">Sails</span></div><div class="num">99.1%</div><div class="note">trusted IDL</div><div class="bar"><span style="width:99%"></span></div></div>
+    <div class="card metric"><div class="top"><span>Executable balance</span><span class="chip warn">Watch</span></div><div class="num">2.8k</div><div class="note">wVARA · 22h runway</div><div class="bar"><span style="width:36%"></span></div></div>
+    <div class="card metric"><div class="top"><span>Error rate</span><span class="chip success">Low</span></div><div class="num">0.04%</div><div class="note">mostly user validation errors</div><div class="bar"><span style="width:8%"></span></div></div>
+  </section>
+
+  <section class="grid sidebar" style="margin-top:18px">
+    <div class="stack">
+      <div class="card">
+        <div class="card-head"><div><h3>Sails interface</h3><div class="desc">Use tabs in the real app; this mock shows the information architecture.</div></div><div class="tabs"><a class="tab active">Services</a><a class="tab">Events</a><a class="tab">IDL</a><a class="tab">Read/Write</a></div></div>
+        <div class="table compact">
+          <div class="table-head" style="grid-template-columns:1fr 120px 120px 1fr"><span>Entry</span><span>Kind</span><span>Codec</span><span>Identifiers</span></div>
+          <div class="table-row" style="grid-template-columns:1fr 120px 120px 1fr"><div class="cell-stack"><span class="cell-main mono">place_limit_order</span><span class="cell-sub">side, price, quantity, time_in_force</span></div><span class="chip info">Command</span><span class="chip neutral">SCALE</span><span class="hash">iface 0x8b7d9c11 · entry 7 · route 1</span></div>
+          <div class="table-row" style="grid-template-columns:1fr 120px 120px 1fr"><div class="cell-stack"><span class="cell-main mono">cancel_order</span><span class="cell-sub">order_id</span></div><span class="chip info">Command</span><span class="chip neutral">SCALE</span><span class="hash">iface 0x8b7d9c11 · entry 8 · route 1</span></div>
+          <div class="table-row" style="grid-template-columns:1fr 120px 120px 1fr"><div class="cell-stack"><span class="cell-main mono">best_bid_ask</span><span class="cell-sub">returns quote snapshot</span></div><span class="chip violet">Query</span><span class="chip neutral">SCALE</span><span class="hash">iface 0x8b7d9c11 · entry 2 · route 1</span></div>
+          <div class="table-row" style="grid-template-columns:1fr 120px 120px 1fr"><div class="cell-stack"><span class="cell-main mono">TradeExecuted</span><span class="cell-sub">maker, taker, price, quantity</span></div><span class="chip brand">Event</span><span class="chip neutral">SCALE</span><span class="hash">iface 0x8b7d9c11 · entry 22 · route 1</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div><h3>Recent activity</h3><div class="desc">Same message table component as the stream page.</div></div><a class="btn small" href="messages.html">View all</a></div>
+        <div class="table messages compact">
+          <div class="table-head"><span>Time</span><span>Execution</span><span>Program</span><span>Decoded activity</span><span>Decode</span><span>Finality</span><span>Block</span></div>
+          <a class="table-row" href="message-detail.html"><div class="cell-stack"><span class="cell-main mono">14:08:56</span><span class="cell-sub">4s ago</span></div><div><span class="chip success">Executed</span></div><div class="cell-stack"><span class="cell-main">CLOB OrderBook</span><span class="cell-sub mono">0x4f8c…a241</span></div><div class="cell-stack"><span class="cell-main">place_limit_order(side: Buy)</span><span class="cell-sub">OrderAccepted</span></div><div><span class="chip brand">Decoded</span></div><div><span class="chip info">Pre-confirmed</span></div><div class="hash">#18,427,057</div></a>
+        </div>
+      </div>
+    </div>
+
+    <aside class="stack">
+      <div class="card pad stack">
+        <h3>Identity</h3>
+        <dl>
+          <div class="kv"><dt>Program ID</dt><dd class="hash">0x4f8c8f…a241</dd></div>
+          <div class="kv"><dt>Code ID</dt><dd class="hash">0x91be77…7bd2</dd></div>
+          <div class="kv"><dt>IDL hash</dt><dd class="hash">0xf13a44…9c02</dd></div>
+          <div class="kv"><dt>IDL source</dt><dd><span class="chip brand">Embedded + registry</span></dd></div>
+          <div class="kv"><dt>Created</dt><dd>#18,201,443</dd></div>
+        </dl>
+      </div>
+      <div class="card pad stack">
+        <h3>Developer actions</h3>
+        <button class="btn primary">Read state</button>
+        <button class="btn">Send message</button>
+        <button class="btn">Download IDL</button>
+        <button class="btn">Open Decode Lab</button>
+      </div>
+      <div class="card pad stack">
+        <h3>TypeScript snippet</h3>
+        <pre class="code-block">const program = await SailsProgram.fromIdl(idl);
+const call = program.OrderBook.place_limit_order({
+  side: 'Buy', price, quantity
+});</pre>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<footer class="footer">Product mock v2 · Static HTML refactor · UI states are modeled for Direct RPC first and Indexed Mode later.</footer>
+</div>
+</body>
+</html>

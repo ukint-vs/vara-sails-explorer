@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Counter · Vara Sails Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="theme.js"></script>
+</head>
+<body>
+
+<div class="header-bar">
+  <a class="logo" href="index.html">
+    <div class="logo-mark"></div>
+    <div class="logo-word">vara.eth<span class="accent">/sails</span></div>
+  </a>
+  <button class="hamburger" aria-label="menu" onclick="document.querySelector('.header-nav').classList.toggle('open')"></button>
+  <nav class="header-nav">
+    <a class="nav-item" href="index.html">[HOME]</a>
+    <a class="nav-item" href="blocks.html">[BLOCKS]</a>
+    <a class="nav-item" href="messages.html">[MESSAGES]</a>
+    <a class="nav-item nav-active" href="index.html#top-programs" title="// programs index TBD — pointing at landing for now">[PROGRAMS]</a>
+    <a class="nav-item" href="#" title="// codes index TBD">[CODES]</a>
+    <a class="nav-item" href="decode-tool.html">[DECODE]</a>
+  </nav>
+  <div class="header-search">
+    <input id="header-q" placeholder="search programId, messageId, codeId, fn..." autocomplete="off" />
+    <span class="kbd-hint">/</span>
+  </div>
+  <div class="header-right">
+    <details class="net-wrap">
+      <summary class="network-chip">
+        <div class="vara-mark"></div>
+        VARA · MAINNET
+      </summary>
+      <div class="net-menu">
+        <div class="net-opt active"><span class="dot green"></span><span class="name">VARA · MAINNET</span><span class="check">[✓]</span></div>
+        <div class="net-opt"><span class="dot green"></span><span class="name">VARA · TESTNET</span></div>
+        <div class="net-opt"><span class="dot amber"></span><span class="name">LOCAL · DEV</span></div>
+        <div class="net-opt"><span class="dot muted"></span><span class="name">[+ ADD CUSTOM RPC]</span></div>
+      </div>
+    </details>
+    <button class="theme-toggle" data-theme-toggle aria-label="toggle theme" title="// click to switch theme">[LIGHT]</button>
+    <details class="wallet-wrap">
+      <summary class="account-pill">[CONNECT WALLET]</summary>
+      <div class="wallet-menu">
+        <div class="w-head">pick a wallet</div>
+        <div class="w-opt"><span class="ic"></span> Polkadot{.js}</div>
+        <div class="w-opt"><span class="ic"></span> Talisman</div>
+        <div class="w-opt"><span class="ic"></span> SubWallet</div>
+        <div class="w-opt"><span class="ic"></span> Nova</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<main class="main">
+
+  <div class="section-head" style="margin-top: 24px;">
+    <h2><a class="faint" href="index.html">programs</a> / Counter</h2>
+    <div style="display:flex;gap:8px;">
+      <a class="btn-bracket" href="messages-list.html">VIEW MESSAGES</a>
+      <a class="btn-bracket" href="messages-list.html">VIEW EVENTS</a>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-body">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+        <h1 style="margin:0; font-size:22px; font-weight:700; letter-spacing:0.02em;">Counter</h1>
+        <span class="pill pill-ok">ACTIVE</span>
+      </div>
+      <dl class="kv-grid">
+        <dt>programId</dt>
+        <dd>
+          <span class="addr">
+            <span class="h">0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128</span>
+            <span class="icon copy-ic" data-copy="0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128">⎘</span>
+            <span class="tip"><span class="k">programId</span>0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128</span>
+          </span>
+        </dd>
+        <dt>
+          <span class="term">codeId
+            <span class="q" tabindex="0"></span>
+            <span class="tip">Blake2 hash of the program's uploaded WASM. Same WASM → same codeId. Multiple programs can share a codeId.</span>
+          </span>
+        </dt>
+        <dd>
+          <span class="addr">
+            <span class="h">0x91be0c83a7d44e1f9f55caf2017c8e8b5d7d2710f7a32c8b2f9f1099b3f37af2</span>
+            <span class="icon copy-ic" data-copy="0x91be0c83a7d44e1f9f55caf2017c8e8b5d7d2710f7a32c8b2f9f1099b3f37af2">⎘</span>
+            <span class="tip"><span class="k">codeId</span>0x91be0c83a7d44e1f9f55caf2017c8e8b5d7d2710f7a32c8b2f9f1099b3f37af2</span>
+          </span>
+        </dd>
+        <dt>init block</dt>
+        <dd>
+          <span class="mono-data">#18,402,194</span>
+          <time class="rel" datetime="2026-05-12T18:22:00Z">2 days ago<span class="tip">2026-05-12 18:22:00 UTC<span class="age">#18,402,194 · 24,863 blocks ago</span></span></time>
+        </dd>
+        <dt>init message</dt>
+        <dd>
+          <span class="addr">
+            <a class="h" href="message-detail.html">0x002c...41ab</a>
+            <span class="icon copy-ic" data-copy="0x002c0011223344556677889900aabbccddeeff0011223344556677889941ab">⎘</span>
+            <span class="tip"><span class="k">messageId · init</span>0x002c0011223344556677889900aabbccddeeff0011223344556677889941ab</span>
+          </span>
+        </dd>
+        <dt>init args</dt>
+        <dd><span class="muted">Counter::New(</span><span class="mono-data">initial: 0</span><span class="muted">)</span></dd>
+        <dt>
+          <span class="term">idl version
+            <span class="q" tabindex="0"></span>
+            <span class="tip">Which IDL grammar this program was compiled against. v2 is the current format; v1 remains supported for backward compatibility.</span>
+          </span>
+        </dt>
+        <dd class="mono-data">v2</dd>
+        <dt>wasm size</dt>
+        <dd>
+          <span class="val">
+            <span class="primary">142,318 bytes</span>
+            <span class="raw">IDL section: 1,204 bytes deflated</span>
+          </span>
+        </dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="panel" style="margin-top:16px;">
+    <div class="tabs">
+      <div class="tab active" data-tab="services" onclick="showTab(event,'services')">SERVICES</div>
+      <div class="tab" data-tab="functions" onclick="showTab(event,'functions')">FUNCTIONS</div>
+      <div class="tab" data-tab="events" onclick="showTab(event,'events')">EVENTS</div>
+      <div class="tab" data-tab="activity" onclick="showTab(event,'activity')">RECENT ACTIVITY</div>
+      <div class="tab" data-tab="idl" onclick="showTab(event,'idl')">IDL</div>
+    </div>
+
+    <div class="detail-grid panel-body">
+      <div>
+        <!-- SERVICES -->
+        <div data-tab-panel="services" class="active">
+          <div class="banner">Multi-instance program. The <span class="mono-data">Counter</span> service unit is exported twice under different route names — <span class="mono-data">Counter</span> (route_idx=1) and <span class="mono-data">Auditor</span> (route_idx=2). The dispatcher's <span class="mono-data">_routes</span> map keys on <span class="mono-data">(interface_id, route_idx)</span> so each export resolves independently.</div>
+
+          <div class="service-block">
+            <div class="service-head">
+              <span class="service-tag tag-s2">SERVICE 1</span>
+              <span class="service-name">Counter</span>
+              <span class="muted">
+                <span class="term">interface_id
+                  <span class="q" tabindex="0"></span>
+                  <span class="tip">8-byte hash of the service's structural definition. Same definition across languages → same id. See docs/interface-id-spec.md.</span>
+                </span>: <span class="mono-data">0x7a8f3c2b94d016ee</span></span>
+              <span class="service-route">route_idx: <span class="mono-data">1</span></span>
+            </div>
+            <div class="function-row">
+              <span class="fn-kind muted">COMMAND</span>
+              <span class="fn-sig">
+                <span class="name">Increment</span><span class="muted">(</span><span class="arg">delta:</span> <span class="type">u32</span><span class="muted">)</span>
+                <span class="ret"> → <span class="type">u32</span></span>
+              </span>
+              <a class="btn-bracket" href="message-detail.html">VIEW CALLS</a>
+            </div>
+            <div class="function-row">
+              <span class="fn-kind muted">COMMAND</span>
+              <span class="fn-sig">
+                <span class="name">Reset</span><span class="muted">()</span>
+                <span class="ret"> → <span class="type">()</span></span>
+              </span>
+              <a class="btn-bracket" href="message-detail.html">VIEW CALLS</a>
+            </div>
+            <div class="function-row">
+              <span class="fn-kind muted">QUERY</span>
+              <span class="fn-sig">
+                <span class="name">Value</span><span class="muted">()</span>
+                <span class="ret"> → <span class="type">u32</span></span>
+              </span>
+              <a class="btn-bracket" href="message-detail.html">VIEW CALLS</a>
+            </div>
+            <div class="event-row">
+              <span class="fn-kind muted">EVENT</span>
+              <span class="fn-sig">
+                <span class="name">Incremented</span><span class="muted">{</span> <span class="arg">by:</span> <span class="type">u32</span><span class="muted">,</span> <span class="arg">new_value:</span> <span class="type">u32</span> <span class="muted">}</span>
+              </span>
+              <a class="btn-bracket" href="message-detail.html">VIEW EMITS</a>
+            </div>
+          </div>
+
+          <div class="service-block">
+            <div class="service-head">
+              <span class="service-tag tag-s3">SERVICE 2</span>
+              <span class="service-name">Auditor</span>
+              <span class="muted">
+                <span class="term">interface_id
+                  <span class="q" tabindex="0"></span>
+                  <span class="tip">8-byte hash of the service's structural definition. Same definition across languages → same id. See docs/interface-id-spec.md.</span>
+                </span>: <span class="mono-data">0x7a8f3c2b94d016ee</span></span>
+              <span class="service-route">route_idx: <span class="mono-data">2</span> · <span class="faint">same interface_id, distinct route</span></span>
+            </div>
+            <div class="function-row">
+              <span class="fn-kind muted">QUERY</span>
+              <span class="fn-sig">
+                <span class="name">Value</span><span class="muted">()</span>
+                <span class="ret"> → <span class="type">u32</span></span>
+              </span>
+              <a class="btn-bracket" href="message-detail.html">VIEW CALLS</a>
+            </div>
+            <div class="function-row">
+              <span class="fn-kind muted">QUERY</span>
+              <span class="fn-sig">
+                <span class="name">History</span><span class="muted">(</span><span class="arg">limit:</span> <span class="type">u16</span><span class="muted">)</span>
+                <span class="ret"> → <span class="type">Vec&lt;AuditEntry&gt;</span></span>
+              </span>
+              <a class="btn-bracket" href="message-detail.html">VIEW CALLS</a>
+            </div>
+          </div>
+
+          <div class="service-block">
+            <div class="service-head">
+              <span class="service-tag tag-s7">SERVICE 3</span>
+              <span class="service-name">Admin</span>
+              <span class="muted">
+                <span class="term">interface_id
+                  <span class="q" tabindex="0"></span>
+                  <span class="tip">8-byte hash of the service's structural definition. Same definition across languages → same id. See docs/interface-id-spec.md.</span>
+                </span>: <span class="mono-data">0x3e29a1d77c40bf12</span></span>
+              <span class="service-route">route_idx: <span class="mono-data">3</span></span>
+            </div>
+            <div class="function-row">
+              <span class="fn-kind muted">COMMAND</span>
+              <span class="fn-sig">
+                <span class="name">SetOwner</span><span class="muted">(</span><span class="arg">new_owner:</span> <span class="type">ActorId</span><span class="muted">)</span>
+                <span class="ret"> → <span class="type">Result&lt;(), AdminError&gt;</span></span>
+              </span>
+              <a class="btn-bracket" href="message-detail.html">VIEW CALLS</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- FUNCTIONS -->
+        <div data-tab-panel="functions">
+          <table class="data">
+            <thead><tr>
+              <th>SERVICE</th><th>FUNCTION</th><th>KIND</th><th>ENTRY_ID</th><th>CALLS 24h</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>Counter</td><td><span class="fn">Increment</span></td><td><span class="kind-badge kind-call">CALL</span></td><td class="hash">0x812f</td><td class="mono-data">1,704</td></tr>
+              <tr><td>Counter</td><td><span class="fn">Reset</span></td><td><span class="kind-badge kind-call">CALL</span></td><td class="hash">0xa019</td><td class="mono-data">12</td></tr>
+              <tr><td>Counter</td><td><span class="fn">Value</span></td><td><span class="kind-badge kind-query">QUERY</span></td><td class="hash">0x004c</td><td class="mono-data">488</td></tr>
+              <tr><td>Auditor</td><td><span class="fn">Value</span></td><td><span class="kind-badge kind-query">QUERY</span></td><td class="hash">0x004c</td><td class="mono-data">204</td></tr>
+              <tr><td>Auditor</td><td><span class="fn">History</span></td><td><span class="kind-badge kind-query">QUERY</span></td><td class="hash">0xb733</td><td class="mono-data">61</td></tr>
+              <tr><td>Admin</td><td><span class="fn">SetOwner</span></td><td><span class="kind-badge kind-call">CALL</span></td><td class="hash">0xd920</td><td class="mono-data">2</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- EVENTS -->
+        <div data-tab-panel="events">
+          <table class="data">
+            <thead><tr><th>SERVICE</th><th>EVENT</th><th>FIELDS</th><th>EMITS 24h</th></tr></thead>
+            <tbody>
+              <tr><td>Counter</td><td><span class="fn">Incremented</span></td><td class="muted">{ by: u32, new_value: u32 }</td><td class="mono-data">1,704</td></tr>
+              <tr><td>Counter</td><td><span class="fn">ResetPerformed</span></td><td class="muted">{ previous: u32 }</td><td class="mono-data">12</td></tr>
+              <tr><td>Admin</td><td><span class="fn">OwnerChanged</span></td><td class="muted">{ from: ActorId, to: ActorId }</td><td class="mono-data">2</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ACTIVITY -->
+        <div data-tab-panel="activity">
+          <div class="activity-feed">
+            <a class="activity-row" href="message-detail.html">
+              <time class="rel" datetime="2026-05-14T14:08:22Z">38s ago<span class="tip">2026-05-14 14:08:22 UTC<span class="age">#18,427,019 · 38 blocks ago</span></span></time>
+              <span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot ok"></span></span>
+              <span><span class="muted">Counter::</span><span class="fn">Increment</span><span class="faint">(delta: 5)</span></span>
+              <span class="addr"><span class="h">0x9b4c...0c44</span><span class="icon copy-ic" data-copy="0x9b4cf18a3d2e10ab9d1cea4fe72b1f8a8c0a2914b3d57f29c4f9e1b0a76d0c44">⎘</span><span class="tip"><span class="k">messageId</span>0x9b4cf18a3d2e10ab9d1cea4fe72b1f8a8c0a2914b3d57f29c4f9e1b0a76d0c44</span></span>
+              <span class="right faint">#18,427,019</span>
+            </a>
+            <a class="activity-row" href="message-detail.html">
+              <time class="rel" datetime="2026-05-14T14:08:14Z">46s ago<span class="tip">2026-05-14 14:08:14 UTC<span class="age">#18,427,015 · 46 blocks ago</span></span></time>
+              <span class="kind-wrap"><span class="kind-badge kind-error">ERROR</span><span class="stat-dot err"></span></span>
+              <span><span class="muted">Counter::</span><span class="fn">Increment</span><span class="faint"> reverted: Overflow</span></span>
+              <span class="addr"><span class="h">0xee01...91a4</span><span class="icon copy-ic" data-copy="0xee010011223344556677889900aabbccddeeff001122334455667788991a4">⎘</span></span>
+              <span class="right faint">#18,427,015</span>
+            </a>
+            <a class="activity-row" href="message-detail.html">
+              <time class="rel" datetime="2026-05-14T14:07:48Z">1m ago<span class="tip">2026-05-14 14:07:48 UTC<span class="age">#18,427,002 · 72 blocks ago</span></span></time>
+              <span class="kind-wrap"><span class="kind-badge kind-query">QUERY</span><span class="stat-dot ok"></span></span>
+              <span><span class="muted">Auditor::</span><span class="fn">History</span><span class="faint">(limit: 50)</span></span>
+              <span class="addr"><span class="h">0x1188...77fc</span><span class="icon copy-ic" data-copy="0x11880011223344556677889900aabbccddeeff001122334455667788977fc">⎘</span></span>
+              <span class="right faint">#18,427,002</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- IDL -->
+        <div data-tab-panel="idl">
+          <div class="banner">Extracted from the program's WASM via the <span class="mono-data">sails:idl</span> custom section. No external registry. <span class="faint">1,204 bytes deflated · envelope v1 · flag=COMPRESSED</span></div>
+          <div class="code-block"><span class="ln">1</span><span class="com">// IDL v2 — extracted from on-chain WASM at codeId 0x91be...7af2</span>
+<span class="ln">2</span>
+<span class="ln">3</span><span class="kw">type</span> <span class="id">AuditEntry</span> = <span class="kw">struct</span> { <span class="id">block</span>: u32, <span class="id">delta</span>: u32 };
+<span class="ln">4</span>
+<span class="ln">5</span><span class="kw">type</span> <span class="id">AdminError</span> = <span class="kw">enum</span> { NotOwner, Frozen };
+<span class="ln">6</span>
+<span class="ln">7</span><span class="kw">constructor</span> {
+<span class="ln">8</span>  <span class="id">New</span> : (<span class="id">initial</span>: u32);
+<span class="ln">9</span>};
+<span class="ln">10</span>
+<span class="ln">11</span><span class="com">// route_idx 1 — Counter</span>
+<span class="ln">12</span><span class="kw">service</span> <span class="id">Counter</span> {
+<span class="ln">13</span>  <span class="id">Increment</span> : (<span class="id">delta</span>: u32) -&gt; u32;
+<span class="ln">14</span>  <span class="id">Reset</span>     : () -&gt; ();
+<span class="ln">15</span>  <span class="kw">query</span> <span class="id">Value</span> : () -&gt; u32;
+<span class="ln">16</span>  <span class="kw">events</span> {
+<span class="ln">17</span>    <span class="id">Incremented</span> : { <span class="id">by</span>: u32, <span class="id">new_value</span>: u32 };
+<span class="ln">18</span>    <span class="id">ResetPerformed</span> : { <span class="id">previous</span>: u32 };
+<span class="ln">19</span>  }
+<span class="ln">20</span>};
+<span class="ln">21</span>
+<span class="ln">22</span><span class="com">// route_idx 2 — same interface_id, exported under a different name</span>
+<span class="ln">23</span><span class="kw">service</span> <span class="id">Auditor</span> = <span class="id">Counter</span> {
+<span class="ln">24</span>  <span class="kw">query</span> <span class="id">History</span> : (<span class="id">limit</span>: u16) -&gt; <span class="kw">vec</span> <span class="id">AuditEntry</span>;
+<span class="ln">25</span>};
+<span class="ln">26</span>
+<span class="ln">27</span><span class="com">// route_idx 3 — Admin</span>
+<span class="ln">28</span><span class="kw">service</span> <span class="id">Admin</span> {
+<span class="ln">29</span>  <span class="id">SetOwner</span> : (<span class="id">new_owner</span>: actor_id) -&gt; <span class="kw">result</span> ((), <span class="id">AdminError</span>);
+<span class="ln">30</span>  <span class="kw">events</span> {
+<span class="ln">31</span>    <span class="id">OwnerChanged</span> : { <span class="id">from</span>: actor_id, <span class="id">to</span>: actor_id };
+<span class="ln">32</span>  }
+<span class="ln">33</span>};</div>
+        </div>
+      </div>
+
+      <!-- LIVE TAIL -->
+      <aside class="rail">
+        <div class="panel-header" style="border-bottom:1px solid var(--border)">
+          <span class="panel-title">Live tail · this program</span>
+          <span class="pill pill-ok">LIVE</span>
+        </div>
+        <a class="tail-row" href="message-detail.html">
+          <div class="top"><span class="kind-wrap"><span class="muted">CALL</span><span class="stat-dot ok"></span></span><time class="rel" datetime="2026-05-14T14:08:22Z">3s ago<span class="tip">2026-05-14 14:08:22 UTC<span class="age">#18,427,019</span></span></time></div>
+          <div><span class="fn">Counter::Increment</span> <span class="faint">(delta: 5)</span></div>
+          <div class="addr"><span class="h">0x9b4c...0c44</span><span class="icon copy-ic" data-copy="0x9b4cf18a3d2e10ab9d1cea4fe72b1f8a8c0a2914b3d57f29c4f9e1b0a76d0c44">⎘</span></div>
+        </a>
+        <a class="tail-row" href="message-detail.html">
+          <div class="top"><span class="kind-wrap"><span class="muted">EVENT</span><span class="stat-dot ok"></span></span><time class="rel" datetime="2026-05-14T14:08:22Z">3s ago<span class="tip">2026-05-14 14:08:22 UTC<span class="age">#18,427,019</span></span></time></div>
+          <div><span class="fn">Counter::Incremented</span></div>
+          <div class="addr"><span class="h">0x9b4c...0c45</span><span class="icon copy-ic" data-copy="0x9b4cf18a3d2e10ab9d1cea4fe72b1f8a8c0a2914b3d57f29c4f9e1b0a76d0c45">⎘</span></div>
+        </a>
+        <a class="tail-row" href="message-detail.html">
+          <div class="top"><span class="kind-wrap"><span style="color:var(--red-fg)">ERROR</span><span class="stat-dot err"></span></span><time class="rel" datetime="2026-05-14T14:08:14Z">11s ago<span class="tip">2026-05-14 14:08:14 UTC<span class="age">#18,427,015</span></span></time></div>
+          <div><span class="fn">Counter::Increment</span></div>
+          <div class="addr"><span class="h">0xee01...91a4</span><span class="icon copy-ic" data-copy="0xee010011223344556677889900aabbccddeeff001122334455667788991a4">⎘</span></div>
+        </a>
+        <a class="tail-row" href="message-detail.html">
+          <div class="top"><span class="kind-wrap"><span class="muted">QUERY</span><span class="stat-dot ok"></span></span><time class="rel" datetime="2026-05-14T14:07:48Z">38s ago<span class="tip">2026-05-14 14:07:48 UTC<span class="age">#18,427,002</span></span></time></div>
+          <div><span class="fn">Auditor::History</span> <span class="faint">(limit: 50)</span></div>
+          <div class="addr"><span class="h">0x1188...77fc</span><span class="icon copy-ic" data-copy="0x11880011223344556677889900aabbccddeeff001122334455667788977fc">⎘</span></div>
+        </a>
+        <a class="tail-row" href="message-detail.html">
+          <div class="top"><span class="kind-wrap"><span class="muted">CALL</span><span class="stat-dot ok"></span></span><time class="rel" datetime="2026-05-14T14:07:25Z">1m ago<span class="tip">2026-05-14 14:07:25 UTC</span></time></div>
+          <div><span class="fn">Counter::Increment</span> <span class="faint">(delta: 1)</span></div>
+          <div class="addr"><span class="h">0xab02...1e90</span><span class="icon copy-ic" data-copy="0xab020011223344556677889900aabbccddeeff001122334455667788991e90">⎘</span></div>
+        </a>
+        <a class="tail-row" href="message-detail.html">
+          <div class="top"><span class="kind-wrap"><span class="muted">CALL</span><span class="stat-dot ok"></span></span><time class="rel" datetime="2026-05-14T14:06:25Z">2m ago<span class="tip">2026-05-14 14:06:25 UTC</span></time></div>
+          <div><span class="fn">Counter::Reset</span> <span class="faint">()</span></div>
+          <div class="addr"><span class="h">0xff21...0c2a</span><span class="icon copy-ic" data-copy="0xff210011223344556677889900aabbccddeeff001122334455667788990c2a">⎘</span></div>
+        </a>
+      </aside>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="f-left">
+    <span class="wordmark">VARA EXPLORER</span>
+    <span class="sep">·</span>
+    <span class="faint">Mainnet</span>
+    <span class="sep">·</span>
+    <span class="faint">v0.1.0</span>
+    <span class="sep">·</span>
+    <a href="#">API</a>
+    <span class="sep">·</span>
+    <a href="#">Docs</a>
+    <span class="sep">·</span>
+    <a href="#">GitHub</a>
+  </div>
+  <div class="f-right tip-meta">
+    <span class="tip-dot"></span>
+    tip: <span class="n">#18,427,057</span> <span class="sep">·</span> <span class="n">4s</span> ago
+  </div>
+</footer>
+
+<script>
+// Copy-to-clipboard.
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-copy]');
+  if (!t) return;
+  e.preventDefault();
+  e.stopPropagation();
+  navigator.clipboard?.writeText(t.getAttribute('data-copy'));
+  t.classList.add('copied');
+  const prev = t.textContent;
+  if (t.classList.contains('copy-ic')) t.textContent = '✓';
+  setTimeout(() => { t.classList.remove('copied'); if (t.classList.contains('copy-ic')) t.textContent = prev; }, 900);
+});
+// Tooltip tap-toggle.
+document.querySelectorAll('.term .q').forEach(q => {
+  q.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); q.parentElement.classList.toggle('open'); });
+});
+// Search cycling.
+const samples = ["0x4a3f...d128  // programId", "Counter::Increment", "0x91be...7af2  // codeId", "events: Incremented"];
+let si = 0;
+const hq = document.getElementById('header-q');
+setInterval(() => { si = (si + 1) % samples.length; if (hq && document.activeElement !== hq) hq.placeholder = samples[si]; }, 2600);
+document.addEventListener('keydown', (e) => {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') { e.preventDefault(); hq?.focus(); }
+});
+document.addEventListener('click', (e) => {
+  document.querySelectorAll('details[open]').forEach(d => { if (!d.contains(e.target)) d.removeAttribute('open'); });
+});
+
+function showTab(e, name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('[data-tab-panel]').forEach(p => p.classList.remove('active'));
+  e.currentTarget.classList.add('active');
+  document.querySelector('[data-tab-panel="' + name + '"]').classList.add('active');
+}
+</script>
+
+</body>
+</html>

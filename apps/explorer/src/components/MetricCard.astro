@@ -1,0 +1,20 @@
+---
+import Chip from "./Chip.astro";
+import type { Metric } from "../data/types";
+
+interface Props {
+  metric: Metric;
+}
+
+const { metric } = Astro.props;
+---
+
+<section class="card metric">
+  <div class="top">
+    <span>{metric.label}</span>
+    <Chip tone={metric.tone} label={metric.badge} compact />
+  </div>
+  <div class="num">{metric.value}</div>
+  <div class="note">{metric.note}</div>
+  <div class="bar" aria-hidden="true"><span style={`width:${metric.progress}%`}></span></div>
+</section>

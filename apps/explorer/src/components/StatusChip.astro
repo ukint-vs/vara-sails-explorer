@@ -1,0 +1,44 @@
+---
+import Chip from "./Chip.astro";
+import {
+  dataSourceMeta,
+  decodeStatusMeta,
+  executionStatusMeta,
+  finalityStatusMeta,
+  programHealthMeta,
+  trustStatusMeta
+} from "../lib/status";
+import type {
+  DataSourceStatus,
+  DecodeStatus,
+  ExecutionStatus,
+  FinalityStatus,
+  ProgramHealth,
+  StatusMeta,
+  TrustStatus
+} from "../data/types";
+
+interface Props {
+  kind: "execution" | "decode" | "finality" | "dataSource" | "trust" | "programHealth";
+  value: string;
+  prefix?: string;
+  dot?: boolean;
+  compact?: boolean;
+}
+
+const { kind, value, prefix, dot = true, compact = false } = Astro.props;
+
+const metaByKind = {
+  execution: executionStatusMeta[value as ExecutionStatus],
+  decode: decodeStatusMeta[value as DecodeStatus],
+  finality: finalityStatusMeta[value as FinalityStatus],
+  dataSource: dataSourceMeta[value as DataSourceStatus],
+  trust: trustStatusMeta[value as TrustStatus],
+  programHealth: programHealthMeta[value as ProgramHealth]
+} satisfies Record<Props["kind"], StatusMeta | undefined>;
+
+const meta = metaByKind[kind] ?? { label: value, tone: "neutral" };
+const label = prefix ? `${prefix}: ${meta.label}` : meta.label;
+---
+
+<Chip tone={meta.tone} label={label} dot={dot} compact={compact} />

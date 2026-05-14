@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Decode lab · Vara Sails Explorer</title>
+  <meta name="description" content="Client-first Sails-aware explorer mock for Vara Network and Gear programs." />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="app.js"></script>
+</head>
+<body>
+<div class="app-shell">
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="logo" href="index.html" aria-label="Vara Sails Explorer home">
+      <span class="logo-mark">V</span>
+      <span class="logo-copy">Vara Sails Explorer<small>Direct RPC first · indexed later</small></span>
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="index.html" class="">Overview</a><a href="blocks.html" class="">Blocks</a><a href="messages.html" class="">Messages</a><a href="program-detail.html" class="">Programs</a><a href="decode-tool.html" class="active">Decode</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn small" href="settings.html">RPC: Vara Mainnet</a>
+      <button class="btn small ghost" data-theme-toggle type="button">Light</button>
+      <button class="btn primary">Connect wallet</button>
+      <button class="btn square mobile-menu" aria-label="Open menu">☰</button>
+    </div>
+  </div>
+</div>
+<div class="status-strip" aria-label="Live explorer status">
+  <div class="status-tile"><span class="label">Data source</span><span class="chip info"><span class="dot"></span>Direct RPC</span></div>
+  <div class="status-tile"><span class="label">Best / finalized</span><span class="value mono">#18,427,057 / #18,427,054</span></div>
+  <div class="status-tile"><span class="label">Node health</span><span class="chip success"><span class="dot"></span>38 ms</span></div>
+  <div class="status-tile"><span class="label">Local cache</span><span class="value">512 blocks · 10k msgs</span></div>
+</div>
+
+
+<main class="layout">
+  <section class="page-head">
+    <div>
+      <div class="eyebrow">Decode lab</div>
+      <h1>Decode raw Sails payloads with explicit failure reasons.</h1>
+      <p class="lede">The decode tool is the explorer’s developer superpower. It should be strict, transparent, and safe for browser-only use.</p>
+    </div>
+    <div class="chip-row"><span class="chip brand">Header-first</span><span class="chip neutral">No Wasm execution</span></div>
+  </section>
+
+  <section class="grid wide-sidebar">
+    <div class="stack">
+      <div class="card">
+        <div class="card-head"><div><h3>Input</h3><div class="desc">Paste bytes, choose IDL source, and decode call/reply/event/error/constructor.</div></div></div>
+        <div class="card-body stack">
+          <div class="grid two">
+            <div class="field"><label>Program or code ID</label><input class="input" value="0x4f8c8f...a241" /></div>
+            <div class="field"><label>Decode as</label><select class="select"><option>Auto-detect from Sails header</option><option>Call</option><option>Reply</option><option>Event</option><option>Error</option><option>Constructor</option></select></div>
+          </div>
+          <div class="field"><label>Raw payload</label><textarea>0x5341494c01108b7d9c110701000102a4010000c8b1a0f4...</textarea></div>
+          <div class="toolbar"><button class="btn primary">Decode payload</button><button class="btn">Upload IDL</button><button class="btn">Upload Wasm</button><button class="btn">Load from registry</button></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h3>Result</h3><div class="desc">Successful decode shows meaning first, then header and bytes.</div></div><span class="chip success">Decoded</span></div>
+        <div class="card-body">
+          <pre class="code-block">{
+  <span class="key">"status"</span>: <span class="str">"decoded"</span>,
+  <span class="key">"kind"</span>: <span class="str">"call"</span>,
+  <span class="key">"service"</span>: <span class="str">"OrderBook"</span>,
+  <span class="key">"entry"</span>: <span class="str">"place_limit_order"</span>,
+  <span class="key">"codec"</span>: <span class="str">"scale"</span>,
+  <span class="key">"args"</span>: { <span class="key">"side"</span>: <span class="str">"Buy"</span>, <span class="key">"quantity"</span>: <span class="num">2.4</span> }
+}</pre>
+        </div>
+      </div>
+    </div>
+    <aside class="stack">
+      <div class="card pad stack">
+        <h3>IDL resolution</h3>
+        <div class="doc-list">
+          <div class="doc-item"><span class="doc-icon">1</span><div><div class="doc-title">Embedded sails:idl</div><div class="doc-copy">Prefer custom section when code bytes are available.</div></div></div>
+          <div class="doc-item"><span class="doc-icon">2</span><div><div class="doc-title">Local cache</div><div class="doc-copy">Persist IDLs per codeId and hash.</div></div></div>
+          <div class="doc-item"><span class="doc-icon">3</span><div><div class="doc-title">Static registry</div><div class="doc-copy">Curated known programs without needing an indexer.</div></div></div>
+        </div>
+      </div>
+      <div class="card pad stack">
+        <h3>Failure statuses</h3>
+        <span class="chip warn">missing_idl</span>
+        <span class="chip danger">bad_header_magic</span>
+        <span class="chip warn">ambiguous_route</span>
+        <span class="chip warn">codec_mismatch</span>
+        <span class="chip neutral">not_sails_payload</span>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<footer class="footer">Product mock v2 · Static HTML refactor · UI states are modeled for Direct RPC first and Indexed Mode later.</footer>
+</div>
+</body>
+</html>

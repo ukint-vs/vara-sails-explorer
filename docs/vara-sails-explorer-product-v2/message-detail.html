@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Message detail · Vara Sails Explorer</title>
+  <meta name="description" content="Client-first Sails-aware explorer mock for Vara Network and Gear programs." />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="app.js"></script>
+</head>
+<body>
+<div class="app-shell">
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="logo" href="index.html" aria-label="Vara Sails Explorer home">
+      <span class="logo-mark">V</span>
+      <span class="logo-copy">Vara Sails Explorer<small>Direct RPC first · indexed later</small></span>
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="index.html" class="">Overview</a><a href="blocks.html" class="">Blocks</a><a href="messages.html" class="active">Messages</a><a href="program-detail.html" class="">Programs</a><a href="decode-tool.html" class="">Decode</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn small" href="settings.html">RPC: Vara Mainnet</a>
+      <button class="btn small ghost" data-theme-toggle type="button">Light</button>
+      <button class="btn primary">Connect wallet</button>
+      <button class="btn square mobile-menu" aria-label="Open menu">☰</button>
+    </div>
+  </div>
+</div>
+<div class="status-strip" aria-label="Live explorer status">
+  <div class="status-tile"><span class="label">Data source</span><span class="chip info"><span class="dot"></span>Direct RPC</span></div>
+  <div class="status-tile"><span class="label">Best / finalized</span><span class="value mono">#18,427,057 / #18,427,054</span></div>
+  <div class="status-tile"><span class="label">Node health</span><span class="chip success"><span class="dot"></span>38 ms</span></div>
+  <div class="status-tile"><span class="label">Local cache</span><span class="value">512 blocks · 10k msgs</span></div>
+</div>
+
+
+<main class="layout">
+  <section class="page-head">
+    <div>
+      <div class="eyebrow">Message detail</div>
+      <h1>Decoded call, execution path, and trust context.</h1>
+      <p class="lede">A message detail page should explain what happened before showing raw protocol data.</p>
+    </div>
+    <div class="chip-row"><span class="chip success"><span class="dot"></span>Executed</span><span class="chip brand"><span class="dot"></span>Decoded</span><span class="chip info"><span class="dot"></span>Pre-confirmed</span></div>
+  </section>
+
+  <section class="grid wide-sidebar">
+    <div class="stack">
+      <div class="card hero-summary">
+        <div class="summary-line"><span class="muted-word">0xdA17…1ec7</span> called <span class="mono">OrderBook.place_limit_order</span> and received <span class="mono">OrderAccepted(order_id: 48192)</span>.</div>
+        <div class="chip-row"><span class="chip success">Execution: success</span><span class="chip brand">Decode: trusted IDL</span><span class="chip info">Finality: pre-confirmed</span><span class="chip neutral">Source: direct RPC</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div><h3>Lifecycle</h3><div class="desc">The current mock separates protocol lifecycle from decode quality.</div></div></div>
+        <div class="card-body timeline">
+          <div class="step done"><span class="step-marker">✓</span><div><div class="step-title">Submitted</div><div class="step-copy">Extrinsic accepted by selected Vara RPC endpoint.</div></div><span class="step-time">14:08:55</span></div>
+          <div class="step done"><span class="step-marker">✓</span><div><div class="step-title">Included</div><div class="step-copy">Message observed in block #18,427,057.</div></div><span class="step-time">+1.2s</span></div>
+          <div class="step done"><span class="step-marker">✓</span><div><div class="step-title">Executed</div><div class="step-copy">Program emitted OrderAccepted and TradeExecuted.</div></div><span class="step-time">+1.4s</span></div>
+          <div class="step current"><span class="step-marker">•</span><div><div class="step-title">Pre-confirmed</div><div class="step-copy">Signed result available; waiting for finalized block confirmation.</div></div><span class="step-time">now</span></div>
+          <div class="step"><span class="step-marker">5</span><div><div class="step-title">Finalized</div><div class="step-copy">Expected after finalized head passes the message block.</div></div><span class="step-time">pending</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div><h3>Decoded call</h3><div class="desc">Sails IDL makes the payload human-readable.</div></div><button class="btn small" data-copy="OrderBook.place_limit_order({ side: 'Buy', price: 1850, quantity: 2.4 })">Copy call</button></div>
+        <div class="card-body">
+          <pre class="code-block"><span class="comment">// service: OrderBook · route_idx: 1 · entry_id: 7</span>
+{
+  <span class="key">"method"</span>: <span class="str">"place_limit_order"</span>,
+  <span class="key">"args"</span>: {
+    <span class="key">"side"</span>: <span class="str">"Buy"</span>,
+    <span class="key">"price"</span>: <span class="num">1850_000000</span>,
+    <span class="key">"quantity"</span>: <span class="num">2400000000000000000</span>,
+    <span class="key">"time_in_force"</span>: <span class="str">"GTC"</span>
+  }
+}</pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div><h3>Sails header and bytes</h3><div class="desc">Annotated bytes are useful, but secondary to the decoded meaning.</div></div></div>
+        <div class="card-body byte-grid">
+          <div class="byte-line header"><strong>magic</strong><span class="bytes">53 41 49 4c · version 01 · header_len 10</span><span>valid</span></div>
+          <div class="byte-line entry"><strong>entry</strong><span class="bytes">interface_id 0x8b7d9c11 · entry_id 07</span><span>place_limit_order</span></div>
+          <div class="byte-line route"><strong>route</strong><span class="bytes">route_idx 01 · reserved 00</span><span>OrderBook</span></div>
+          <div class="byte-line"><strong>payload</strong><span class="bytes">0x0102a4010000c8b1a0f4...e7</span><span>SCALE</span></div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="stack">
+      <div class="card pad stack">
+        <h3>Identifiers</h3>
+        <dl>
+          <div class="kv"><dt>Message ID</dt><dd><span class="hash">0xb8a4…92ef</span> <button class="copy" data-copy="0xb8a4...92ef">Copy</button></dd></div>
+          <div class="kv"><dt>Program</dt><dd>CLOB OrderBook</dd></div>
+          <div class="kv"><dt>Program ID</dt><dd class="hash">0x4f8c…a241</dd></div>
+          <div class="kv"><dt>Code ID</dt><dd class="hash">0x91be…7bd2</dd></div>
+          <div class="kv"><dt>Block</dt><dd>#18,427,057</dd></div>
+          <div class="kv"><dt>Caller</dt><dd class="hash">0xdA17…1ec7</dd></div>
+        </dl>
+      </div>
+      <div class="card pad stack">
+        <h3>Trust and decode</h3>
+        <div class="doc-list">
+          <div class="doc-item"><span class="doc-icon">✓</span><div><div class="doc-title">Header valid</div><div class="doc-copy">Magic, version, length, and reserved byte passed.</div></div></div>
+          <div class="doc-item"><span class="doc-icon">✓</span><div><div class="doc-title">IDL verified</div><div class="doc-copy">Embedded IDL hash matches code registry.</div></div></div>
+          <div class="doc-item"><span class="doc-icon">!</span><div><div class="doc-title">Not finalized yet</div><div class="doc-copy">Execution is pre-confirmed until finalized head advances.</div></div></div>
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<footer class="footer">Product mock v2 · Static HTML refactor · UI states are modeled for Direct RPC first and Indexed Mode later.</footer>
+</div>
+</body>
+</html>

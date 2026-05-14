@@ -1,0 +1,32 @@
+---
+import StatusStrip from "../components/StatusStrip.astro";
+import Topbar from "../components/Topbar.astro";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  active?: "overview" | "blocks" | "messages" | "programs" | "decode" | "compare";
+  variant?: "production" | "terminal" | "operator" | "documentarian" | "search-first";
+  showStatus?: boolean;
+}
+
+const { title, active = "overview", variant = "production", showStatus = true } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark" data-variant={variant}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Client-first Vara Sails Explorer mock implementation." />
+    <title>{title} · Vara Sails Explorer</title>
+    <script is:inline src="/theme.js" defer></script>
+  </head>
+  <body class={`variant-${variant}`}>
+    <div class="app-shell">
+      <Topbar active={active} />
+      {showStatus && <StatusStrip />}
+      <slot />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Counter · Messages · Vara Sails Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="header-bar">
+  <a class="logo" href="index.html">
+    <div class="logo-mark"></div>
+    <div class="logo-word">vara.eth<span class="accent">/sails</span></div>
+  </a>
+  <button class="hamburger" aria-label="menu" onclick="document.querySelector('.header-nav').classList.toggle('open')"></button>
+  <nav class="header-nav">
+    <a class="nav-item" href="index.html">[HOME]</a>
+    <a class="nav-item" href="blocks.html">[BLOCKS]</a>
+    <a class="nav-item nav-active" href="messages.html">[MESSAGES]</a>
+    <a class="nav-item" href="index.html#top-programs" title="// programs index TBD">[PROGRAMS]</a>
+    <a class="nav-item" href="#" title="// codes index TBD">[CODES]</a>
+    <a class="nav-item" href="decode-tool.html">[DECODE]</a>
+  </nav>
+  <div class="header-search">
+    <input id="header-q" placeholder="search programId, messageId, codeId, fn..." autocomplete="off" />
+    <span class="kbd-hint">/</span>
+  </div>
+  <div class="header-right">
+    <details class="net-wrap">
+      <summary class="network-chip">
+        <div class="vara-mark"></div>
+        VARA · MAINNET
+      </summary>
+      <div class="net-menu">
+        <div class="net-opt active"><span class="dot green"></span><span class="name">VARA · MAINNET</span><span class="check">[✓]</span></div>
+        <div class="net-opt"><span class="dot green"></span><span class="name">VARA · TESTNET</span></div>
+        <div class="net-opt"><span class="dot amber"></span><span class="name">LOCAL · DEV</span></div>
+        <div class="net-opt"><span class="dot muted"></span><span class="name">[+ ADD CUSTOM RPC]</span></div>
+      </div>
+    </details>
+    <details class="wallet-wrap">
+      <summary class="account-pill">[CONNECT WALLET]</summary>
+      <div class="wallet-menu">
+        <div class="w-head">pick a wallet</div>
+        <div class="w-opt"><span class="ic"></span> Polkadot{.js}</div>
+        <div class="w-opt"><span class="ic"></span> Talisman</div>
+        <div class="w-opt"><span class="ic"></span> SubWallet</div>
+        <div class="w-opt"><span class="ic"></span> Nova</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<main class="main">
+
+  <div class="section-head" style="margin-top:24px;">
+    <h2><a class="faint" href="program-detail.html">Counter</a> / messages</h2>
+    <div class="faint" style="font-size:11px;">programId
+      <span class="addr">
+        <a class="h" href="program-detail.html">0x4a3f...d128</a>
+        <span class="icon copy-ic" data-copy="0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128">⎘</span>
+        <span class="tip"><span class="k">programId</span>0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="filter-bar">
+      <button class="btn-chip active">ALL</button>
+      <button class="btn-chip">CALL</button>
+      <button class="btn-chip">QUERY</button>
+      <button class="btn-chip">EVENT</button>
+      <button class="btn-chip">CTOR</button>
+      <button class="btn-chip">ERROR</button>
+
+      <select class="select" style="margin-left: 16px;">
+        <option>SERVICE — ALL</option>
+        <option>Counter</option>
+        <option>Auditor</option>
+        <option>Admin</option>
+      </select>
+
+      <select class="select">
+        <option>FUNCTION — ALL</option>
+        <option>Increment</option>
+        <option>Reset</option>
+        <option>Value</option>
+        <option>History</option>
+        <option>SetOwner</option>
+      </select>
+
+      <select class="select">
+        <option>LAST 24h</option>
+        <option>LAST 7d</option>
+        <option>LAST 30d</option>
+        <option>ALL TIME</option>
+      </select>
+
+      <input class="search-input" placeholder="filter by source actor..." style="margin-left:auto; height: 36px; flex: 0 0 260px;" />
+    </div>
+
+    <table class="data">
+      <thead>
+        <tr>
+          <th>TIMESTAMP ↕</th>
+          <th>KIND</th>
+          <th>SERVICE</th>
+          <th>FUNCTION / EVENT</th>
+          <th>SOURCE</th>
+          <th>BLOCK ↕</th>
+          <th>GAS USED ↕</th>
+          <th>STATUS</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><time class="rel" datetime="2026-05-14T14:08:22Z">38s ago<span class="tip">2026-05-14 14:08:22 UTC<span class="age">#18,427,019</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot ok"></span></span></td>
+          <td>Counter</td>
+          <td class="fn">Increment <span class="muted faint" style="font-weight:400;">(delta: 5)</span></td>
+          <td><span class="addr"><span class="h">0xdA17...1ec7</span><span class="icon copy-ic" data-copy="0xdA17e3f5c419b002afb8e6e9c4f10a2299c1fbe7c0d1244c2110a98b5e7a1ec7">⎘</span></span></td>
+          <td class="mono-data">18,427,019</td>
+          <td class="mono-data right">17,402,118</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><time class="rel" datetime="2026-05-14T14:08:18Z">42s ago<span class="tip">2026-05-14 14:08:18 UTC<span class="age">#18,427,019</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-event">EVENT</span><span class="stat-dot ok"></span></span></td>
+          <td>Counter</td>
+          <td class="fn">Incremented <span class="muted faint" style="font-weight:400;">{ by: 5, new_value: 42 }</span></td>
+          <td><span class="addr"><span class="h">0xdA17...1ec7</span><span class="icon copy-ic" data-copy="0xdA17e3f5c419b002afb8e6e9c4f10a2299c1fbe7c0d1244c2110a98b5e7a1ec7">⎘</span></span></td>
+          <td class="mono-data">18,427,019</td>
+          <td class="mono-data right">—</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><time class="rel" datetime="2026-05-14T14:08:14Z">46s ago<span class="tip">2026-05-14 14:08:14 UTC<span class="age">#18,427,015</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-error">ERROR</span><span class="stat-dot err"></span></span></td>
+          <td>Counter</td>
+          <td class="fn">Increment <span class="muted faint" style="font-weight:400;">(delta: 1) → Overflow { current: u32::MAX }</span></td>
+          <td><span class="addr"><span class="h">0x5b02...9933</span><span class="icon copy-ic" data-copy="0x5b020011223344556677889900aabbccddeeff001122334455667788999933">⎘</span></span></td>
+          <td class="mono-data">18,427,015</td>
+          <td class="mono-data right">14,290,022</td>
+          <td><span class="pill pill-err">PANIC</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><time class="rel" datetime="2026-05-14T14:08:09Z">51s ago<span class="tip">2026-05-14 14:08:09 UTC<span class="age">#18,427,012</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-query">QUERY</span><span class="stat-dot ok"></span></span></td>
+          <td>Auditor</td>
+          <td class="fn">History <span class="muted faint" style="font-weight:400;">(limit: 50)</span></td>
+          <td><span class="addr"><span class="h">0xab19...ce20</span><span class="icon copy-ic" data-copy="0xab190011223344556677889900aabbccddeeff00112233445566778899ce20">⎘</span></span></td>
+          <td class="mono-data">18,427,012</td>
+          <td class="mono-data right">3,109,041</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <!-- Decode-status != 'ok' rows -->
+        <tr class="decode-unknown" onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><time class="rel" datetime="2026-05-14T14:08:02Z">58s ago<span class="tip">2026-05-14 14:08:02 UTC<span class="age">#18,427,008</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot warn"></span></span></td>
+          <td>Counter</td>
+          <td class="muted">Unknown payload <span class="faint">— route_idx=1, entry_id=0x812f</span> <span class="copy-btn"></span></td>
+          <td><span class="addr"><span class="h">0x77ec...4b81</span><span class="icon copy-ic" data-copy="0x77ec0011223344556677889900aabbccddeeff00112233445566778899004b81">⎘</span></span></td>
+          <td class="mono-data">18,427,008</td>
+          <td class="mono-data right">9,221,033</td>
+          <td><span class="pill pill-warn">TRAILING-BYTES</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><time class="rel" datetime="2026-05-14T14:07:54Z">1m ago<span class="tip">2026-05-14 14:07:54 UTC<span class="age">#18,427,002</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot ok"></span></span></td>
+          <td>Counter</td>
+          <td class="fn">Increment <span class="muted faint" style="font-weight:400;">(delta: 12)</span></td>
+          <td><span class="addr"><span class="h">0xdA17...1ec7</span><span class="icon copy-ic" data-copy="0xdA17e3f5c419b002afb8e6e9c4f10a2299c1fbe7c0d1244c2110a98b5e7a1ec7">⎘</span></span></td>
+          <td class="mono-data">18,427,002</td>
+          <td class="mono-data right">17,408,210</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><time class="rel" datetime="2026-05-14T14:07:42Z">1m ago<span class="tip">2026-05-14 14:07:42 UTC<span class="age">#18,426,991</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-query">QUERY</span><span class="stat-dot ok"></span></span></td>
+          <td>Counter</td>
+          <td class="fn">Value <span class="muted faint" style="font-weight:400;">()</span></td>
+          <td><span class="addr"><span class="h">0x91c0...0a01</span><span class="icon copy-ic" data-copy="0x91c00011223344556677889900aabbccddeeff00112233445566778899000a01">⎘</span></span></td>
+          <td class="mono-data">18,426,991</td>
+          <td class="mono-data right">1,402,118</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr class="decode-unknown" onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><time class="rel" datetime="2026-05-14T14:07:31Z">1m ago<span class="tip">2026-05-14 14:07:31 UTC<span class="age">#18,426,982</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-event">EVENT</span><span class="stat-dot muted"></span></span></td>
+          <td class="muted">—</td>
+          <td class="muted">Unknown payload <span class="faint">— interface_id=0x3e29a1d77c40bf12</span> <span class="copy-btn"></span></td>
+          <td><span class="addr"><span class="h">0x4a3f...d128</span><span class="icon copy-ic" data-copy="0x4a3f9b27e1cc0844f6712b91d8aa3c45e1ee9c01c4f7b2a0c6db5a8f4e1cd128">⎘</span></span></td>
+          <td class="mono-data">18,426,982</td>
+          <td class="mono-data right">—</td>
+          <td><span class="pill pill-warn">NO-ENTRY</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><time class="rel" datetime="2026-05-14T14:07:20Z">2m ago<span class="tip">2026-05-14 14:07:20 UTC<span class="age">#18,426,971</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-event">EVENT</span><span class="stat-dot ok"></span></span></td>
+          <td>Counter</td>
+          <td class="fn">ResetPerformed <span class="muted faint" style="font-weight:400;">{ previous: 30 }</span></td>
+          <td><span class="addr"><span class="h">0xae71...c509</span><span class="icon copy-ic" data-copy="0xae710000000000000000000000000000000000000000000000000000000c509">⎘</span></span></td>
+          <td class="mono-data">18,426,971</td>
+          <td class="mono-data right">—</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><time class="rel" datetime="2026-05-14T14:07:12Z">2m ago<span class="tip">2026-05-14 14:07:12 UTC<span class="age">#18,426,964</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot ok"></span></span></td>
+          <td>Counter</td>
+          <td class="fn">Reset <span class="muted faint" style="font-weight:400;">()</span></td>
+          <td><span class="addr"><span class="h">0xae71...c509</span><span class="icon copy-ic" data-copy="0xae710000000000000000000000000000000000000000000000000000000c509">⎘</span></span></td>
+          <td class="mono-data">18,426,964</td>
+          <td class="mono-data right">2,103,488</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+        <tr class="decode-unknown" onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><time class="rel" datetime="2026-05-14T14:06:58Z">2m ago<span class="tip">2026-05-14 14:06:58 UTC<span class="age">#18,426,951</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot warn"></span></span></td>
+          <td>Counter</td>
+          <td class="muted">Unknown payload <span class="faint">— ambiguous route (route_idx=0)</span> <span class="copy-btn"></span></td>
+          <td><span class="addr"><span class="h">0x66a2...7700</span><span class="icon copy-ic" data-copy="0x66a200112233445566778899aabbccddeeff00112233445566778899007700">⎘</span></span></td>
+          <td class="mono-data">18,426,951</td>
+          <td class="mono-data right">512,098</td>
+          <td><span class="pill pill-warn">AMBIGUOUS-ROUTE</span></td>
+        </tr>
+
+        <tr onclick="location='message-detail.html'" style="cursor:pointer;">
+          <td><time class="rel" datetime="2026-05-14T14:06:31Z">3m ago<span class="tip">2026-05-14 14:06:31 UTC<span class="age">#18,426,927</span></span></time></td>
+          <td><span class="kind-wrap"><span class="kind-badge kind-call">CALL</span><span class="stat-dot ok"></span></span></td>
+          <td>Admin</td>
+          <td class="fn">SetOwner <span class="muted faint" style="font-weight:400;">(new_owner: 0x82c0...4400)</span></td>
+          <td><span class="addr"><span class="h">0xdA17...1ec7</span><span class="icon copy-ic" data-copy="0xdA17e3f5c419b002afb8e6e9c4f10a2299c1fbe7c0d1244c2110a98b5e7a1ec7">⎘</span></span></td>
+          <td class="mono-data">18,426,927</td>
+          <td class="mono-data right">5,820,109</td>
+          <td><span class="pill pill-ok">OK</span></td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <span class="faint">page <span class="mono-data">1</span> of <span class="mono-data">487</span></span>
+      <span style="margin: 0 12px;"></span>
+      <span class="page-btn">&lt;</span>
+      <span class="page-btn">&gt;</span>
+    </div>
+  </div>
+
+  <div class="banner" style="margin-top: 24px;">
+    Rows marked <span class="pill pill-warn" style="margin: 0 4px; vertical-align: middle;">UNKNOWN</span> are messages the dispatcher couldn't decode against the program's IDL. Raw bytes are preserved for retroactive diagnosis. Common reasons: <span class="mono-data">trailing-bytes</span> (IDL drift), <span class="mono-data">no-entry</span> (unknown entry_id), <span class="mono-data">ambiguous-route</span> (route_idx=0 with multi-instance services).
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="f-left">
+    <span class="wordmark">VARA EXPLORER</span>
+    <span class="sep">·</span>
+    <span class="faint">Mainnet</span>
+    <span class="sep">·</span>
+    <span class="faint">v0.1.0</span>
+    <span class="sep">·</span>
+    <a href="#">API</a>
+    <span class="sep">·</span>
+    <a href="#">Docs</a>
+    <span class="sep">·</span>
+    <a href="#">GitHub</a>
+  </div>
+  <div class="f-right tip-meta">
+    <span class="tip-dot"></span>
+    tip: <span class="n">#18,427,057</span> <span class="sep">·</span> <span class="n">4s</span> ago
+  </div>
+</footer>
+
+<script>
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-copy]');
+  if (!t) return;
+  e.preventDefault();
+  e.stopPropagation();
+  navigator.clipboard?.writeText(t.getAttribute('data-copy'));
+  t.classList.add('copied');
+  const prev = t.textContent;
+  if (t.classList.contains('copy-ic')) t.textContent = '✓';
+  setTimeout(() => { t.classList.remove('copied'); if (t.classList.contains('copy-ic')) t.textContent = prev; }, 900);
+});
+const samples = ["Counter::Increment", "0xdA17...1ec7  // actorId", "trailing-bytes", "AMBIGUOUS-ROUTE"];
+let si = 0;
+const hq = document.getElementById('header-q');
+setInterval(() => { si = (si + 1) % samples.length; if (hq && document.activeElement !== hq) hq.placeholder = samples[si]; }, 2600);
+document.addEventListener('keydown', (e) => {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') { e.preventDefault(); hq?.focus(); }
+});
+document.addEventListener('click', (e) => {
+  document.querySelectorAll('details[open]').forEach(d => { if (!d.contains(e.target)) d.removeAttribute('open'); });
+});
+</script>
+
+</body>
+</html>
