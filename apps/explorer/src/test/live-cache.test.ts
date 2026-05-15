@@ -68,6 +68,7 @@ function makeDetail(blockNumber: number): ExplorerBlockDetail {
     },
     blockNumber,
     blockHash: `0x${blockNumber}`,
+    observedObjects: [],
     events: [],
     extrinsics: [],
     fetchedAt: Date.now(),

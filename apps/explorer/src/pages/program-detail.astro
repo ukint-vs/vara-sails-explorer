@@ -14,7 +14,7 @@ const program = programs[0];
 const code = codeSummaries[0];
 const programMetrics = [
   { label: "Messages 24h", value: program.messages24h, note: "observed in local cache", tone: "success", badge: "+12%", progress: 68 },
-  { label: "Decode coverage", value: program.decodeCoverage, note: "trusted Sails IDL", tone: "brand", badge: "Sails", progress: 99 },
+  { label: "IDL readiness", value: program.decodeCoverage, note: "fixture preview", tone: "brand", badge: "Sails", progress: 99 },
   { label: "Executable balance", value: program.executableBalance, note: "watch before heavy calls", tone: "warn", badge: "Balance", progress: 36 },
   { label: "Linked code", value: "4", note: "programs using this code ID", tone: "info", badge: "Code", progress: 52 }
 ] as const;
@@ -26,14 +26,14 @@ const programMetrics = [
 
     <section class="page-head compact-head">
       <div>
-        <div class="eyebrow">Program</div>
+        <div class="eyebrow">Program preview</div>
         <h1>{program.name}</h1>
-        <p class="lede">IDs, linked code, Sails interface, recent messages, read/send actions, and IDL trust for one deployed program.</p>
+        <p class="lede">Static Milestone 3 preview for one deployed program. M1 only links to program candidates observed from live RPC data.</p>
       </div>
       <div class="chip-row">
         <StatusChip kind="programHealth" value={program.health} />
         <StatusChip kind="trust" value={program.trust} />
-        <Chip tone="info" label="Direct RPC" dot />
+        <Chip tone="info" label="Preview · M3" dot />
       </div>
     </section>
 

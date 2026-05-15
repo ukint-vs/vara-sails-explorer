@@ -46,6 +46,7 @@ export class ExplorerRuntime {
   private status: ExplorerConnectionStatus;
   private headUnsubscribe: Unsubscribe | undefined;
   private started = false;
+  private fixtureMode = false;
   private generation = 0;
   private queue: QueueItem[] = [];
   private queuedKeys = new Set<string>();
@@ -112,6 +113,7 @@ export class ExplorerRuntime {
     this.headUnsubscribe = undefined;
     await this.dataSource?.disconnect();
     this.dataSource = undefined;
+    this.fixtureMode = false;
     this.status = {
       ...this.status,
       phase: "idle",
@@ -135,13 +137,24 @@ export class ExplorerRuntime {
       return cached;
     }
 
-    const source = this.dataSource ?? this.fixtureDataSource;
+    const source = this.dataSource ?? (this.fixtureMode ? this.fixtureDataSource : undefined);
+    if (!source) {
+      throw new Error("Block detail unavailable until the RPC endpoint connects or cached data exists.");
+    }
 
     try {
       const detail = await source.getBlockDetail(blockId);
       await this.cache.writeDetail(key, blockId, detail);
       return detail;
     } catch (error) {
+      if (!this.fixtureMode) {
+        throw new Error(
+          error instanceof Error
+            ? `Block detail unavailable from RPC: ${error.message}`
+            : "Block detail unavailable from RPC."
+        );
+      }
+
       const detail = await this.fixtureDataSource.getBlockDetail(blockId);
       return {
         ...detail,
@@ -170,7 +183,9 @@ export class ExplorerRuntime {
     await this.headUnsubscribe?.();
     this.headUnsubscribe = undefined;
     await this.dataSource?.disconnect();
-    this.dataSource = forceFixture ? this.fixtureDataSource : this.dataSourceFactory(endpoint);
+    const nextDataSource = forceFixture ? this.fixtureDataSource : this.dataSourceFactory(endpoint);
+    this.dataSource = nextDataSource;
+    this.fixtureMode = forceFixture;
     this.currentEndpoint = endpoint;
     this.queue = [];
     this.queuedKeys.clear();
@@ -192,8 +207,14 @@ export class ExplorerRuntime {
     }
 
     try {
-      await withTimeout(this.dataSource.connect(endpoint), CONNECT_TIMEOUT_MS, "RPC connection timed out.");
+      await withTimeout(
+        nextDataSource.connect(endpoint),
+        CONNECT_TIMEOUT_MS,
+        "RPC connection timed out.",
+        () => safeDisconnect(nextDataSource)
+      );
       if (generation !== this.generation) {
+        await safeDisconnect(nextDataSource);
         return;
       }
 
@@ -230,6 +251,10 @@ export class ExplorerRuntime {
         this.emit();
       });
     } catch (error) {
+      if (this.dataSource === nextDataSource && !forceFixture) {
+        this.dataSource = undefined;
+      }
+      await safeDisconnect(nextDataSource);
       await this.useFallback(endpoint, error);
     }
   }
@@ -306,16 +331,17 @@ export class ExplorerRuntime {
 
   private async useFallback(endpoint: RpcEndpoint, error: unknown): Promise<void> {
     const cachedBlocks = await this.cache.readBlocks(endpointKey(endpoint));
-    this.blocks = cachedBlocks.length > 0 ? sortBlocksDesc(cachedBlocks) : await this.fixtureDataSource.getRecentBlocks(
+    const hasCachedBlocks = cachedBlocks.length > 0;
+    this.blocks = hasCachedBlocks ? sortBlocksDesc(cachedBlocks) : await this.fixtureDataSource.getRecentBlocks(
       BLOCKS_RENDER_LIMIT
     );
     this.status = {
-      phase: cachedBlocks.length > 0 ? "cache_only" : "error",
+      phase: hasCachedBlocks ? "cache_only" : "error",
       endpoint,
-      message: cachedBlocks.length > 0
+      message: hasCachedBlocks
         ? "RPC unavailable. Showing cached blocks."
         : "RPC unavailable. Showing fixture blocks.",
-      usingCache: cachedBlocks.length > 0,
+      usingCache: hasCachedBlocks,
       error: error instanceof Error ? error.message : String(error),
       lastUpdated: Date.now()
     };
@@ -350,11 +376,18 @@ export function createInitialSnapshot(
 
 function statsFromBlocks(blocks: ExplorerBlock[], status: ExplorerConnectionStatus): NetStat[] {
   const best = status.bestBlock ?? blockNumberValue(blocks[0]?.number ?? "#0");
-  const finalized = status.finalizedBlock ?? blockNumberValue(blocks.find((block) => block.finality === "finalized")?.number ?? "#0");
   const bestBlock = blocks[0];
-  const totalGearMessages = blocks.reduce((sum, block) => sum + block.gearMessages, 0);
-  const totalDecoded = blocks.reduce((sum, block) => sum + block.decodedSails, 0);
-  const coverage = totalGearMessages > 0 ? `${Math.round((totalDecoded / totalGearMessages) * 100)}%` : "pending";
+  let finalized = status.finalizedBlock;
+  let totalGearMessages = 0;
+  let failedExtrinsics = 0;
+
+  for (const block of blocks) {
+    if (finalized == null && block.finality === "finalized") {
+      finalized = blockNumberValue(block.number);
+    }
+    totalGearMessages += block.gearMessages;
+    failedExtrinsics += block.failures;
+  }
 
   return [
     {
@@ -366,7 +399,7 @@ function statsFromBlocks(blocks: ExplorerBlock[], status: ExplorerConnectionStat
     },
     {
       label: "Finalized",
-      value: finalized > 0 ? `#${finalized.toLocaleString("en-US")}` : "pending",
+      value: finalized && finalized > 0 ? `#${finalized.toLocaleString("en-US")}` : "pending",
       note: best && finalized ? `lag ${Math.max(0, best - finalized)} blocks` : "awaiting head",
       tone: "success"
     },
@@ -383,24 +416,32 @@ function statsFromBlocks(blocks: ExplorerBlock[], status: ExplorerConnectionStat
       tone: "neutral"
     },
     {
-      label: "Gear msgs",
+      label: "Gear events",
       value: String(totalGearMessages),
       note: "from current window",
       tone: "steel"
     },
     {
-      label: "Decode coverage",
-      value: coverage,
-      note: "M2 decoder pending",
-      tone: "success"
+      label: "Failed ext.",
+      value: String(failedExtrinsics),
+      note: "current window",
+      tone: failedExtrinsics > 0 ? "warn" : "success"
     }
   ];
 }
 
-async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, message: string): Promise<T> {
+async function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+  message: string,
+  onTimeout?: () => Promise<void> | void
+): Promise<T> {
   let timeout: ReturnType<typeof setTimeout> | undefined;
   const timer = new Promise<never>((_, reject) => {
-    timeout = setTimeout(() => reject(new Error(message)), timeoutMs);
+    timeout = setTimeout(() => {
+      void (async () => onTimeout?.())().catch(() => undefined);
+      reject(new Error(message));
+    }, timeoutMs);
   });
 
   return Promise.race([promise, timer]).finally(() => {
@@ -408,4 +449,8 @@ async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, message: s
       clearTimeout(timeout);
     }
   });
+}
+
+async function safeDisconnect(source: ExplorerDataSource): Promise<void> {
+  await source.disconnect().catch(() => undefined);
 }

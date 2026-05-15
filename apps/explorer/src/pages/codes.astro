@@ -17,12 +17,12 @@ import { codeSummaries, programs } from "../data/fixtures";
     <section class="page-head compact-head">
       <div>
         <div class="eyebrow">Codes</div>
-        <h1>Code IDs, Wasm hashes, IDL availability, and deployed programs.</h1>
-        <p class="lede">Check whether a code hash has embedded, registry, or user-provided Sails IDL before decoding messages.</p>
+        <h1>Code and IDL preview.</h1>
+        <p class="lede">Fixture rows model the later code/IDL registry. M1 only shows code candidates when live block data exposes them.</p>
       </div>
       <div class="chip-row">
-        <Chip tone="brand" label="Sails IDL" dot />
-        <Chip tone="info" label="Direct RPC" dot />
+        <Chip tone="info" label="Preview · M3" dot />
+        <Chip tone="steel" label="Fixture rows" dot />
       </div>
     </section>
 
@@ -39,7 +39,7 @@ import { codeSummaries, programs } from "../data/fixtures";
     </section>
 
     <section class="grid sidebar">
-      <DataCard title="Code directory" description="Static and cached code records used by decode, program pages, and search.">
+      <DataCard title="Code directory preview" description="Static examples for code IDs, Wasm hashes, IDL source, and trust state.">
         <div class="table codes">
           <div class="table-head">
             <span>Code ID</span>

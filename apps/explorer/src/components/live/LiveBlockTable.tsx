@@ -1,6 +1,6 @@
 import type { ExplorerBlock, FinalityStatus } from "../../data/types";
 import { finalityStatusMeta } from "../../lib/status";
-import { blockNumberValue } from "../../lib/live-explorer/mappers";
+import { blockNumberValue, formatBlockNumberPlain } from "../../lib/live-explorer/mappers";
 import LiveCopyButton from "./LiveCopyButton";
 
 type Props = {
@@ -18,39 +18,41 @@ export default function LiveBlockTable({ blocks, compact = false }: Props) {
         <span>Author</span>
         <span>Finality</span>
         <span>Extrinsics / events</span>
-        <span>Gear msgs</span>
-        <span>Sails decoded</span>
+        <span>Gear events</span>
+        <span>Failed ext.</span>
       </div>
-      {blocks.map((block) => (
-        <div className="table-row" data-searchable key={`${block.number}-${block.hash}`}>
-          <CopyHash
-            value={block.number}
-            label={block.number}
-            href={`/block-detail?block=${encodeURIComponent(String(blockNumberValue(block.number)))}`}
-            name="block number"
-          />
-          <div className="cell-stack">
-            <span className="cell-main mono">{block.age}</span>
-            <span className="cell-sub mono">{block.timestamp}</span>
+      {blocks.map((block) => {
+        const blockNumber = formatBlockNumberPlain(block.number);
+
+        return (
+          <div className="table-row" data-searchable key={`${block.number}-${block.hash}`}>
+            <CopyHash
+              value={blockNumber}
+              label={blockNumber}
+              href={`/block-detail?block=${encodeURIComponent(String(blockNumberValue(block.number)))}`}
+              name="block number"
+            />
+            <div className="cell-stack">
+              <span className="cell-main mono">{block.age}</span>
+              <span className="cell-sub mono">{block.timestamp}</span>
+            </div>
+            <CopyHash value={block.hash} label={block.hash} name="block hash" />
+            <CopyHash value={block.author} label={block.author} name="block author" />
+            <div>
+              <FinalityChip value={block.finality} />
+            </div>
+            <div className="cell-stack">
+              <span className="cell-main">{block.extrinsics}</span>
+              <span className="cell-sub">{block.events} events</span>
+            </div>
+            <div className="cell-stack">
+              <span className="cell-main">{block.gearMessages}</span>
+              <span className="cell-sub">observed</span>
+            </div>
+            <div className="cell-main">{block.failures}</div>
           </div>
-          <CopyHash value={block.hash} label={block.hash} name="block hash" />
-          <CopyHash value={block.author} label={block.author} name="block author" />
-          <div>
-            <FinalityChip value={block.finality} />
-          </div>
-          <div className="cell-stack">
-            <span className="cell-main">{block.extrinsics}</span>
-            <span className="cell-sub">{block.events} events</span>
-          </div>
-          <div className="cell-stack">
-            <span className="cell-main">{block.gearMessages}</span>
-            <span className="cell-sub">{block.failures} failed</span>
-          </div>
-          <div className="cell-main">
-            {block.decodedSails}/{block.gearMessages}
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

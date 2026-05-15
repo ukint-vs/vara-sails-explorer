@@ -8,19 +8,24 @@ type Props = {
   initialBlocks: ExplorerBlock[];
 };
 
+type FinalityFilter = "all" | "best_block" | "finalized";
+
 export default function LiveBlocksPanel({ initialBlocks }: Props) {
   const snapshot = useExplorerSnapshot(initialBlocks);
   const [query, setQuery] = useState("");
-  const [finality, setFinality] = useState("all");
+  const [finality, setFinality] = useState<FinalityFilter>("all");
   const visibleBlocks = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
-    return snapshot.blocks
-      .slice(0, 50)
-      .filter((block) => {
-        const matchesQuery = !normalizedQuery || Object.values(block).join(" ").toLowerCase().includes(normalizedQuery);
-        const matchesFinality = finality === "all" || block.finality === finality;
-        return matchesQuery && matchesFinality;
-      });
+    const rows = snapshot.blocks.slice(0, 50);
+    if (!normalizedQuery && finality === "all") {
+      return rows;
+    }
+
+    return rows.filter((block) => {
+      const matchesQuery = !normalizedQuery || Object.values(block).join(" ").toLowerCase().includes(normalizedQuery);
+      const matchesFinality = finality === "all" || block.finality === finality;
+      return matchesQuery && matchesFinality;
+    });
   }, [snapshot.blocks, query, finality]);
 
   return (
@@ -37,7 +42,7 @@ export default function LiveBlocksPanel({ initialBlocks }: Props) {
             <span className="kbd-hint">/</span>
           </label>
         </div>
-        <select className="select" aria-label="Finality filter" value={finality} onChange={(event) => setFinality(event.currentTarget.value)}>
+        <select className="select" aria-label="Finality filter" value={finality} onChange={(event) => setFinality(event.currentTarget.value as FinalityFilter)}>
           <option value="all">All finality states</option>
           <option value="best_block">Best block</option>
           <option value="finalized">Finalized</option>
@@ -54,7 +59,7 @@ export default function LiveBlocksPanel({ initialBlocks }: Props) {
         <div className="data-card-head">
           <div>
             <h3>Block stream</h3>
-            <p>Rows keep block production, finality, message volume, failures, and decode coverage separate.</p>
+            <p>Rows keep block production, finality, event volume, and failed extrinsics separate.</p>
           </div>
           <span className="chip info">
             <span className="dot" aria-hidden="true" />

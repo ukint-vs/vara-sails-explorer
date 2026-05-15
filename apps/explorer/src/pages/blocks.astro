@@ -13,12 +13,13 @@ import { blocks, netStats } from "../data/fixtures";
     <section class="page-head compact-head">
       <div>
         <div class="eyebrow">Blocks</div>
-        <h1>Recent blocks with finality, authors, Gear messages, and Sails decode counts.</h1>
-        <p class="lede">Use this view to compare best and finalized heads, spot failed messages, and jump to a block from the cache window.</p>
+        <h1>Live block stream.</h1>
+        <p class="lede">Compare best and finalized heads, scan producer and Gear event volume, then open a block for observed objects, events, and extrinsics.</p>
       </div>
       <div class="chip-row">
-        <Chip tone="info" label="Best block" dot />
-        <Chip tone="success" label="Finalized" dot />
+        <Chip tone="info" label="Best head" dot />
+        <Chip tone="success" label="Finalized head" dot />
+        <Chip tone="steel" label="Local window" dot />
       </div>
     </section>
 

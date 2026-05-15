@@ -1,7 +1,7 @@
 import { blocks } from "../../data/fixtures";
 import type { ExplorerBlock } from "../../data/types";
 import type { ExplorerDataSource } from "./data-source";
-import { blockNumberValue, formatBlockNumber, mergeBlocks } from "./mappers";
+import { blockNumberValue, extractObservedObjects, formatBlockNumber, mergeBlocks } from "./mappers";
 import { RPC_ENDPOINTS } from "./settings";
 import type { ExplorerBlockDetail, ExplorerConnectionStatus, ExplorerHeads, RpcEndpoint, Unsubscribe } from "./types";
 
@@ -72,55 +72,73 @@ export class FixtureDataSource implements ExplorerDataSource {
     const summary = await this.getBlockSummary(block);
     const blockNumber = blockNumberValue(summary.number);
     const hash = summary.hash.startsWith("0x") ? summary.hash : `0xfixture${blockNumber.toString(16)}`;
+    const events = [
+      {
+        id: "0-gear.MessageQueued",
+        index: 0,
+        phase: "ApplyExtrinsic(1)",
+        section: "gear",
+        method: "MessageQueued",
+        summary: "gear.MessageQueued",
+        raw: {
+          event: {
+            section: "gear",
+            method: "MessageQueued",
+            data: {
+              messageId: "0x1234567890abcdef",
+              programId: "0xabcdef1234567890"
+            }
+          }
+        }
+      },
+      {
+        id: "1-system.ExtrinsicSuccess",
+        index: 1,
+        phase: "ApplyExtrinsic(1)",
+        section: "system",
+        method: "ExtrinsicSuccess",
+        summary: "system.ExtrinsicSuccess",
+        raw: { section: "system", method: "ExtrinsicSuccess" }
+      }
+    ];
+    const extrinsics = [
+      {
+        id: "0-timestamp.set",
+        index: 0,
+        hash: `${hash}-0`,
+        section: "timestamp",
+        method: "set",
+        signer: "unsigned",
+        success: true,
+        summary: "timestamp.set",
+        raw: { section: "timestamp", method: "set" }
+      },
+      {
+        id: "1-gear.sendMessage",
+        index: 1,
+        hash: `${hash}-1`,
+        section: "gear",
+        method: "sendMessage",
+        signer: "0xfixture",
+        success: true,
+        summary: "gear.sendMessage",
+        raw: {
+          section: "gear",
+          method: "sendMessage",
+          args: {
+            destination: "0xabcdef1234567890"
+          }
+        }
+      }
+    ];
 
     return {
       block: summary,
       blockNumber,
       blockHash: hash,
-      events: [
-        {
-          id: "0-gear.MessageQueued",
-          index: 0,
-          phase: "ApplyExtrinsic(1)",
-          section: "gear",
-          method: "MessageQueued",
-          summary: "gear.MessageQueued fixture event",
-          raw: { section: "gear", method: "MessageQueued" }
-        },
-        {
-          id: "1-system.ExtrinsicSuccess",
-          index: 1,
-          phase: "ApplyExtrinsic(1)",
-          section: "system",
-          method: "ExtrinsicSuccess",
-          summary: "system.ExtrinsicSuccess fixture event",
-          raw: { section: "system", method: "ExtrinsicSuccess" }
-        }
-      ],
-      extrinsics: [
-        {
-          id: "0-timestamp.set",
-          index: 0,
-          hash: `${hash}-0`,
-          section: "timestamp",
-          method: "set",
-          signer: "unsigned",
-          success: true,
-          summary: "timestamp.set",
-          raw: { section: "timestamp", method: "set" }
-        },
-        {
-          id: "1-gear.sendMessage",
-          index: 1,
-          hash: `${hash}-1`,
-          section: "gear",
-          method: "sendMessage",
-          signer: "0xfixture",
-          success: true,
-          summary: "gear.sendMessage",
-          raw: { section: "gear", method: "sendMessage" }
-        }
-      ],
+      observedObjects: extractObservedObjects(events, extrinsics, blockNumber, "fixture"),
+      events,
+      extrinsics,
       fetchedAt: Date.now(),
       source: "fixture"
     };

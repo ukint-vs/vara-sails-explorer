@@ -17,12 +17,12 @@ import { messages } from "../data/fixtures";
     <section class="page-head compact-head">
       <div>
         <div class="eyebrow">Messages</div>
-        <h1>Gear message stream with execution, finality, decode, source, and trust.</h1>
-        <p class="lede">Filter recent calls, replies, events, queries, failures, program IDs, callers, fees, and block inclusion.</p>
+        <h1>Message stream preview.</h1>
+        <p class="lede">Fixture rows model the Milestone 2 message stream. M1 only promotes message objects observed from live block data.</p>
       </div>
       <div class="chip-row">
-        <Chip tone="info" label="Local cache" dot />
-        <Chip tone="brand" label="Header-first decode" dot />
+        <Chip tone="info" label="Preview · M2" dot />
+        <Chip tone="steel" label="Fixture rows" dot />
       </div>
     </section>
 
@@ -44,7 +44,7 @@ import { messages } from "../data/fixtures";
       <Button href="/decode" size="sm">Decode raw bytes</Button>
     </section>
 
-    <DataCard title="Local message cache" description="Direct RPC plus cached rows. Full historical account/message search belongs to indexed mode.">
+    <DataCard title="Message cache preview" description="Static examples for the later live message cache. Full historical account/message search belongs to indexed mode.">
       <MessageTable messages={messages} />
       <Fragment slot="foot"><Pagination label="Message pagination" location="Showing latest cached messages" placeholder="Jump to message / block" /></Fragment>
     </DataCard>
