@@ -14,6 +14,86 @@ The UI must never care whether data came from live RPC, local cache, static mani
 
 This keeps the product decentralized and fast to ship, while preserving the path to a production explorer.
 
+0.1 Milestone 2 decode source of truth
+
+M2 decode work is implemented against the local Sails checkout at:
+
+* path: `/Users/ukintvs/Documents/projects/sails`
+* commit: `9077b7d04322d098b96379c904380d0a445c5e04`
+* tag: `js/v1.0.0-beta.2`
+* explorer install artifact: generated local tarball `../sails/js/sails-js-0.5.1.tgz`
+
+The tarball is not a tracked binary artifact. Rebuild it with:
+
+```text
+pnpm prepare:sails-js
+pnpm install
+```
+
+The local Sails package provides the M2 browser decode surface: `SailsIdlParser`, `SailsMessageHeader`, `extractIdlFromWasm`, `SailsProgram.decodeCall`, `decodeReply`, `decodeError`, `decodeEvent`, `decodeCtor`, `resolveEntry`, and `resolveEntryCandidates`.
+
+Broader ecosystem-stage claims in this document are deferred until validated against real Vara/Sails program IDs, code IDs, messages, and embedded IDL flows. M2 is scoped to direct, user-initiated Decode Lab resolution and local browser decoding.
+
+0.2 M2 decode pipeline
+
+```text
+payload hex
+  -> byte cap: 256 KiB
+  -> Decode Lab session worker
+  -> Sails header read
+  -> SailsProgram.decode*
+  -> decoded | sails_unknown
+  -> result + route inspector + copyable trace
+```
+
+IDL sources:
+
+```text
+pasted/uploaded IDL
+  -> IDL cap: 1 MiB
+  -> worker parser
+  -> idlHash
+  -> dedicated decode cache
+
+uploaded Wasm
+  -> Wasm cap: 8 MiB
+  -> worker extractIdlFromWasm
+  -> IDL cap: 1 MiB
+  -> worker parser
+  -> idlHash
+  -> dedicated decode cache
+
+program ID
+  -> explicit resolve action
+  -> Gear RPC program.exists
+  -> Gear RPC program.codeId
+  -> original code bytes
+  -> code cap: 8 MiB
+  -> worker extractIdlFromWasm
+  -> aliases: programId -> codeId -> idlHash
+
+code ID
+  -> explicit resolve action
+  -> Gear RPC code.exists
+  -> original code bytes
+  -> code cap: 8 MiB
+  -> worker extractIdlFromWasm
+  -> alias: codeId -> idlHash
+```
+
+Worker state:
+
+```text
+idle
+  -> warm on first parse/extract/decode
+  -> parser init timeout: 5s
+  -> parse/extract/decode timeout: 10s
+  -> cache parsed SailsProgram by idlHash for the session
+  -> terminate on idle, source reset, endpoint reset, or unrecoverable failure
+```
+
+Persistent decode cache stores only IDL text, idlHash, provenance, and program/code aliases. It must never persist raw payloads, uploaded Wasm, or chain-fetched code bytes.
+
 ⸻
 
 1. Product scope
