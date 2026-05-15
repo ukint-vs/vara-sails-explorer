@@ -16,6 +16,12 @@ importers:
       '@gear-js/api':
         specifier: ^0.45.0
         version: 0.45.0(@polkadot/api@16.5.6)(@polkadot/wasm-crypto@7.5.4(@polkadot/util@14.0.3)(@polkadot/x-randomvalues@14.0.3(@polkadot/util@14.0.3)(@polkadot/wasm-util@7.5.4(@polkadot/util@14.0.3))))(rxjs@7.8.2)
+      '@polkadot/api':
+        specifier: ^16.5.1
+        version: 16.5.6
+      '@polkadot/util':
+        specifier: ^14.0.1
+        version: 14.0.3
       astro:
         specifier: ^6.3.3
         version: 6.3.3(@types/node@25.8.0)(rollup@4.60.3)(yaml@2.9.0)
@@ -25,6 +31,9 @@ importers:
       react-dom:
         specifier: ^19.2.6
         version: 19.2.6(react@19.2.6)
+      sails-js:
+        specifier: file:../../../sails/js/sails-js-0.5.1.tgz
+        version: file:../sails/js/sails-js-0.5.1.tgz(@gear-js/api@0.45.0(@polkadot/api@16.5.6)(@polkadot/wasm-crypto@7.5.4(@polkadot/util@14.0.3)(@polkadot/x-randomvalues@14.0.3(@polkadot/util@14.0.3)(@polkadot/wasm-util@7.5.4(@polkadot/util@14.0.3))))(rxjs@7.8.2))(@polkadot/api@16.5.6)(@polkadot/util@14.0.3)
     devDependencies:
       '@astrojs/check':
         specifier: ^0.9.9
@@ -1891,6 +1900,14 @@ packages:
 
   rxjs@7.8.2:
     resolution: {integrity: sha512-dhKf903U/PQZY6boNNtAGdWbG85WAbjT/1xYoZIC7FAY0yWapOBQVsVrDl58W86//e1VpMNBtRV4MaXfdMySFA==}
+
+  sails-js@file:../sails/js/sails-js-0.5.1.tgz:
+    resolution: {integrity: sha512-VX9PVjKE9UogYimvJ8aiv2S2aBXno6TaNhc3xc3rkqFTEVxjRDKlGLMYNBfMLSm32jruKFSfHz+2bpTsn1ML9g==, tarball: file:../sails/js/sails-js-0.5.1.tgz}
+    version: 0.5.1
+    peerDependencies:
+      '@gear-js/api': ^0.45.0
+      '@polkadot/api': ^16.5.1
+      '@polkadot/util': ^14.0.1
 
   sax@1.6.0:
     resolution: {integrity: sha512-6R3J5M4AcbtLUdZmRv2SygeVaM7IhrLXu9BmnOGmmACak8fiUtOsYNWUS4uK7upbmHIBbLBeFeI//477BKLBzA==}
@@ -4660,6 +4677,12 @@ snapshots:
   rxjs@7.8.2:
     dependencies:
       tslib: 2.8.1
+
+  sails-js@file:../sails/js/sails-js-0.5.1.tgz(@gear-js/api@0.45.0(@polkadot/api@16.5.6)(@polkadot/wasm-crypto@7.5.4(@polkadot/util@14.0.3)(@polkadot/x-randomvalues@14.0.3(@polkadot/util@14.0.3)(@polkadot/wasm-util@7.5.4(@polkadot/util@14.0.3))))(rxjs@7.8.2))(@polkadot/api@16.5.6)(@polkadot/util@14.0.3):
+    dependencies:
+      '@gear-js/api': 0.45.0(@polkadot/api@16.5.6)(@polkadot/wasm-crypto@7.5.4(@polkadot/util@14.0.3)(@polkadot/x-randomvalues@14.0.3(@polkadot/util@14.0.3)(@polkadot/wasm-util@7.5.4(@polkadot/util@14.0.3))))(rxjs@7.8.2)
+      '@polkadot/api': 16.5.6
+      '@polkadot/util': 14.0.3
 
   sax@1.6.0: {}
 
