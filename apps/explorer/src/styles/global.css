@@ -2181,6 +2181,12 @@ textarea {
   color: var(--muted);
 }
 
+.decode-lab .copy-ic {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--space-2);
+}
+
 .decode-head-actions .copy-ic {
   min-height: 44px;
   padding: 0 var(--space-2);

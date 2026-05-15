@@ -25,7 +25,9 @@ export function RouteInspector({ result, inspection, provenance }: RouteInspecto
       <dl className="decode-kv">
         <div>
           <dt>interface_id</dt>
-          <dd>{header?.interfaceId ?? "pending"}</dd>
+          <dd>
+            <CopyableHex value={header?.interfaceId} name="interface ID" chars={14} empty="pending" />
+          </dd>
         </div>
         <div>
           <dt>entry_id</dt>
