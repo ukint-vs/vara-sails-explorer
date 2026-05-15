@@ -41,7 +41,7 @@ const programMetrics = [
       <CopyHash value={program.programId} label="Program ID" name="program ID" />
       <Button variant="primary" size="sm">Read state</Button>
       <Button size="sm">Send message</Button>
-      <Button href={`/decode?programId=${program.programId}`} size="sm">Decode payload</Button>
+      <Button href="/decode" size="sm">Decode payload</Button>
       <Button size="sm">Download IDL</Button>
       <Button href="/codes" size="sm">Open code</Button>
     </section>
@@ -112,7 +112,7 @@ const programMetrics = [
           <Button variant="primary">Query order book</Button>
           <Button>Submit limit order</Button>
           <Button>Estimate gas</Button>
-          <Button href={`/decode?programId=${program.programId}`}>Decode payload</Button>
+          <Button href="/decode">Decode payload</Button>
         </Card>
         <Card title="Raw call setup" id="raw">
           <pre class="code-block">const program = await SailsProgram.fromIdl(idl);
