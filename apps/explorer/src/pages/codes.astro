@@ -34,7 +34,7 @@ import { codeSummaries, programs } from "../data/fixtures";
         <option>Registry IDL</option>
         <option>User IDL</option>
       </select>
-      <Button href="/decode" size="sm">Decode with IDL</Button>
+      <Button href={`/decode?codeId=${codeSummaries[0].codeId}`} size="sm">Decode with IDL</Button>
       <Button size="sm">Import registry</Button>
     </section>
 
@@ -85,7 +85,7 @@ import { codeSummaries, programs } from "../data/fixtures";
           </div>
         </DataCard>
 
-        <DataCard title="Decode resolution" description="Order used when rows need an interface.">
+        <DataCard title="Decode resolution" description="M2 resolves IDL only from explicit user actions.">
           <div class="doc-list">
             <div class="doc-item"><span class="doc-icon">1</span><div><div class="doc-title">Embedded IDL</div><div class="doc-copy">Read from the code custom section when code bytes are available.</div></div></div>
             <div class="doc-item"><span class="doc-icon">2</span><div><div class="doc-title">Local registry</div><div class="doc-copy">Use cached or curated IDL mapped by code ID and hash.</div></div></div>

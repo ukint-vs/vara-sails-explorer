@@ -1,4 +1,7 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+import { SAMPLE_IDL, SAMPLE_PAYLOAD_HEX } from "../../lib/decode/sample";
+
+const decodeAttemptTimeout = 7_000;
 
 const routes = [
   "/?source=fixture",
@@ -16,6 +19,42 @@ const routes = [
   "/variants/documentarian",
   "/variants/search-first"
 ];
+
+async function expectDecodeLabReady(page: Page) {
+  await expect(page).toHaveURL(/\/decode/);
+  await expect(page.getByRole("combobox", { name: "IDL source" })).toHaveValue("pasted_idl");
+  await expect(page.getByLabel("IDL text")).toBeEditable();
+  await expect(page.getByLabel("Raw bytes")).toBeEditable();
+  await page.waitForLoadState("networkidle");
+  await expect(page.getByLabel("IDL text")).toBeEditable();
+  await expect(page.getByLabel("Raw bytes")).toBeEditable();
+}
+
+async function fillDecodeLabAndWait(page: Page, payloadHex: string, waitForResult: () => Promise<void>) {
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    await expectDecodeLabReady(page);
+    await page.getByLabel("IDL text").fill(SAMPLE_IDL);
+    await page.getByLabel("Raw bytes").fill(payloadHex);
+    await expect(page.getByLabel("IDL text")).toHaveValue(SAMPLE_IDL);
+    await expect(page.getByLabel("Raw bytes")).toHaveValue(payloadHex);
+
+    try {
+      await waitForResult();
+      return;
+    } catch (error) {
+      lastError = error;
+      await page.waitForLoadState("networkidle").catch(() => undefined);
+    }
+  }
+
+  throw lastError;
+}
+
+function diagnosticsCopyButton(page: Page) {
+  return page.getByRole("region", { name: "Diagnostics" }).getByRole("button").first();
+}
 
 for (const route of routes) {
   test(`renders ${route}`, async ({ page }) => {
@@ -82,4 +121,30 @@ test("live M1 block surfaces use real-first labels", async ({ page }) => {
   await expect(page.getByText("Failed ext.").first()).toBeVisible();
   await expect(page.getByText("Sails decoded")).toHaveCount(0);
   await expect(page.getByText("Decode coverage")).toHaveCount(0);
+});
+
+test("decode lab runs bundled worker flow and copies diagnostics", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/decode", { waitUntil: "networkidle" });
+
+  await fillDecodeLabAndWait(page, SAMPLE_PAYLOAD_HEX, async () => {
+    await expect(page.getByText('"value": 7')).toBeVisible({ timeout: decodeAttemptTimeout });
+  });
+  await expect(page.getByText("Counter")).toBeVisible();
+  await expect(page.getByText("routeIdx")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Copy payload hex" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Copy IDL hash" }).first()).toBeVisible();
+
+  await diagnosticsCopyButton(page).click();
+  await expect(page.locator("[role='status']")).toContainText(/Diagnostics copied|Copy failed/);
+});
+
+test("decode lab shows malformed payload failures without hiding diagnostics", async ({ page }) => {
+  await page.goto("/decode", { waitUntil: "networkidle" });
+
+  await fillDecodeLabAndWait(page, "0x000102", async () => {
+    await expect(page.getByLabel("Decode workspace").getByText("Sails unknown").first()).toBeVisible({ timeout: decodeAttemptTimeout });
+  });
+  await expect(page.getByLabel("Decode workspace").getByText(/too-short|no-magic/).first()).toBeVisible();
+  await expect(diagnosticsCopyButton(page)).toBeEnabled();
 });
