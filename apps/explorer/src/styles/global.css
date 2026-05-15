@@ -133,6 +133,7 @@ button:disabled,
   left: var(--space-3);
   z-index: 70;
   transform: translateY(-140%);
+  min-height: var(--control-height-lg);
   padding: var(--space-2) var(--space-3);
   border: 1px solid var(--brand);
   border-radius: var(--radius-tag);
@@ -224,6 +225,7 @@ h3 {
 
 .logo {
   display: inline-flex;
+  min-height: var(--control-height-lg);
   align-items: center;
   gap: var(--space-3);
   color: var(--text-strong);
@@ -521,7 +523,7 @@ h3 {
 }
 
 .btn.small {
-  min-height: 32px;
+  min-height: var(--control-height-lg);
   padding: 0 var(--space-2);
   font-size: var(--font-size-sm);
 }
@@ -1393,6 +1395,9 @@ textarea {
 }
 
 .copy-hash .hash {
+  display: inline-flex;
+  min-height: var(--control-height-lg);
+  align-items: center;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1411,8 +1416,9 @@ textarea {
 
 .copy-ic {
   flex: 0 0 auto;
-  min-height: 22px;
-  padding: 0 5px;
+  min-width: var(--control-height-lg);
+  min-height: var(--control-height-lg);
+  padding: 0 var(--space-2);
   font-size: var(--font-size-xs);
 }
 
@@ -1562,14 +1568,15 @@ textarea {
 }
 
 .tab {
-  min-height: var(--control-height-sm);
+  display: inline-flex;
+  min-height: var(--control-height-lg);
+  align-items: center;
   padding: 0 var(--space-2);
   border: 1px solid var(--border);
   border-radius: var(--radius-tag);
   color: var(--muted);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
-  line-height: var(--control-height-sm);
   text-transform: uppercase;
 }
 
@@ -1770,7 +1777,7 @@ textarea {
 }
 
 .pagination-v2 .input {
-  min-height: 32px;
+  min-height: var(--control-height-lg);
 }
 
 .live-panel {
@@ -2082,6 +2089,10 @@ textarea {
 }
 
 .footer a {
+  display: inline-flex;
+  min-width: var(--control-height-lg);
+  min-height: var(--control-height-lg);
+  align-items: center;
   color: var(--muted);
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;

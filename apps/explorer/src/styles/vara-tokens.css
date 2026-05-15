@@ -46,7 +46,7 @@
   --color-syntax-number: var(--color-primitive-brand-green);
   --color-syntax-string: #ffc785;
   --control-height-lg: 44px;
-  --control-height-md: 40px;
+  --control-height-md: 44px;
   --control-height-sm: 28px;
   --font-family-mono: "Roboto Mono", ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
   --font-family-sans: var(--font-family-mono);
