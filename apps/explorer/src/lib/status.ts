@@ -19,7 +19,7 @@ export const executionStatusMeta: Record<ExecutionStatus, StatusMeta> = {
 };
 
 export const decodeStatusMeta: Record<DecodeStatus, StatusMeta> = {
-  decoded: { label: "Decoded", tone: "brand" },
+  decoded: { label: "Decoded", tone: "steel" },
   missing_idl: { label: "Missing IDL", tone: "warn" },
   unknown_interface: { label: "Unknown interface", tone: "warn" },
   bad_header: { label: "Bad header", tone: "danger" },
@@ -46,8 +46,8 @@ export const dataSourceMeta: Record<DataSourceStatus, StatusMeta> = {
 };
 
 export const trustStatusMeta: Record<TrustStatus, StatusMeta> = {
-  verified_source: { label: "Verified source", tone: "success" },
-  embedded_idl: { label: "Embedded IDL", tone: "brand" },
+  verified_source: { label: "Verified source", tone: "steel" },
+  embedded_idl: { label: "Embedded IDL", tone: "steel" },
   registry_idl: { label: "Registry IDL", tone: "steel" },
   user_idl: { label: "User IDL", tone: "warn" },
   unknown: { label: "Unknown", tone: "neutral" }

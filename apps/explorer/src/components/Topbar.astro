@@ -2,7 +2,7 @@
 import Button from "./Button.astro";
 
 interface Props {
-  active?: "overview" | "blocks" | "messages" | "programs" | "decode" | "compare";
+  active?: "overview" | "blocks" | "messages" | "programs" | "codes" | "decode" | "settings" | "compare";
 }
 
 const { active = "overview" } = Astro.props;
@@ -10,9 +10,10 @@ const nav = [
   { id: "overview", href: "/", label: "HOME" },
   { id: "blocks", href: "/blocks", label: "BLOCKS" },
   { id: "messages", href: "/messages", label: "MESSAGES" },
-  { id: "programs", href: "/program-detail", label: "PROGRAMS" },
+  { id: "programs", href: "/programs", label: "PROGRAMS" },
+  { id: "codes", href: "/codes", label: "CODES" },
   { id: "decode", href: "/decode", label: "DECODE" },
-  { id: "compare", href: "/compare", label: "VARIANTS" }
+  { id: "settings", href: "/settings", label: "SETTINGS" }
 ] as const;
 ---
 
@@ -21,7 +22,7 @@ const nav = [
     <a class="logo" href="/" aria-label="Vara Sails Explorer home">
       <!-- TODO(vara-brand): replace [V] with the official Vara mark SVG when the asset ships. -->
       <span class="logo-mark">[V]</span>
-      <span class="logo-copy">Vara Sails Explorer<small>Direct RPC first · indexed later</small></span>
+      <span class="logo-copy">Vara Sails Explorer<small>Blocks · messages · programs</small></span>
     </a>
     <nav class="nav" aria-label="Primary navigation">
       {
@@ -30,6 +31,10 @@ const nav = [
         ))
       }
     </nav>
+    <div class="header-search" role="search">
+      <input aria-label="Global explorer search" placeholder="Search block, msg, program, code, account..." />
+      <span class="kbd-hint" aria-hidden="true">/</span>
+    </div>
     <div class="header-actions">
       <a class="network-chip" href="/settings"><span class="vara-mark">[V]</span> VARA.ETH MAINNET</a>
       <Button variant="primary">CONNECT WALLET</Button>

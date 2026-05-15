@@ -1,0 +1,24 @@
+---
+import { netStats } from "../data/fixtures";
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<section class:list={["netstats", compact && "compact"]} aria-label="Network stats">
+  {
+    netStats.map((stat) => (
+      <div class:list={["netstat", stat.tone || "neutral"]}>
+        <div class="netstat-label">
+          {stat.live && <span class="live-dot" aria-hidden="true"></span>}
+          <span>{stat.label}</span>
+        </div>
+        <div class="netstat-value">{stat.value}</div>
+        <div class="netstat-note">{stat.note}</div>
+      </div>
+    ))
+  }
+</section>

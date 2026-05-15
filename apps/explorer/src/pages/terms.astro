@@ -1,0 +1,24 @@
+---
+import Card from "../components/Card.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Terms" active="overview">
+  <main id="main-content" class="layout">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow">Terms</div>
+        <h1>Explorer terms and data accuracy.</h1>
+        <p class="lede">Explorer data is for chain inspection, debugging, and ecosystem operations. Verify critical balances, transactions, and finality against a trusted endpoint.</p>
+      </div>
+    </section>
+
+    <Card title="Use of this explorer">
+      <dl>
+        <div class="kv"><dt>Data accuracy</dt><dd>Fixture data is representative and not a canonical chain record.</dd></div>
+        <div class="kv"><dt>Transactions</dt><dd>No transaction submission is implemented.</dd></div>
+        <div class="kv"><dt>Scope</dt><dd>Direct RPC, indexing, wallet actions, and local cache behavior depend on the active build and endpoint.</dd></div>
+      </dl>
+    </Card>
+  </main>
+</BaseLayout>

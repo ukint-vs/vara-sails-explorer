@@ -1,0 +1,18 @@
+---
+import BlockDetailPanel from "../components/live/BlockDetailPanel";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Block detail" active="blocks" showStatus={false}>
+  <main id="main-content" class="layout layout-dense">
+    <section class="page-head compact-head">
+      <div>
+        <div class="eyebrow">Block detail</div>
+        <h1>Events and extrinsics for one live or cached block.</h1>
+        <p class="lede">Use a block number or hash in the query string to inspect raw runtime context before Sails decode lands.</p>
+      </div>
+    </section>
+
+    <BlockDetailPanel client:load />
+  </main>
+</BaseLayout>

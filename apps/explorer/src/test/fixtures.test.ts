@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { blocks, messages, programs, variants } from "../data/fixtures";
+import { blocks, codeSummaries, messages, netStats, programs, variants } from "../data/fixtures";
 
 describe("static explorer fixtures", () => {
   it("contains data for all source mockup directions", () => {
@@ -22,5 +22,7 @@ describe("static explorer fixtures", () => {
     expect(blocks.length).toBeGreaterThanOrEqual(4);
     expect(messages.length).toBeGreaterThanOrEqual(4);
     expect(programs.length).toBeGreaterThanOrEqual(3);
+    expect(codeSummaries.length).toBeGreaterThanOrEqual(3);
+    expect(netStats.length).toBeGreaterThanOrEqual(6);
   });
 });

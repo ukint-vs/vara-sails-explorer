@@ -1,0 +1,21 @@
+---
+interface Props {
+  value: string;
+  label?: string;
+  href?: string;
+  name?: string;
+}
+
+const { value, label = value, href, name = "value" } = Astro.props;
+---
+
+<span class="copy-hash">
+  {
+    href ? (
+      <a class="hash" href={href} title={value}>{label}</a>
+    ) : (
+      <span class="hash" title={value}>{label}</span>
+    )
+  }
+  <button class="copy copy-ic" type="button" data-copy={value} aria-label={`Copy ${name}`}>Copy</button>
+</span>

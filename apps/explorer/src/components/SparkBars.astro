@@ -1,0 +1,11 @@
+---
+interface Props {
+  values: number[];
+}
+
+const { values } = Astro.props;
+---
+
+<span class="spark-bars" aria-hidden="true">
+  {values.map((value) => <i style={`--bar: ${value}%`}></i>)}
+</span>

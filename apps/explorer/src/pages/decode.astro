@@ -7,19 +7,19 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="Decode lab" active="decode">
-  <main class="layout">
+  <main id="main-content" class="layout">
     <section class="page-head">
       <div>
         <div class="eyebrow">Decode lab</div>
         <h1>Decode raw Sails payloads with explicit failure reasons.</h1>
-        <p class="lede">The decode tool is the explorer’s developer surface. It stays strict, transparent, and browser-safe.</p>
+        <p class="lede">Use this when a payload is undecoded in a message row or you need to verify an IDL route manually.</p>
       </div>
       <div class="chip-row"><Chip tone="brand" label="Header-first" /><Chip label="No Wasm execution" /></div>
     </section>
 
     <section class="grid wide-sidebar">
       <div class="stack">
-        <Card title="Input" description="Paste bytes, choose IDL source, and decode call/reply/event/error/constructor.">
+        <Card title="Input" description="Paste bytes, select an IDL source, and decode call/reply/event/error/constructor payloads.">
           <div class="stack">
             <div class="grid two">
               <div class="field"><label>Program or code ID</label><input class="input" value="0x4f8c8f...a241" /></div>
@@ -30,7 +30,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           </div>
         </Card>
 
-        <Card title="Result" description="Successful decode shows meaning first, then header and bytes.">
+        <Card title="Result" description="Decoded output shows service, method, arguments, header fields, and original bytes.">
           <Fragment slot="action"><Chip tone="success" label="Decoded" /></Fragment>
           <pre class="code-block">&#123;
   <span class="key">"status"</span>: <span class="str">"decoded"</span>,

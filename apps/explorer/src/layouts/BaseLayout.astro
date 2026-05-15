@@ -5,7 +5,7 @@ import "../styles/global.css";
 
 interface Props {
   title: string;
-  active?: "overview" | "blocks" | "messages" | "programs" | "decode" | "compare";
+  active?: "overview" | "blocks" | "messages" | "programs" | "codes" | "decode" | "settings" | "compare";
   variant?: "production" | "terminal" | "operator" | "documentarian" | "search-first";
   showStatus?: boolean;
 }
@@ -18,18 +18,31 @@ const { title, active = "overview", variant = "production", showStatus = true } 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Client-first Vara Sails Explorer mock implementation." />
+    <meta name="description" content="Vara Sails Explorer for blocks, messages, programs, and Sails payload decoding." />
+    <meta property="og:title" content={`${title} · Vara Sails Explorer`} />
+    <meta property="og:description" content="Vara Sails Explorer for blocks, messages, programs, and Sails payload decoding." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
     <title>{title} · Vara Sails Explorer</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <script is:inline src="/interactions.js" defer></script>
   </head>
   <body class={`variant-${variant}`}>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <div class="app-shell">
       <Topbar active={active} />
       {showStatus && <StatusStrip />}
       <slot />
+      <footer class="footer">
+        <span>Vara Sails Explorer · Blocks · messages · programs · decode.</span>
+        <nav aria-label="Legal links">
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
+        </nav>
+      </footer>
     </div>
   </body>
 </html>

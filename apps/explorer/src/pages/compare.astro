@@ -7,24 +7,24 @@ import { variants } from "../data/fixtures";
 ---
 
 <BaseLayout title="Variant comparison" active="compare">
-  <main class="layout">
+  <main id="main-content" class="layout">
     <section class="page-head">
       <div>
-        <div class="eyebrow">Mockup directions</div>
-        <h1>Keep the four source directions visible while extracting one component system.</h1>
+        <div class="eyebrow">Design comparison</div>
+        <h1>Compare alternate explorer layouts against daily-use tasks.</h1>
         <p class="lede">
-          Milestone 0 preserves the terminal, operator, documentarian, and search-first ideas as route-level variants.
-          The production pages borrow from all four without flattening the source material.
+          These routes are reference comps for density, explanation, and lookup flows. The main explorer should stay
+          focused on blocks, messages, programs, accounts, decode, and network status.
         </p>
       </div>
-      <Chip tone="brand" label="All variants represented" />
+      <Chip tone="brand" label="Comparison only" />
     </section>
 
     <section class="variant-grid">
       {
         variants.map((variant) => (
           <Card title={variant.name} description={variant.caption} className={`variant-card compare-${variant.slug}`}>
-            <Fragment slot="action"><Button href={variant.route} size="sm">Open full</Button></Fragment>
+            <Fragment slot="action"><Button href={variant.route} size="sm">Open comp</Button></Fragment>
             <div class="variant-preview">
               <div class="chip-row"><Chip tone="info" label={variant.role} /><Chip label={variant.slug} /></div>
               <div class="mini-row"><span class="hash">14:08:56</span><span>{variant.caption}</span><Chip tone="brand" label="Decoded" compact /></div>

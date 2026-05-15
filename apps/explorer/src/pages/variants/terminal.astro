@@ -8,12 +8,12 @@ import { messages } from "../../data/fixtures";
 ---
 
 <BaseLayout title="Terminal variant" active="compare" variant="terminal">
-  <main class="layout">
+  <main id="main-content" class="layout">
     <section class="page-head">
       <div>
-        <div class="eyebrow">Variant A</div>
-        <h1>Brutalist terminal · protocol-first density.</h1>
-        <p class="lede">This keeps the original mono-heavy posture for people debugging headers, message IDs, and raw payloads.</p>
+        <div class="eyebrow">Design comp A</div>
+        <h1>Raw message and header debugging layout.</h1>
+        <p class="lede">Prioritizes message IDs, route IDs, bytes, and decode flags for protocol-heavy sessions.</p>
       </div>
       <div class="chip-row"><Chip tone="brand" label="Raw" /><Chip tone="info" label="Precise" /></div>
     </section>
@@ -32,7 +32,7 @@ entry      07
 route      01
 reserved   00</pre>
         </Card>
-        <Button href="/compare">Back to variants</Button>
+        <Button href="/compare">Back to comparison</Button>
       </aside>
     </section>
   </main>

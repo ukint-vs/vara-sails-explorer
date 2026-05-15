@@ -1,34 +1,42 @@
 ---
 import type { ExplorerProgram } from "../data/types";
+import CopyHash from "./CopyHash.astro";
 import StatusChip from "./StatusChip.astro";
 
 interface Props {
   programs: ExplorerProgram[];
+  compact?: boolean;
 }
 
-const { programs } = Astro.props;
+const { programs, compact = false } = Astro.props;
 ---
 
-<div class="table programs">
+<div class:list={["table", "programs", compact && "compact"]}>
   <div class="table-head">
     <span>Program</span>
+    <span>Program ID</span>
+    <span>Code ID</span>
     <span>Health</span>
     <span>Trust</span>
     <span>Decode</span>
-    <span>Messages</span>
+    <span>Messages 24h</span>
+    <span>Balance</span>
   </div>
   {
     programs.map((program) => (
-      <a class="table-row" href="/program-detail" data-searchable>
+      <div class="table-row" data-searchable>
         <div class="cell-stack">
-          <span class="cell-main">{program.name}</span>
-          <span class="cell-sub mono">{program.programId}</span>
+          <a class="cell-main" href="/program-detail">{program.name}</a>
+          <span class="cell-sub">deployed {program.deployedAt}</span>
         </div>
+        <CopyHash value={program.programId} label={program.programId} name="program ID" />
+        <CopyHash value={program.codeId} label={program.codeId} name="code ID" />
         <StatusChip kind="programHealth" value={program.health} compact />
         <StatusChip kind="trust" value={program.trust} compact />
         <div class="cell-main">{program.decodeCoverage}</div>
         <div class="cell-main mono">{program.messages24h}</div>
-      </a>
+        <div class="cell-main mono">{program.executableBalance}</div>
+      </div>
     ))
   }
 </div>

@@ -1,0 +1,98 @@
+---
+import Button from "../components/Button.astro";
+import Chip from "../components/Chip.astro";
+import CopyHash from "../components/CopyHash.astro";
+import DataCard from "../components/DataCard.astro";
+import NetStats from "../components/NetStats.astro";
+import Pagination from "../components/Pagination.astro";
+import StatusChip from "../components/StatusChip.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { codeSummaries, programs } from "../data/fixtures";
+---
+
+<BaseLayout title="Codes" active="codes" showStatus={false}>
+  <main id="main-content" class="layout layout-dense">
+    <NetStats compact />
+
+    <section class="page-head compact-head">
+      <div>
+        <div class="eyebrow">Codes</div>
+        <h1>Code IDs, Wasm hashes, IDL availability, and deployed programs.</h1>
+        <p class="lede">Check whether a code hash has embedded, registry, or user-provided Sails IDL before decoding messages.</p>
+      </div>
+      <div class="chip-row">
+        <Chip tone="brand" label="Sails IDL" dot />
+        <Chip tone="info" label="Direct RPC" dot />
+      </div>
+    </section>
+
+    <section class="filter-bar" aria-label="Code filters">
+      <input class="input" data-local-filter aria-label="Filter codes" placeholder="Filter code ID, Wasm hash, IDL source, trust..." />
+      <select class="select" aria-label="IDL source filter">
+        <option>All IDL sources</option>
+        <option>Embedded sails:idl</option>
+        <option>Registry IDL</option>
+        <option>User IDL</option>
+      </select>
+      <Button href="/decode" size="sm">Decode with IDL</Button>
+      <Button size="sm">Import registry</Button>
+    </section>
+
+    <section class="grid sidebar">
+      <DataCard title="Code directory" description="Static and cached code records used by decode, program pages, and search.">
+        <div class="table codes">
+          <div class="table-head">
+            <span>Code ID</span>
+            <span>Wasm hash</span>
+            <span>Size</span>
+            <span>Uploaded</span>
+            <span>Programs</span>
+            <span>IDL</span>
+            <span>Trust</span>
+          </div>
+          {
+            codeSummaries.map((code) => (
+              <div class="table-row" data-searchable>
+                <CopyHash value={code.codeId} label={code.codeId} name="code ID" />
+                <CopyHash value={code.wasmHash} label={code.wasmHash} name="Wasm hash" />
+                <span class="cell-main">{code.size}</span>
+                <span class="cell-main mono">{code.uploadedAt}</span>
+                <span class="cell-main">{code.programs}</span>
+                <span class="cell-main">{code.idlStatus}</span>
+                <StatusChip kind="trust" value={code.trust} compact />
+              </div>
+            ))
+          }
+        </div>
+        <Fragment slot="foot"><Pagination label="Code pagination" location="Showing local code records" placeholder="Code ID / hash" /></Fragment>
+      </DataCard>
+
+      <aside class="stack">
+        <DataCard title="Programs by code" description="Same Wasm, different program IDs.">
+          <div class="mini-list">
+            {
+              programs.map((program) => (
+                <a class="mini-row og" href="/program-detail" data-searchable>
+                  <div class="cell-stack">
+                    <span class="cell-main">{program.name}</span>
+                    <span class="cell-sub mono">{program.codeId}</span>
+                  </div>
+                  <span class="cell-sub mono">{program.deployedAt}</span>
+                  <span class="cell-main">{program.decodeCoverage}</span>
+                </a>
+              ))
+            }
+          </div>
+        </DataCard>
+
+        <DataCard title="Decode resolution" description="Order used when rows need an interface.">
+          <div class="doc-list">
+            <div class="doc-item"><span class="doc-icon">1</span><div><div class="doc-title">Embedded IDL</div><div class="doc-copy">Read from the code custom section when code bytes are available.</div></div></div>
+            <div class="doc-item"><span class="doc-icon">2</span><div><div class="doc-title">Local registry</div><div class="doc-copy">Use cached or curated IDL mapped by code ID and hash.</div></div></div>
+            <div class="doc-item"><span class="doc-icon">3</span><div><div class="doc-title">User upload</div><div class="doc-copy">Keep uploaded IDLs scoped to the local browser cache.</div></div></div>
+          </div>
+        </DataCard>
+      </aside>
+    </section>
+  </main>
+</BaseLayout>

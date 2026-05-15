@@ -7,12 +7,12 @@ import { messages } from "../../data/fixtures";
 ---
 
 <BaseLayout title="Search-first variant" active="compare" variant="search-first">
-  <main class="layout">
+  <main id="main-content" class="layout">
     <section class="page-head">
       <div>
-        <div class="eyebrow">Variant D</div>
-        <h1>Start with the hash, then explain the object.</h1>
-        <p class="lede">This direction is for users arriving with a message ID, block hash, program ID, code ID, account, or raw payload.</p>
+        <div class="eyebrow">Design comp D</div>
+        <h1>Lookup layout for hash-first sessions.</h1>
+        <p class="lede">Designed for someone who arrives with a message ID, block hash, program ID, code ID, account, function, event, or raw payload.</p>
       </div>
     </section>
 
@@ -31,8 +31,8 @@ import { messages } from "../../data/fixtures";
       <div class="callout info">Direct RPC can resolve live/local objects. Indexed mode is required for arbitrary historical message lookup.</div>
     </section>
 
-    <section style="margin-top:18px">
-      <Card title="Recent decoded messages" description="Search-first still needs a live context below the input.">
+    <section class="section-offset">
+      <Card title="Recent decoded messages" description="Recent messages give context below the lookup field.">
         <MessageTable messages={messages.slice(0, 3)} compact />
       </Card>
     </section>

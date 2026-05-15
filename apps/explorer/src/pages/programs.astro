@@ -1,0 +1,82 @@
+---
+import Button from "../components/Button.astro";
+import Chip from "../components/Chip.astro";
+import DataCard from "../components/DataCard.astro";
+import NetStats from "../components/NetStats.astro";
+import Pagination from "../components/Pagination.astro";
+import ProgramTable from "../components/ProgramTable.astro";
+import SparkBars from "../components/SparkBars.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { accountSummaries, programs, topEvents } from "../data/fixtures";
+---
+
+<BaseLayout title="Programs" active="programs" showStatus={false}>
+  <main id="main-content" class="layout layout-dense">
+    <NetStats compact />
+
+    <section class="page-head compact-head">
+      <div>
+        <div class="eyebrow">Programs</div>
+        <h1>Programs, code IDs, IDL trust, activity, and executable balance.</h1>
+        <p class="lede">Use this view to find active contracts, inspect their Sails interface, and watch decode coverage before calling them.</p>
+      </div>
+      <div class="chip-row">
+        <Chip tone="success" label="Active" dot />
+        <Chip tone="warn" label="Balance watch" dot />
+      </div>
+    </section>
+
+    <section class="filter-bar" aria-label="Program filters">
+      <input class="input" data-local-filter aria-label="Filter programs" placeholder="Filter program, program ID, code ID, trust, health..." />
+      <select class="select" aria-label="Program health filter">
+        <option>All health states</option>
+        <option>Active</option>
+        <option>Balance watch</option>
+        <option>Halted</option>
+      </select>
+      <Button href="/program-detail" size="sm">Open sample</Button>
+      <Button href="/decode" size="sm">Decode payload</Button>
+    </section>
+
+    <DataCard title="Program directory" description="Program identity, code ID, IDL trust, decode coverage, activity, and balance warnings.">
+      <ProgramTable programs={programs} />
+      <Fragment slot="foot"><Pagination label="Program pagination" location="Showing pinned and recently active programs" placeholder="Program / code ID" /></Fragment>
+    </DataCard>
+
+    <section class="grid two">
+      <DataCard title="Top decoded events" description="Event counts by decoded Sails entry.">
+        <div class="mini-list">
+          {
+            topEvents.map((event) => (
+              <div class="mini-row og" data-searchable>
+                <div class="cell-stack">
+                  <span class="cell-main">{event.name}</span>
+                  <span class="cell-sub">{event.program}</span>
+                </div>
+                <SparkBars values={event.trend} />
+                <span class="cell-main mono">{event.count}</span>
+              </div>
+            ))
+          }
+        </div>
+      </DataCard>
+
+      <DataCard title="Active accounts" description="Local cache senders and program operators.">
+        <div class="mini-list">
+          {
+            accountSummaries.map((account) => (
+              <div class="mini-row og" data-searchable>
+                <div class="cell-stack">
+                  <span class="cell-main mono">{account.accountId}</span>
+                  <span class="cell-sub">{account.label}</span>
+                </div>
+                <span class="cell-sub">{account.role}</span>
+                <span class="cell-main mono">{account.messages24h}</span>
+              </div>
+            ))
+          }
+        </div>
+      </DataCard>
+    </section>
+  </main>
+</BaseLayout>

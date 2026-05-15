@@ -2,50 +2,75 @@
 import Button from "../components/Button.astro";
 import Card from "../components/Card.astro";
 import Chip from "../components/Chip.astro";
+import CopyHash from "../components/CopyHash.astro";
 import MessageTable from "../components/MessageTable.astro";
 import MetricCard from "../components/MetricCard.astro";
+import NetStats from "../components/NetStats.astro";
 import StatusChip from "../components/StatusChip.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { messages, serviceEntries } from "../data/fixtures";
+import { codeSummaries, messages, programs, serviceEntries } from "../data/fixtures";
 
+const program = programs[0];
+const code = codeSummaries[0];
 const programMetrics = [
-  { label: "Messages 24h", value: "42,890", note: "local + indexed preview fixture", tone: "success", badge: "+12%", progress: 68 },
-  { label: "Decode coverage", value: "99.1%", note: "trusted IDL", tone: "brand", badge: "Sails", progress: 99 },
-  { label: "Executable balance", value: "2.8k", note: "[V] wVARA · 22h runway", tone: "warn", badge: "Watch", progress: 36 },
-  { label: "Error rate", value: "0.04%", note: "mostly validation errors", tone: "success", badge: "Low", progress: 8 }
+  { label: "Messages 24h", value: program.messages24h, note: "observed in local cache", tone: "success", badge: "+12%", progress: 68 },
+  { label: "Decode coverage", value: program.decodeCoverage, note: "trusted Sails IDL", tone: "brand", badge: "Sails", progress: 99 },
+  { label: "Executable balance", value: program.executableBalance, note: "watch before heavy calls", tone: "warn", badge: "Balance", progress: 36 },
+  { label: "Linked code", value: "4", note: "programs using this code ID", tone: "info", badge: "Code", progress: 52 }
 ] as const;
 ---
 
-<BaseLayout title="Program detail" active="programs">
-  <main class="layout">
-    <section class="page-head">
+<BaseLayout title="Program detail" active="programs" showStatus={false}>
+  <main id="main-content" class="layout layout-dense">
+    <NetStats compact />
+
+    <section class="page-head compact-head">
       <div>
         <div class="eyebrow">Program</div>
-        <h1>CLOB OrderBook / ETH-USDC</h1>
-        <p class="lede">Program pages read like typed application profiles: identity, trust, health, services, recent activity, and actions.</p>
+        <h1>{program.name}</h1>
+        <p class="lede">IDs, linked code, Sails interface, recent messages, read/send actions, and IDL trust for one deployed program.</p>
       </div>
       <div class="chip-row">
-        <StatusChip kind="programHealth" value="active" />
-        <StatusChip kind="trust" value="verified_source" />
-        <Chip tone="info" label="Direct RPC" />
+        <StatusChip kind="programHealth" value={program.health} />
+        <StatusChip kind="trust" value={program.trust} />
+        <Chip tone="info" label="Direct RPC" dot />
       </div>
     </section>
 
-    <section class="grid four">
+    <section class="object-actions" aria-label="Program actions">
+      <CopyHash value={program.programId} label="Program ID" name="program ID" />
+      <Button variant="primary" size="sm">Read state</Button>
+      <Button size="sm">Send message</Button>
+      <Button href="/decode" size="sm">Decode payload</Button>
+      <Button size="sm">Download IDL</Button>
+      <Button href="/codes" size="sm">Open code</Button>
+    </section>
+
+    <nav class="object-tabs" aria-label="Program sections">
+      <a class="tab active" href="#overview">Overview</a>
+      <a class="tab" href="#services">Services</a>
+      <a class="tab" href="#events">Events</a>
+      <a class="tab" href="#activity">Messages</a>
+      <a class="tab" href="#idl">IDL</a>
+      <a class="tab" href="#actions">Read / send</a>
+      <a class="tab" href="#raw">Raw</a>
+    </nav>
+
+    <section class="grid four section-offset" id="overview">
       {programMetrics.map((metric) => <MetricCard metric={metric} />)}
     </section>
 
-    <section class="grid sidebar" style="margin-top:18px">
+    <section class="grid sidebar section-offset">
       <div class="stack">
-        <Card title="Sails interface" description="Tabs are static in Milestone 0; later islands will drive the active view.">
+        <Card title="Sails interface" description="Declared services, queries, commands, events, codecs, and route identifiers." id="services">
           <Fragment slot="action">
-            <div class="tabs"><a class="tab active">Services</a><a class="tab">Events</a><a class="tab">IDL</a><a class="tab">Read/Write</a></div>
+            <div class="tabs"><a class="tab active">Services</a><a class="tab">Events</a><a class="tab">IDL</a><a class="tab">Raw</a></div>
           </Fragment>
-          <div class="table">
-            <div class="table-head" style="grid-template-columns:1fr 120px 120px 1fr"><span>Entry</span><span>Kind</span><span>Codec</span><span>Identifiers</span></div>
+          <div class="table service-interface-table">
+            <div class="table-head"><span>Entry</span><span>Kind</span><span>Codec</span><span>Identifiers</span></div>
             {serviceEntries.map(([name, kind, codec, identifiers]) => (
-              <div class="table-row" style="grid-template-columns:1fr 120px 120px 1fr">
-                <div class="cell-stack"><span class="cell-main mono">{name}</span><span class="cell-sub">Typed Sails route metadata</span></div>
+              <div class="table-row" data-searchable>
+                <div class="cell-stack"><span class="cell-main mono">{name}</span><span class="cell-sub">IDL route metadata</span></div>
                 <Chip tone={kind === "Event" ? "brand" : kind === "Query" ? "steel" : "info"} label={kind} compact />
                 <Chip label={codec} compact />
                 <span class="hash">{identifiers}</span>
@@ -54,9 +79,19 @@ const programMetrics = [
           </div>
         </Card>
 
-        <Card title="Recent activity" description="Same message table component as the stream page.">
+        <Card title="Recent activity" description="Messages involving this program, with decode and finality separated." id="activity">
           <Fragment slot="action"><Button href="/messages" size="sm">View all</Button></Fragment>
-          <MessageTable messages={messages.slice(0, 2)} compact />
+          <MessageTable messages={messages.slice(0, 4)} compact />
+        </Card>
+
+        <Card title="IDL preview" description="Current trusted interface record for decode and generated calls." id="idl">
+          <pre class="code-block">&#123;
+  <span class="key">"program"</span>: <span class="str">"{program.name}"</span>,
+  <span class="key">"programId"</span>: <span class="str">"{program.programId}"</span>,
+  <span class="key">"codeId"</span>: <span class="str">"{program.codeId}"</span>,
+  <span class="key">"idlHash"</span>: <span class="str">"{program.idlHash}"</span>,
+  <span class="key">"services"</span>: [<span class="str">"OrderBook"</span>, <span class="str">"Admin"</span>, <span class="str">"Events"</span>]
+&#125;</pre>
         </Card>
       </div>
 
@@ -64,23 +99,24 @@ const programMetrics = [
         <Card pad body={false} className="stack">
           <h3>Identity</h3>
           <dl>
-            <div class="kv"><dt>Program ID</dt><dd class="hash">0x4f8c8f...a241</dd></div>
-            <div class="kv"><dt>Code ID</dt><dd class="hash">0x91be77...7bd2</dd></div>
-            <div class="kv"><dt>IDL hash</dt><dd class="hash">0xf13a44...9c02</dd></div>
-            <div class="kv"><dt>IDL source</dt><dd><Chip tone="brand" label="Embedded + registry" compact /></dd></div>
-            <div class="kv"><dt>Created</dt><dd>#18,201,443</dd></div>
+            <div class="kv"><dt>Program ID</dt><dd><CopyHash value={program.programId} label={program.programId} name="program ID" /></dd></div>
+            <div class="kv"><dt>Code ID</dt><dd><CopyHash value={program.codeId} label={program.codeId} name="code ID" /></dd></div>
+            <div class="kv"><dt>Wasm hash</dt><dd><CopyHash value={code.wasmHash} label={code.wasmHash} name="Wasm hash" /></dd></div>
+            <div class="kv"><dt>IDL hash</dt><dd><CopyHash value={program.idlHash} label={program.idlHash} name="IDL hash" /></dd></div>
+            <div class="kv"><dt>Deployed</dt><dd>{program.deployedAt}</dd></div>
+            <div class="kv"><dt>IDL source</dt><dd><StatusChip kind="trust" value={program.trust} compact /></dd></div>
           </dl>
         </Card>
-        <Card pad body={false} className="stack">
-          <h3>Developer actions</h3>
-          <Button variant="primary">Read state</Button>
-          <Button>Send message</Button>
-          <Button>Download IDL</Button>
-          <Button href="/decode">Open Decode Lab</Button>
+        <Card pad body={false} className="stack" id="actions">
+          <h3>Read / send</h3>
+          <Button variant="primary">Query order book</Button>
+          <Button>Submit limit order</Button>
+          <Button>Estimate gas</Button>
+          <Button href="/decode">Decode payload</Button>
         </Card>
-        <Card title="SDK snippet">
+        <Card title="Raw call setup" id="raw">
           <pre class="code-block">const program = await SailsProgram.fromIdl(idl);
-program.setProgramId("0x4f8c8f...a241");
+program.setProgramId("{program.programId}");
 const tx = program.services.OrderBook.functions.place_limit_order(order);</pre>
         </Card>
       </aside>

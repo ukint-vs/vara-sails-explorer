@@ -1,36 +1,48 @@
 ---
 import type { ExplorerBlock } from "../data/types";
+import CopyHash from "./CopyHash.astro";
 import StatusChip from "./StatusChip.astro";
 
 interface Props {
   blocks: ExplorerBlock[];
+  compact?: boolean;
 }
 
-const { blocks } = Astro.props;
+const { blocks, compact = false } = Astro.props;
 ---
 
-<div class="table blocks">
+<div class:list={["table", "blocks", compact && "compact"]}>
   <div class="table-head">
     <span>Block</span>
-    <span>Time</span>
+    <span>Age</span>
     <span>Hash</span>
+    <span>Author</span>
     <span>Finality</span>
-    <span>Gear messages</span>
+    <span>Extrinsics / events</span>
+    <span>Gear msgs</span>
     <span>Sails decoded</span>
   </div>
   {
     blocks.map((block) => (
-      <a class="table-row" href="/blocks" data-searchable>
-        <div class="cell-main mono">{block.number}</div>
-        <div class="cell-sub mono">{block.timestamp}</div>
-        <div class="hash">{block.hash}</div>
+      <div class="table-row" data-searchable>
+        <CopyHash value={block.number} label={block.number} href="/blocks" name="block number" />
+        <div class="cell-stack">
+          <span class="cell-main mono">{block.age}</span>
+          <span class="cell-sub mono">{block.timestamp}</span>
+        </div>
+        <CopyHash value={block.hash} label={block.hash} name="block hash" />
+        <CopyHash value={block.author} label={block.author} name="block author" />
         <div><StatusChip kind="finality" value={block.finality} compact /></div>
         <div class="cell-stack">
+          <span class="cell-main">{block.extrinsics}</span>
+          <span class="cell-sub">{block.events} events</span>
+        </div>
+        <div class="cell-stack">
           <span class="cell-main">{block.gearMessages}</span>
-          <span class="cell-sub">{block.extrinsics} extrinsics · {block.events} events</span>
+          <span class="cell-sub">{block.failures} failed</span>
         </div>
         <div class="cell-main">{block.decodedSails}/{block.gearMessages}</div>
-      </a>
+      </div>
     ))
   }
 </div>

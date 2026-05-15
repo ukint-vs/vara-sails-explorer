@@ -1,0 +1,24 @@
+---
+interface Props {
+  label?: string;
+  location?: string;
+  placeholder?: string;
+}
+
+const {
+  label = "Local cache window",
+  location = "Rows 1-50 of cached results",
+  placeholder = "Block / page"
+} = Astro.props;
+---
+
+<nav class="pagination-v2" aria-label={label}>
+  <button class="btn small" type="button" disabled>Prev</button>
+  <span>{location}</span>
+  <label>
+    <span class="visually-hidden">{placeholder}</span>
+    <input class="input" placeholder={placeholder} />
+  </label>
+  <button class="btn small" type="button" disabled>Next</button>
+  <button class="btn small" type="button" disabled>Export CSV</button>
+</nav>

@@ -1,0 +1,30 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  eyebrow?: string;
+  className?: string;
+  dense?: boolean;
+}
+
+const { title, description, eyebrow, className = "", dense = false } = Astro.props;
+---
+
+<section class:list={["data-card", dense && "dense", className]}>
+  {
+    (title || description || eyebrow) && (
+      <div class="data-card-head">
+        <div>
+          {eyebrow && <div class="eyebrow">{eyebrow}</div>}
+          {title && <h3>{title}</h3>}
+          {description && <p>{description}</p>}
+        </div>
+        <slot name="action" />
+      </div>
+    )
+  }
+  <div class="data-card-body">
+    <slot />
+  </div>
+  <slot name="foot" />
+</section>

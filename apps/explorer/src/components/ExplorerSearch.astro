@@ -1,0 +1,29 @@
+---
+import Chip from "./Chip.astro";
+
+interface Props {
+  compact?: boolean;
+  placeholder?: string;
+  label?: string;
+  categories?: string[];
+  localFilter?: boolean;
+}
+
+const {
+  compact = false,
+  placeholder = "Search block, message, program, code ID, account, function, event, or raw bytes",
+  label = "Explorer search",
+  categories = ["All", "Blocks", "Messages", "Programs", "Codes", "Accounts", "Raw bytes"],
+  localFilter = false
+} = Astro.props;
+---
+
+<form class:list={["explorer-search", compact && "compact"]} role="search">
+  <div class="explorer-search-row">
+    <input aria-label={label} placeholder={placeholder} data-local-filter={localFilter ? "" : undefined} />
+    <span class="kbd-hint" aria-hidden="true">/</span>
+  </div>
+  <div class="search-cats" aria-label="Search categories">
+    {categories.map((category, index) => <Chip label={category} tone={index === 0 ? "brand" : "neutral"} compact={compact} />)}
+  </div>
+</form>

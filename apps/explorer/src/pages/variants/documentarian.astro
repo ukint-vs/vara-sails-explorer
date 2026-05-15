@@ -5,14 +5,14 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="Documentarian variant" active="compare" variant="documentarian">
-  <main class="layout">
+  <main id="main-content" class="layout">
     <section class="page-head">
       <div>
-        <div class="eyebrow">Variant C</div>
-        <h1>Read any program on Vara, without starting from protocol jargon.</h1>
-        <p class="lede">This direction teaches what a program, code ID, Sails IDL, interface ID, entry ID, and route index mean while still exposing raw data.</p>
+        <div class="eyebrow">Design comp C</div>
+        <h1>Guided layout for users learning Vara program objects.</h1>
+        <p class="lede">Defines program ID, code ID, IDL hash, interface ID, entry ID, route index, and payload before showing bytes.</p>
       </div>
-      <Chip tone="brand" label="Explain first" />
+      <Chip tone="brand" label="Explain terms" />
     </section>
 
     <section class="grid three">
@@ -33,8 +33,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
       </Card>
     </section>
 
-    <section style="margin-top:18px">
-      <Card title="How decoding works" description="The documentarian mode explains header fields before showing bytes.">
+    <section class="section-offset">
+      <Card title="How decoding works" description="Header fields are explained before payload bytes.">
         <div class="doc-list">
           <div class="doc-item"><span class="doc-icon">1</span><div><div class="doc-title">Read header</div><div class="doc-copy">Validate magic, version, header length, route index, and reserved byte.</div></div></div>
           <div class="doc-item"><span class="doc-icon">2</span><div><div class="doc-title">Resolve entry</div><div class="doc-copy">Use interface_id, entry_id, and route_idx against the trusted IDL route map.</div></div></div>

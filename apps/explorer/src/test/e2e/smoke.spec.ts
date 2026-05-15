@@ -1,13 +1,16 @@
 import { expect, test } from "@playwright/test";
 
 const routes = [
-  "/",
-  "/blocks",
+  "/?source=fixture",
+  "/blocks?source=fixture",
+  "/block-detail?source=fixture&block=18427057",
   "/messages",
+  "/programs",
+  "/codes",
   "/message-detail",
   "/program-detail",
   "/decode",
-  "/settings",
+  "/settings?source=fixture",
   "/compare",
   "/variants/terminal",
   "/variants/operator",
@@ -31,3 +34,26 @@ for (const route of routes) {
     expect(horizontalOverflow).toBeLessThanOrEqual(2);
   });
 }
+
+test("settings rejects non-WebSocket custom endpoints", async ({ page }) => {
+  await page.goto("/settings?source=fixture");
+
+  await page.getByRole("textbox", { name: "Custom endpoint" }).fill("https://rpc.vara.network");
+  await page.getByRole("button", { name: "Save endpoint" }).click();
+
+  await expect(page.getByRole("alert")).toContainText("Use a ws:// or wss:// endpoint.");
+});
+
+test("block detail renders fixture events and extrinsics", async ({ page }) => {
+  await page.goto("/block-detail?source=fixture&block=18427057");
+
+  await expect(page.getByRole("heading", { name: "Events", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Extrinsics", exact: true })).toBeVisible();
+  await expect(page.getByText("gear.MessageQueued", { exact: true })).toBeVisible();
+});
+
+test("block detail rejects invalid block query", async ({ page }) => {
+  await page.goto("/block-detail?source=fixture&block=not-a-block");
+
+  await expect(page.getByRole("alert")).toContainText("Use a block number or 0x hash");
+});

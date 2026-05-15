@@ -1,5 +1,7 @@
 ---
 import type { ExplorerMessage } from "../data/types";
+import Chip from "./Chip.astro";
+import CopyHash from "./CopyHash.astro";
 import StatusChip from "./StatusChip.astro";
 
 interface Props {
@@ -12,34 +14,44 @@ const { messages, compact = false } = Astro.props;
 
 <div class:list={["table", "messages", compact && "compact"]}>
   <div class="table-head">
-    <span>Time</span>
-    <span>Execution</span>
+    <span>Message</span>
+    <span>Age</span>
+    <span>Kind</span>
     <span>Program</span>
-    <span>Decoded activity</span>
+    <span>Activity</span>
+    <span>Execution</span>
     <span>Decode</span>
     <span>Finality</span>
-    <span>Block</span>
+    <span>Block / fee</span>
   </div>
   {
     messages.map((message) => (
-      <a class="table-row" href="/message-detail" data-searchable>
+      <div class="table-row" data-searchable>
         <div class="cell-stack">
-          <span class="cell-main mono">{message.time}</span>
-          <span class="cell-sub">{message.age}</span>
+          <CopyHash value={message.id} label={message.id} href="/message-detail" name="message ID" />
+          <span class="cell-sub mono">{message.caller}</span>
         </div>
-        <div><StatusChip kind="execution" value={message.execution} compact /></div>
+        <div class="cell-stack">
+          <span class="cell-main mono">{message.age}</span>
+          <span class="cell-sub mono">{message.time}</span>
+        </div>
+        <div><Chip label={message.kind} compact /></div>
         <div class="cell-stack">
           <span class="cell-main">{message.program}</span>
-          <span class="cell-sub mono">{message.programId}</span>
+          <CopyHash value={message.programId} label={message.programId} name="program ID" />
         </div>
         <div class="cell-stack">
           <span class="cell-main">{message.activity}</span>
           <span class="cell-sub">{message.result}</span>
         </div>
+        <div><StatusChip kind="execution" value={message.execution} compact /></div>
         <div><StatusChip kind="decode" value={message.decode} compact /></div>
         <div><StatusChip kind="finality" value={message.finality} compact /></div>
-        <div class="hash">{message.block}</div>
-      </a>
+        <div class="cell-stack">
+          <span class="cell-main mono">{message.block}</span>
+          <span class="cell-sub">{message.fee}</span>
+        </div>
+      </div>
     ))
   }
 </div>

@@ -1,0 +1,24 @@
+---
+import Card from "../components/Card.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Privacy" active="overview">
+  <main id="main-content" class="layout">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow">Privacy</div>
+        <h1>Explorer privacy and local data.</h1>
+        <p class="lede">Read-only browsing should not require a wallet. Local cache, imported IDLs, and endpoint settings stay on the user's device unless sync is explicitly added.</p>
+      </div>
+    </section>
+
+    <Card title="Current data handling">
+      <dl>
+        <div class="kv"><dt>Network data</dt><dd>Fixture data in this build; Direct RPC reads in connected builds.</dd></div>
+        <div class="kv"><dt>Wallet data</dt><dd>Read-only pages do not require a wallet connection.</dd></div>
+        <div class="kv"><dt>Local storage</dt><dd>Reserved for endpoint settings, local cache, and user-uploaded IDLs.</dd></div>
+      </dl>
+    </Card>
+  </main>
+</BaseLayout>

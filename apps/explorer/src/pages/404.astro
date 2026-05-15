@@ -1,0 +1,27 @@
+---
+import Button from "../components/Button.astro";
+import Card from "../components/Card.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Page not found" active="overview">
+  <main id="main-content" class="layout">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow">404</div>
+        <h1>This explorer route does not exist.</h1>
+        <p class="lede">Check the URL or use the primary navigation to open an explorer view.</p>
+      </div>
+    </section>
+
+    <Card pad body={false} className="stack">
+      <h2>Open an explorer view.</h2>
+      <p class="lede">Go to overview, messages, blocks, programs, or decode.</p>
+      <div class="toolbar">
+        <Button href="/" variant="primary">Open overview</Button>
+        <Button href="/messages">Open messages</Button>
+        <Button href="/decode">Decode payload</Button>
+      </div>
+    </Card>
+  </main>
+</BaseLayout>

@@ -25,6 +25,7 @@ export type ExplorerMessage = {
   id: string;
   time: string;
   age: string;
+  kind: "call" | "reply" | "event" | "error" | "query" | "constructor" | "unknown";
   execution: ExecutionStatus;
   decode: DecodeStatus;
   finality: FinalityStatus;
@@ -38,17 +39,21 @@ export type ExplorerMessage = {
   result: string;
   block: string;
   payload: string;
+  fee?: string;
 };
 
 export type ExplorerBlock = {
   number: string;
   hash: string;
   timestamp: string;
+  age: string;
+  author: string;
   finality: FinalityStatus;
   extrinsics: number;
   events: number;
   gearMessages: number;
   decodedSails: number;
+  failures: number;
 };
 
 export type ExplorerProgram = {
@@ -60,6 +65,8 @@ export type ExplorerProgram = {
   trust: TrustStatus;
   decodeCoverage: string;
   messages24h: string;
+  executableBalance: string;
+  deployedAt: string;
 };
 
 export type Metric = {
@@ -76,5 +83,38 @@ export type Variant = {
   name: string;
   caption: string;
   route: string;
+  role: string;
+};
+
+export type NetStat = {
+  label: string;
+  value: string;
+  note: string;
+  tone?: ChipTone;
+  live?: boolean;
+};
+
+export type EventMetric = {
+  name: string;
+  program: string;
+  count: string;
+  trend: number[];
+};
+
+export type CodeSummary = {
+  codeId: string;
+  wasmHash: string;
+  size: string;
+  uploadedAt: string;
+  programs: string;
+  idlStatus: string;
+  trust: TrustStatus;
+};
+
+export type AccountSummary = {
+  accountId: string;
+  label: string;
+  messages24h: string;
+  lastSeen: string;
   role: string;
 };

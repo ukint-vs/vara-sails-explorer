@@ -8,12 +8,12 @@ import { blocks, metrics } from "../../data/fixtures";
 ---
 
 <BaseLayout title="Operator variant" active="compare" variant="operator">
-  <main class="layout">
+  <main id="main-content" class="layout">
     <section class="page-head">
       <div>
-        <div class="eyebrow">Variant B</div>
-        <h1>Operator console · htop for on-chain activity.</h1>
-        <p class="lede">A dense network watch surface for best/finalized heads, decode success rate, error clusters, and top active programs.</p>
+        <div class="eyebrow">Design comp B</div>
+        <h1>Network operations layout for block tails and decode failures.</h1>
+        <p class="lede">Prioritizes best/finalized heads, block lag, failure clusters, throughput, and active programs.</p>
       </div>
       <div class="chip-row"><Chip tone="success" label="Healthy" dot /><Chip tone="warn" label="3 block lag" /></div>
     </section>
@@ -22,8 +22,8 @@ import { blocks, metrics } from "../../data/fixtures";
       {metrics.map((metric) => <MetricCard metric={metric} />)}
     </section>
 
-    <section class="grid two" style="margin-top:18px">
-      <Card title="Live tail · last blocks" description="Blocks update from Direct RPC in Milestone 1.">
+    <section class="grid two section-offset">
+      <Card title="Live tail · last blocks" description="Block rows for operational monitoring.">
         <BlockTable blocks={blocks} />
       </Card>
       <Card title="Decode failures" description="Operator mode puts failures near throughput.">

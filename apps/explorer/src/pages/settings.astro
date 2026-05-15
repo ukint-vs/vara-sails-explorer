@@ -2,39 +2,28 @@
 import Button from "../components/Button.astro";
 import Card from "../components/Card.astro";
 import Chip from "../components/Chip.astro";
+import SettingsPanel from "../components/live/SettingsPanel";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="Settings" active="overview">
-  <main class="layout">
+<BaseLayout title="Settings" active="settings">
+  <main id="main-content" class="layout">
     <section class="page-head">
       <div>
         <div class="eyebrow">Settings</div>
         <h1>RPC endpoint, local cache, wallet, and IDL registry controls.</h1>
-        <p class="lede">Milestone 0 models settings as static controls so later RPC and cache work has a stable surface.</p>
+        <p class="lede">Configure endpoint, cache retention, wallet connection, and local IDL sources.</p>
       </div>
       <Chip tone="info" label="Direct RPC mode" dot />
     </section>
 
-    <section class="grid two">
-      <Card title="RPC endpoint" description="Endpoint switching is static until the Direct RPC adapter lands.">
-        <div class="stack">
-          <label class="field"><span>Selected endpoint</span><input class="input" value="wss://rpc.vara.network" /></label>
-          <div class="toolbar"><Button variant="primary">Save endpoint</Button><Button>Use testnet</Button><Button>Use local node</Button></div>
-        </div>
-      </Card>
-      <Card title="Local cache" description="Retention defaults from the spec.">
-        <dl>
-          <div class="kv"><dt>Recent blocks</dt><dd>500-2,000</dd></div>
-          <div class="kv"><dt>Decoded messages</dt><dd>10,000-50,000</dd></div>
-          <div class="kv"><dt>Pinned programs</dt><dd>Retain until cleared</dd></div>
-          <div class="kv"><dt>Uploaded IDLs</dt><dd>Persistent</dd></div>
-        </dl>
-      </Card>
-      <Card title="Wallet" description="Wallet connection is out of scope for Milestone 0.">
+    <SettingsPanel client:load />
+
+    <section class="grid two section-offset">
+      <Card title="Wallet" description="Wallet state for signed program actions. Read-only browsing remains available.">
         <div class="toolbar"><Button variant="primary">Connect wallet</Button><Chip label="Disconnected" /></div>
       </Card>
-      <Card title="IDL registry" description="Static registry support is represented by fixtures for now.">
+      <Card title="IDL registry" description="Manage imported IDLs used to decode calls, replies, and events.">
         <div class="toolbar"><Button>Import registry</Button><Button>Export uploaded IDLs</Button><Button>Clear user IDLs</Button></div>
       </Card>
     </section>

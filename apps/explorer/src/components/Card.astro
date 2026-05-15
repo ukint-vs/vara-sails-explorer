@@ -1,5 +1,6 @@
 ---
 interface Props {
+  id?: string;
   title?: string;
   description?: string;
   pad?: boolean;
@@ -7,10 +8,10 @@ interface Props {
   className?: string;
 }
 
-const { title, description, pad = false, body = true, className = "" } = Astro.props;
+const { id, title, description, pad = false, body = true, className = "" } = Astro.props;
 ---
 
-<section class:list={["card", pad && "pad", className]}>
+<section id={id} class:list={["card", pad && "pad", className]}>
   {
     title && (
       <div class="card-head">
