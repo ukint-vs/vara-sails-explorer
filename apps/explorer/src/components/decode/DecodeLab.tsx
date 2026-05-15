@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { hashIdl, shortHash } from "../../lib/decode/bytes";
 import { DecodeIdlCache, makeIdlRecord } from "../../lib/decode/cache";
 import { DecodeResolverClient } from "../../lib/decode/resolver-client";
@@ -16,7 +16,7 @@ import type {
 } from "../../lib/decode/types";
 import { DecodeWorkerSession } from "../../lib/decode/worker-session";
 import { copyText } from "../../lib/live-explorer/copy";
-import { getEndpointById, loadRpcSettings } from "../../lib/live-explorer/settings";
+import { getEndpointById, loadRpcSettings, RPC_SETTINGS_CHANGED_EVENT } from "../../lib/live-explorer/settings";
 import { CopyableHex } from "./CopyableHex";
 import { DiagnosticsTrace } from "./DiagnosticsTrace";
 import { PayloadWorkspace } from "./PayloadWorkspace";
@@ -31,6 +31,11 @@ const sourceLabels: Record<IdlSourceMode, string> = {
   code_id: "Code ID",
   cache: "Cache"
 };
+
+function readSelectedEndpoint() {
+  const settings = loadRpcSettings();
+  return getEndpointById(settings.selectedEndpointId, settings.customEndpointUrl);
+}
 
 export function DecodeLab() {
   const [sourceMode, setSourceMode] = useState<IdlSourceMode>("pasted_idl");
@@ -51,10 +56,7 @@ export function DecodeLab() {
   const idlJobRef = useRef(0);
   const decodeJobRef = useRef(0);
 
-  const endpoint = useMemo(() => {
-    const settings = loadRpcSettings();
-    return getEndpointById(settings.selectedEndpointId, settings.customEndpointUrl);
-  }, []);
+  const [endpoint, setEndpoint] = useState(readSelectedEndpoint);
 
   useEffect(() => {
     cacheRef.current = new DecodeIdlCache();
@@ -80,6 +82,20 @@ export function DecodeLab() {
       workerRef.current?.terminate();
       void resolverRef.current?.close();
       void cacheRef.current?.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    function refreshEndpoint(): void {
+      setEndpoint(readSelectedEndpoint());
+    }
+
+    window.addEventListener(RPC_SETTINGS_CHANGED_EVENT, refreshEndpoint);
+    window.addEventListener("storage", refreshEndpoint);
+
+    return () => {
+      window.removeEventListener(RPC_SETTINGS_CHANGED_EVENT, refreshEndpoint);
+      window.removeEventListener("storage", refreshEndpoint);
     };
   }, []);
 
@@ -235,12 +251,21 @@ export function DecodeLab() {
     const resolver = resolverRef.current;
     if (!cache || !worker || !resolver) return;
 
-    const aliasType = sourceMode === "program_id" ? "program" : "code";
-    setBusy(sourceMode === "program_id" ? "Resolving program" : "Resolving code");
+    const job = ++idlJobRef.current;
+    decodeJobRef.current += 1;
+    const activeSourceMode = sourceMode === "program_id" ? "program_id" : "code_id";
+    const activeChainId = chainId.trim();
+    const activeEndpoint = endpoint;
+    const aliasType = activeSourceMode === "program_id" ? "program" : "code";
+
+    setBusy(activeSourceMode === "program_id" ? "Resolving program" : "Resolving code");
     setResult(undefined);
 
     try {
-      const cached = await cache.readByAlias(aliasType, chainId);
+      const cached = await cache.readByAlias(aliasType, activeChainId);
+      if (job !== idlJobRef.current) {
+        return;
+      }
       if (cached.ok) {
         const next = {
           ...cached.record,
@@ -253,16 +278,18 @@ export function DecodeLab() {
           }
         };
         setIdlText(next.idlText);
-        setRecord(next);
         await acceptIdl(next.idlText, next.provenance);
         return;
       }
 
       const resolved = await resolver.resolve({
-        source: sourceMode === "program_id" ? "program_id" : "code_id",
-        id: chainId,
-        endpoint
+        source: activeSourceMode,
+        id: activeChainId,
+        endpoint: activeEndpoint
       });
+      if (job !== idlJobRef.current) {
+        return;
+      }
       setTrace((current) => appendTrace(current, resolved.trace));
       if (!resolved.ok) {
         const failure: DecodeResult = {
@@ -279,9 +306,9 @@ export function DecodeLab() {
       }
 
       const provenance: DecodeProvenance = {
-        source: sourceMode,
+        source: activeSourceMode,
         trust: "chain_embedded",
-        label: sourceMode === "program_id" ? "Resolved program ID" : "Resolved code ID",
+        label: activeSourceMode === "program_id" ? "Resolved program ID" : "Resolved code ID",
         programId: resolved.programId,
         codeId: resolved.codeId,
         endpointLabel: resolved.endpoint.label,
@@ -289,6 +316,9 @@ export function DecodeLab() {
         updatedAt: Date.now()
       };
       const extracted = await worker.extractIdl({ kind: "extract-idl", wasmBytes: resolved.codeBytes, provenance });
+      if (job !== idlJobRef.current) {
+        return;
+      }
       if (extracted.kind === "extract-idl" && extracted.ok) {
         setTrace((current) => appendTrace(current, extracted.trace));
         setIdlText(extracted.idlText);
@@ -302,7 +332,9 @@ export function DecodeLab() {
         setAnnouncement(resultMessage(extracted.result));
       }
     } finally {
-      setBusy(undefined);
+      if (job === idlJobRef.current) {
+        setBusy(undefined);
+      }
     }
   }
 
@@ -355,14 +387,28 @@ export function DecodeLab() {
   }
 
   function changeSourceMode(mode: IdlSourceMode): void {
+    invalidateActiveSource("IDL source changed.");
+    setSourceMode(mode);
+  }
+
+  function changeIdlText(value: string): void {
+    setIdlText(value);
+    invalidateActiveSource(value.trim() ? "IDL text changed. Re-parsing." : "IDL text cleared.");
+  }
+
+  function changeChainId(value: string): void {
+    setChainId(value);
+    invalidateActiveSource(value.trim() ? "Chain source changed. Resolve again." : "Chain source cleared.");
+  }
+
+  function invalidateActiveSource(message: string): void {
     idlJobRef.current += 1;
     decodeJobRef.current += 1;
-    setSourceMode(mode);
-    setResult(undefined);
-    setInspection(undefined);
     setRecord(undefined);
+    setInspection(undefined);
+    setResult(undefined);
     setBusy(undefined);
-    setAnnouncement("IDL source changed.");
+    setAnnouncement(message);
   }
 
   return (
@@ -375,9 +421,9 @@ export function DecodeLab() {
         sourceMode={sourceMode}
         onSourceModeChange={changeSourceMode}
         idlText={idlText}
-        onIdlTextChange={setIdlText}
+        onIdlTextChange={changeIdlText}
         chainId={chainId}
-        onChainIdChange={setChainId}
+        onChainIdChange={changeChainId}
         endpointLabel={endpoint.label}
         record={record}
         busy={busy}

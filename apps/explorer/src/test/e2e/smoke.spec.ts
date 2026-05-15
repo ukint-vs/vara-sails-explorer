@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { SAMPLE_IDL, SAMPLE_PAYLOAD_HEX } from "../../lib/decode/sample";
+import { RPC_SETTINGS_CHANGED_EVENT, SETTINGS_STORAGE_KEY } from "../../lib/live-explorer/settings";
 
 const decodeAttemptTimeout = 7_000;
 
@@ -137,6 +138,43 @@ test("decode lab runs bundled worker flow and copies diagnostics", async ({ page
 
   await diagnosticsCopyButton(page).click();
   await expect(page.locator("[role='status']")).toContainText(/Diagnostics copied|Copy failed/);
+});
+
+test("decode lab invalidates active IDL when source text changes", async ({ page }) => {
+  await page.goto("/decode", { waitUntil: "networkidle" });
+
+  await fillDecodeLabAndWait(page, SAMPLE_PAYLOAD_HEX, async () => {
+    await expect(page.getByText('"value": 7')).toBeVisible({ timeout: decodeAttemptTimeout });
+  });
+
+  await page.getByLabel("IDL text").fill("{ definitely invalid");
+
+  await expect(page.getByRole("button", { name: "Decode now" })).toBeDisabled();
+  await expect(page.getByLabel("Decode workspace").getByText('"value": 7')).toHaveCount(0);
+  await expect(page.getByLabel("Decode workspace").getByText("Invalid IDL").first()).toBeVisible({
+    timeout: decodeAttemptTimeout
+  });
+});
+
+test("decode lab follows live endpoint setting changes", async ({ page }) => {
+  await page.goto("/decode", { waitUntil: "networkidle" });
+  await page.getByRole("combobox", { name: "IDL source" }).selectOption("program_id");
+
+  const sourceRail = page.locator(".decode-source-rail");
+  await expect(sourceRail.getByText("Vara testnet")).toBeVisible();
+
+  await page.evaluate(
+    ([storageKey, eventName]) => {
+      window.localStorage.setItem(
+        storageKey,
+        JSON.stringify({ selectedEndpointId: "custom", customEndpointUrl: "wss://custom.vara.example" })
+      );
+      window.dispatchEvent(new CustomEvent(eventName));
+    },
+    [SETTINGS_STORAGE_KEY, RPC_SETTINGS_CHANGED_EVENT]
+  );
+
+  await expect(sourceRail.getByText("Custom endpoint")).toBeVisible();
 });
 
 test("decode lab shows malformed payload failures without hiding diagnostics", async ({ page }) => {
