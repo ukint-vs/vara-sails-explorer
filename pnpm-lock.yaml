@@ -32,8 +32,8 @@ importers:
         specifier: ^19.2.6
         version: 19.2.6(react@19.2.6)
       sails-js:
-        specifier: file:../../../sails/js/sails-js-0.5.1.tgz
-        version: file:../sails/js/sails-js-0.5.1.tgz(@gear-js/api@0.45.0(@polkadot/api@16.5.6)(@polkadot/wasm-crypto@7.5.4(@polkadot/util@14.0.3)(@polkadot/x-randomvalues@14.0.3(@polkadot/util@14.0.3)(@polkadot/wasm-util@7.5.4(@polkadot/util@14.0.3))))(rxjs@7.8.2))(@polkadot/api@16.5.6)(@polkadot/util@14.0.3)
+        specifier: https://github.com/gear-tech/sails/releases/download/js/v1.0.0-beta.2/sails-js.tgz
+        version: https://github.com/gear-tech/sails/releases/download/js/v1.0.0-beta.2/sails-js.tgz(@gear-js/api@0.45.0(@polkadot/api@16.5.6)(@polkadot/wasm-crypto@7.5.4(@polkadot/util@14.0.3)(@polkadot/x-randomvalues@14.0.3(@polkadot/util@14.0.3)(@polkadot/wasm-util@7.5.4(@polkadot/util@14.0.3))))(rxjs@7.8.2))(@polkadot/api@16.5.6)(@polkadot/util@14.0.3)
     devDependencies:
       '@astrojs/check':
         specifier: ^0.9.9
@@ -1901,8 +1901,8 @@ packages:
   rxjs@7.8.2:
     resolution: {integrity: sha512-dhKf903U/PQZY6boNNtAGdWbG85WAbjT/1xYoZIC7FAY0yWapOBQVsVrDl58W86//e1VpMNBtRV4MaXfdMySFA==}
 
-  sails-js@file:../sails/js/sails-js-0.5.1.tgz:
-    resolution: {integrity: sha512-VX9PVjKE9UogYimvJ8aiv2S2aBXno6TaNhc3xc3rkqFTEVxjRDKlGLMYNBfMLSm32jruKFSfHz+2bpTsn1ML9g==, tarball: file:../sails/js/sails-js-0.5.1.tgz}
+  sails-js@https://github.com/gear-tech/sails/releases/download/js/v1.0.0-beta.2/sails-js.tgz:
+    resolution: {integrity: sha512-smq/wSBkp14Fxc9Lt0Yq8II+5BN0bornIkMT8ArybVKQzm46mlWze+p8TE1aHZoPMpnCIyp40GI+8dIGQrK8rQ==, tarball: https://github.com/gear-tech/sails/releases/download/js/v1.0.0-beta.2/sails-js.tgz}
     version: 0.5.1
     peerDependencies:
       '@gear-js/api': ^0.45.0
@@ -4678,7 +4678,7 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  sails-js@file:../sails/js/sails-js-0.5.1.tgz(@gear-js/api@0.45.0(@polkadot/api@16.5.6)(@polkadot/wasm-crypto@7.5.4(@polkadot/util@14.0.3)(@polkadot/x-randomvalues@14.0.3(@polkadot/util@14.0.3)(@polkadot/wasm-util@7.5.4(@polkadot/util@14.0.3))))(rxjs@7.8.2))(@polkadot/api@16.5.6)(@polkadot/util@14.0.3):
+  sails-js@https://github.com/gear-tech/sails/releases/download/js/v1.0.0-beta.2/sails-js.tgz(@gear-js/api@0.45.0(@polkadot/api@16.5.6)(@polkadot/wasm-crypto@7.5.4(@polkadot/util@14.0.3)(@polkadot/x-randomvalues@14.0.3(@polkadot/util@14.0.3)(@polkadot/wasm-util@7.5.4(@polkadot/util@14.0.3))))(rxjs@7.8.2))(@polkadot/api@16.5.6)(@polkadot/util@14.0.3):
     dependencies:
       '@gear-js/api': 0.45.0(@polkadot/api@16.5.6)(@polkadot/wasm-crypto@7.5.4(@polkadot/util@14.0.3)(@polkadot/x-randomvalues@14.0.3(@polkadot/util@14.0.3)(@polkadot/wasm-util@7.5.4(@polkadot/util@14.0.3))))(rxjs@7.8.2)
       '@polkadot/api': 16.5.6

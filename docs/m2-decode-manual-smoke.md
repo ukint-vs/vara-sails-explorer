@@ -17,17 +17,16 @@ programId or codeId
 
 ## Steps
 
-1. Run `pnpm prepare:sails-js` after updating `/Users/ukintvs/Documents/projects/sails`.
-2. Run `pnpm install`.
-3. Start the explorer with `pnpm dev`.
-4. Open `/decode`.
-5. Select `Program` or `Code`.
-6. Paste a known Sails program ID or code ID from the selected endpoint.
-7. Click `Resolve`.
-8. Confirm the source rail shows `chain_embedded`, `codeId`, `idlHash`, and cache state.
-9. Paste a matching raw Sails payload.
-10. Click `Decode payload`.
-11. Confirm the result, route inspector, and copied diagnostics all name the same provenance.
+1. Run `pnpm install`.
+2. Start the explorer with `pnpm dev`.
+3. Open `/decode`.
+4. Select `Program` or `Code`.
+5. Paste a known Sails program ID or code ID from the selected endpoint.
+6. Click `Resolve`.
+7. Confirm the source rail shows `chain_embedded`, `codeId`, `idlHash`, and cache state.
+8. Paste a matching raw Sails payload.
+9. Confirm auto-decode updates the result without a manual Decode click.
+10. Confirm the result, route inspector, and copied diagnostics all name the same provenance.
 
 ## Expected Failures
 

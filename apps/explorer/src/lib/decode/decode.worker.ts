@@ -1,6 +1,8 @@
 import { handleDecodeWorkerRequest } from "./worker-core";
 import type { DecodeWorkerRequest, DecodeWorkerResponse } from "./worker-protocol";
 
+installMinimalBufferShim();
+
 self.addEventListener("message", (event: MessageEvent<DecodeWorkerRequest>) => {
   void handleDecodeWorkerRequest(event.data)
     .then((response) => {
@@ -29,3 +31,24 @@ self.addEventListener("message", (event: MessageEvent<DecodeWorkerRequest>) => {
       self.postMessage(response);
     });
 });
+
+function installMinimalBufferShim(): void {
+  const target = globalThis as unknown as {
+    Buffer?: { from(value: string, encoding?: string): Uint8Array };
+  };
+
+  target.Buffer ??= {
+    from(value: string, encoding?: string): Uint8Array {
+      if (encoding && encoding !== "base64") {
+        throw new Error(`Unsupported Buffer.from encoding in decode worker: ${encoding}`);
+      }
+
+      const binary = atob(value);
+      const bytes = new Uint8Array(binary.length);
+      for (let index = 0; index < binary.length; index += 1) {
+        bytes[index] = binary.charCodeAt(index);
+      }
+      return bytes;
+    }
+  };
+}

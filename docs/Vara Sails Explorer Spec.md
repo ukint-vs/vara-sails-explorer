@@ -21,12 +21,13 @@ M2 decode work is implemented against the local Sails checkout at:
 * path: `/Users/ukintvs/Documents/projects/sails`
 * commit: `9077b7d04322d098b96379c904380d0a445c5e04`
 * tag: `js/v1.0.0-beta.2`
-* explorer install artifact: generated local tarball `../sails/js/sails-js-0.5.1.tgz`
+* explorer install artifact: published GitHub release tarball `sails-js.tgz`
+* package version inside tarball: `sails-js@0.5.1`
+* release tarball: `https://github.com/gear-tech/sails/releases/download/js/v1.0.0-beta.2/sails-js.tgz`
 
-The tarball is not a tracked binary artifact. Rebuild it with:
+Install uses the published package and does not require a sibling Sails checkout:
 
 ```text
-pnpm prepare:sails-js
 pnpm install
 ```
 

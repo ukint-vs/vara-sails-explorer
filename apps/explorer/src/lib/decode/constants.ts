@@ -13,9 +13,9 @@ export const DECODE_TIMEOUTS = {
   workerIdleMs: 90_000
 } as const;
 
-export const LOCAL_SAILS_SOURCE = {
-  path: "/Users/ukintvs/Documents/projects/sails",
-  commit: "9077b7d04322d098b96379c904380d0a445c5e04",
-  tag: "js/v1.0.0-beta.2",
-  tarball: "../sails/js/sails-js-0.5.1.tgz"
+export const SAILS_JS_SOURCE = {
+  packageName: "sails-js",
+  packageVersion: "0.5.1",
+  releaseTag: "js/v1.0.0-beta.2",
+  tarball: "https://github.com/gear-tech/sails/releases/download/js/v1.0.0-beta.2/sails-js.tgz"
 } as const;
