@@ -466,7 +466,7 @@ function resultMessage(result: DecodeResult): string {
 
 function DecodeProvenanceLine({ provenance }: { provenance: DecodeProvenance | undefined }) {
   if (!provenance) {
-    return <div className="decode-provenance-line">No IDL source selected.</div>;
+    return null;
   }
 
   return (

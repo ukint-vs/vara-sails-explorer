@@ -26,7 +26,13 @@ const nav = [
     <nav class="nav" aria-label="Primary navigation">
       {
         nav.map((item) => (
-          <a href={item.href} class:list={[active === item.id && "active"]}>{item.label}</a>
+          <a
+            href={item.href}
+            class:list={[active === item.id && "active"]}
+            aria-current={active === item.id ? "page" : undefined}
+          >
+            {item.label}
+          </a>
         ))
       }
     </nav>

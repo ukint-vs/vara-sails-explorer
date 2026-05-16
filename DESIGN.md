@@ -40,8 +40,9 @@
 
 ## Components
 
+- Bracket syntax `[…]` is reserved for chips and nav items only. Buttons, segmented controls, and tabs rely on shape, weight, and fill — not bracket pseudo-elements.
 - Chips: bracketed, compact, uppercase, semantic color only for state.
-- Buttons: primary action is high contrast; secondary actions are bracketed compact controls.
+- Buttons: primary action is brand-green high-contrast fill; secondary actions are plain compact controls with a thin border.
 - Inputs: visible labels; placeholders never replace labels.
 - Provenance cards: show source, idlHash, codeId/programId aliases, cache state, trust label, and timestamp.
 - Diagnostics trace: collapsed by default, always copyable after every attempt.
@@ -60,3 +61,6 @@
 | 2026-05-15 | Hybrid workbench direction | Merges search, operator, documentarian, and Decode Lab needs without turning the app into marketing. |
 | 2026-05-15 | No marketing first viewport | First screen must contain usable controls and live/status data. |
 | 2026-05-15 | Desktop-first Decode Lab | Mobile minimum remains required; richer mobile tabs/accordions are tracked as follow-up. |
+| 2026-05-16 | Brackets reserved for chips and nav | Operator buttons stopped reading as primary actions when every control wore the same bracket costume. Buttons and segmented controls now rely on fill, weight, and border. |
+| 2026-05-16 | Decode-page H1 shrinks to 20px | First-viewport rule says the workbench should lead with controls and status data, not slogan-sized hero type. Scoped to `.decode-head h1`; other page heads stay at 32px until a separate audit. |
+| 2026-05-16 | Primary button = brand-green fill | DESIGN.md already promised "high contrast primary action"; implementation used white-on-black with a floating shadow. Aligned both. Disabled state is 40% opacity, no border. |

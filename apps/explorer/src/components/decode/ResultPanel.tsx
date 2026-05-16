@@ -9,13 +9,7 @@ export function ResultPanel({ result }: ResultPanelProps) {
   if (!result) {
     return (
       <div className="decode-result empty">
-        <div className="decode-result-head">
-          <span>No result</span>
-          <strong>idle</strong>
-        </div>
-        <pre>{`{
-  "status": "waiting_for_decode"
-}`}</pre>
+        <p className="decode-empty">Paste a payload to decode. Auto-decode runs once the IDL is ready.</p>
       </div>
     );
   }

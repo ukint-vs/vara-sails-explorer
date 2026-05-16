@@ -25,12 +25,18 @@ export function DiagnosticsTrace({ trace, result, onCopy }: DiagnosticsTraceProp
         </button>
       </div>
 
-      <button type="button" className="trace-summary" onClick={() => setOpen((value) => !value)} aria-expanded={open}>
+      <button
+        type="button"
+        className="trace-summary"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        disabled={trace.length === 0 && !result}
+      >
         <span>{meta?.label ?? "No trace yet"}</span>
         <strong>{summary?.durationMs ? `${summary.durationMs}ms` : summary?.status ?? "idle"}</strong>
       </button>
 
-      {open && (
+      {open && trace.length > 0 && (
         <ol className="trace-list">
           {trace.map((step, index) => (
             <li className={step.status} key={`${step.at}-${index}`}>
@@ -39,8 +45,11 @@ export function DiagnosticsTrace({ trace, result, onCopy }: DiagnosticsTraceProp
               <p>{step.detail}</p>
             </li>
           ))}
-          {trace.length === 0 && <li className="info">No trace yet.</li>}
         </ol>
+      )}
+
+      {trace.length === 0 && !result && (
+        <p className="decode-empty">No trace yet. Resolve a source or decode a payload to populate.</p>
       )}
     </section>
   );

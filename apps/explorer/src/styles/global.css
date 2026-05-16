@@ -54,6 +54,12 @@
   letter-spacing: 0;
 }
 
+*:focus-visible {
+  outline: 2px solid var(--color-semantic-brand-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-tag);
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -315,11 +321,12 @@ h3 {
   content: "]";
 }
 
-.nav a.active {
-  background: var(--surface-3);
-  border-color: var(--border);
-  color: var(--text-strong);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+.nav a.active,
+.nav a[aria-current="page"] {
+  background: var(--color-state-nav-active-bg);
+  border-color: var(--color-state-nav-active-text);
+  color: var(--color-state-nav-active-text);
+  box-shadow: none;
 }
 
 .header-search {
@@ -528,21 +535,22 @@ h3 {
   font-size: var(--font-size-sm);
 }
 
-.btn:not(.primary)::before {
-  content: "[";
-}
-
-.btn:not(.primary)::after {
-  content: "]";
-}
 
 .btn.primary {
   min-height: var(--control-height-md);
-  border-color: var(--color-primitive-white);
-  border-radius: var(--radius-pill);
-  background: var(--color-primitive-white);
-  color: var(--color-primitive-black);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--color-button-primary-bg);
+  border-radius: var(--radius-tag);
+  background: var(--color-button-primary-bg);
+  color: var(--color-button-primary-text);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  box-shadow: none;
+}
+
+.btn.primary:disabled,
+.btn.primary[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .btn:active,
@@ -1580,14 +1588,6 @@ textarea {
   text-transform: uppercase;
 }
 
-.tab::before {
-  content: "[";
-}
-
-.tab::after {
-  content: "]";
-}
-
 .tab.active {
   background: var(--surface-3);
   color: var(--text-strong);
@@ -2106,6 +2106,13 @@ textarea {
   margin-bottom: var(--space-5);
 }
 
+.decode-head h1 {
+  font-size: var(--font-size-page-title);
+  font-weight: 600;
+  line-height: var(--font-lineHeight-tight);
+  margin: 0;
+}
+
 .decode-lab {
   display: grid;
   grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.45fr) minmax(280px, 0.86fr);
@@ -2279,14 +2286,6 @@ textarea {
   text-transform: uppercase;
 }
 
-.segmented button::before {
-  content: "[";
-}
-
-.segmented button::after {
-  content: "]";
-}
-
 .segmented button.active {
   border-color: var(--border-strong);
   background: var(--surface-3);
@@ -2447,6 +2446,8 @@ textarea {
 
 .decode-result.success {
   border-color: var(--success-border);
+  border-left-width: 2px;
+  background: var(--success-soft);
 }
 
 .decode-result.warning,
@@ -2456,6 +2457,11 @@ textarea {
 
 .decode-result.danger {
   border-color: var(--danger-border);
+  border-left-width: 2px;
+}
+
+.decode-inspector.success {
+  border-left: 2px solid var(--success-border);
 }
 
 .decode-health {
@@ -2477,14 +2483,59 @@ textarea {
 
 .decode-health.success {
   border-color: var(--success-border);
+  background: var(--success-soft);
+  border-left: 2px solid var(--success);
 }
 
 .decode-health.warning {
   border-color: var(--warning-border);
+  background: var(--warning-soft);
+  border-left: 2px solid var(--warning);
 }
 
 .decode-health.danger {
   border-color: var(--danger-border);
+  background: var(--danger-soft);
+  border-left: 2px solid var(--danger);
+}
+
+.decode-empty {
+  padding: var(--space-4);
+  color: var(--muted);
+  font-size: var(--font-size-base);
+  line-height: var(--font-lineHeight-normal);
+}
+
+.decode-empty.kv {
+  padding: var(--space-3) var(--space-4);
+}
+
+.skeleton {
+  border-radius: var(--radius-tag);
+  background: var(--surface-2);
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--surface-2) 0%,
+      var(--surface-3) 50%,
+      var(--surface-2) 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer var(--motion-duration-skeleton) var(--motion-easing-skeleton) infinite;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
 }
 
 .candidate-list {

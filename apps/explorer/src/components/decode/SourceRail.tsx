@@ -140,34 +140,55 @@ export function SourceRail(props: SourceRailProps) {
         </button>
       </div>
 
-      <dl className="decode-kv">
-        <div>
-          <dt>Trust</dt>
-          <dd>{props.record?.provenance.trust ?? "none"}</dd>
-        </div>
-        <div>
-          <dt>idlHash</dt>
-          <dd>
-            <CopyableHex value={props.record?.idlHash} name="IDL hash" chars={14} />
-          </dd>
-        </div>
-        <div>
-          <dt>Program</dt>
-          <dd>
-            <CopyableHex value={props.record?.provenance.programId} name="program ID" chars={12} />
-          </dd>
-        </div>
-        <div>
-          <dt>Code</dt>
-          <dd>
-            <CopyableHex value={props.record?.provenance.codeId} name="code ID" chars={12} />
-          </dd>
-        </div>
-        <div>
-          <dt>Cache</dt>
-          <dd>{props.record?.provenance.cacheHit ? "hit" : props.record ? "ready" : "empty"}</dd>
-        </div>
-      </dl>
+      {props.record ? (
+        <dl className="decode-kv">
+          <div>
+            <dt>Trust</dt>
+            <dd>{props.record.provenance.trust}</dd>
+          </div>
+          <div>
+            <dt>idlHash</dt>
+            <dd>
+              <CopyableHex value={props.record.idlHash} name="IDL hash" chars={14} />
+            </dd>
+          </div>
+          <div>
+            <dt>Program</dt>
+            <dd>
+              <CopyableHex value={props.record.provenance.programId} name="program ID" chars={12} />
+            </dd>
+          </div>
+          <div>
+            <dt>Code</dt>
+            <dd>
+              <CopyableHex value={props.record.provenance.codeId} name="code ID" chars={12} />
+            </dd>
+          </div>
+          <div>
+            <dt>Cache</dt>
+            <dd>{props.record.provenance.cacheHit ? "hit" : "ready"}</dd>
+          </div>
+        </dl>
+      ) : isResolving(props.busy) ? (
+        <dl className="decode-kv" aria-busy="true">
+          {["Trust", "idlHash", "Program", "Code", "Cache"].map((label) => (
+            <div key={label}>
+              <dt>{label}</dt>
+              <dd>
+                <span className="skeleton" aria-hidden="true">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      ) : (
+        <p className="decode-empty kv">No IDL source loaded. Pick a source above to start.</p>
+      )}
     </section>
   );
+}
+
+function isResolving(busy: string | undefined): boolean {
+  return busy === "Resolving program" || busy === "Resolving code" || busy === "Extracting IDL";
 }

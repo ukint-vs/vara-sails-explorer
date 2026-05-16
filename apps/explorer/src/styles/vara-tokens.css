@@ -26,6 +26,10 @@
   --color-semantic-border-focus: var(--color-primitive-brand-green);
   --color-semantic-border-translucent: var(--color-primitive-border-translucent);
   --color-semantic-brand-primary: var(--color-primitive-brand-green);
+  --color-button-primary-bg: var(--color-primitive-brand-green);
+  --color-button-primary-text: var(--color-primitive-black);
+  --color-state-nav-active-bg: var(--color-primitive-brand-green-bg-10);
+  --color-state-nav-active-text: var(--color-primitive-brand-green);
   --color-semantic-state-failed: var(--color-primitive-danger-red);
   --color-semantic-state-failed-bg: var(--color-primitive-danger-red-bg);
   --color-semantic-state-success: var(--color-primitive-brand-green);
@@ -55,6 +59,7 @@
   --font-lineHeight-normal: 1.5;
   --font-lineHeight-tight: 1.2;
   --font-size-2xl: 32px;
+  --font-size-page-title: 20px;
   --font-size-base: 12px;
   --font-size-lg: 20px;
   --font-size-md: 16px;
@@ -65,7 +70,9 @@
   --font-weight-regular: 400;
   --icon-statusDot-size: 8px;
   --motion-duration-instant: 80ms;
+  --motion-duration-skeleton: 1200ms;
   --motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --motion-easing-skeleton: linear;
   --radius-panel: 4px;
   --radius-pill: 12px;
   --radius-full: 9999px;

@@ -34,7 +34,7 @@ export function PayloadWorkspace(props: PayloadWorkspaceProps) {
         </div>
         <div className="decode-head-actions">
           {payload && <LiveCopyButton value={payload} name="payload hex" />}
-          <button type="button" className="btn" disabled={!props.ready} onClick={() => void props.onDecode()}>
+          <button type="button" className="btn primary" disabled={!props.ready} onClick={() => void props.onDecode()}>
             {props.busy === "Decoding payload" ? "Decoding" : "Decode now"}
           </button>
         </div>
