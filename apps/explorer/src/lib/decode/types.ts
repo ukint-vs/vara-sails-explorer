@@ -33,7 +33,8 @@ export type DecodeStatusCode =
   | "cache_failure"
   | "worker_timeout"
   | "worker_failure"
-  | "sails_unknown";
+  | "sails_unknown"
+  | "codec_mismatch";
 
 export type SailsUnknownReason =
   | "too-short"
@@ -68,6 +69,14 @@ export type DecodeEntryView = {
   interfaceId: string;
   entryId: number;
   routeIdx: number;
+  /**
+   * Codec the entry was defined with. Optional because sails-js@0.5.1 does not
+   * yet expose codec on ResolvedEntry. The field exists so the schema is ready
+   * when upstream surfaces it (spec section 8.1.5). When present and equal to
+   * "ethabi", the decode pipeline returns codec_mismatch instead of decoding
+   * as SCALE.
+   */
+  codec?: "scale" | "ethabi" | string;
 };
 
 export type DecodeProvenance = {
@@ -79,7 +88,6 @@ export type DecodeProvenance = {
   codeId?: string;
   endpointLabel?: string;
   cacheHit?: boolean;
-  warnings?: string[];
   updatedAt: number;
 };
 

@@ -10,6 +10,8 @@ describe("decode status registry", () => {
     expect(decodeStatusRegistry.rpc_timeout.category).toBe("timeout");
     expect(decodeStatusRegistry.cache_failure.category).toBe("cache_failure");
     expect(decodeStatusRegistry.worker_failure.category).toBe("worker_failure");
+    expect(decodeStatusRegistry.codec_mismatch.category).toBe("idl_failure");
+    expect(decodeStatusRegistry.codec_mismatch.tone).toBe("warning");
   });
 
   it("covers current Sails JS unknown reasons", () => {

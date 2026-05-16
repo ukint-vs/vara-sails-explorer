@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { hashIdl } from "../lib/decode/bytes";
 import { SAMPLE_IDL, SAMPLE_PAYLOAD_HEX } from "../lib/decode/sample";
 import type { DecodeProvenance } from "../lib/decode/types";
@@ -122,6 +122,49 @@ describe("decode worker core", () => {
       expect(sanitize({ items: [1n, "x", { id: new Uint8Array([0xff]) }] })).toEqual({
         items: ["1", "x", { id: "0xff" }]
       });
+    });
+  });
+
+  describe("withParserInitTimeout", () => {
+    const { withParserInitTimeout } = __test__;
+
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("rejects with a 5000ms detail when parser.init() never resolves", async () => {
+      const pending = new Promise<void>(() => {
+        // Never resolves — simulates a hung wasm fetch on a flaky proxy.
+      });
+      const wrapped = withParserInitTimeout(pending, 5000);
+      const assertion = expect(wrapped).rejects.toThrow(/5000ms/);
+      await vi.advanceTimersByTimeAsync(5000);
+      await assertion;
+    });
+
+    it("resolves with the inner value when parser.init() succeeds before the timeout", async () => {
+      const wrapped = withParserInitTimeout(Promise.resolve("ok" as const), 5000);
+      await expect(wrapped).resolves.toBe("ok");
+    });
+  });
+
+  describe("resolvedEntryCodec", () => {
+    const { resolvedEntryCodec } = __test__;
+
+    it("surfaces a hypothetical ethabi codec field for spec 8.1.5 routing", () => {
+      // sails-js@0.5.1 ResolvedEntry has no codec field. This mock proves the
+      // guard in decodePayload will fire once upstream surfaces entry.codec.
+      const entry = { kind: "command", codec: "ethabi" } as unknown as Parameters<typeof resolvedEntryCodec>[0];
+      expect(resolvedEntryCodec(entry)).toBe("ethabi");
+    });
+
+    it("returns undefined for current sails-js entries without a codec field", () => {
+      const entry = { kind: "command" } as unknown as Parameters<typeof resolvedEntryCodec>[0];
+      expect(resolvedEntryCodec(entry)).toBeUndefined();
     });
   });
 

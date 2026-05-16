@@ -2113,6 +2113,14 @@ textarea {
   margin: 0;
 }
 
+.decode-trust-line {
+  width: 100%;
+  margin: var(--space-2) 0 0;
+  color: var(--subtle);
+  font-size: var(--font-size-xs);
+  line-height: var(--font-lineHeight-normal);
+}
+
 .decode-lab {
   display: grid;
   grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.45fr) minmax(280px, 0.86fr);

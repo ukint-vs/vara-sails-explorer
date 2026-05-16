@@ -205,7 +205,6 @@ function stripTransientFields(record: IdlRecord): IdlRecord {
       codeId: record.provenance.codeId,
       endpointLabel: record.provenance.endpointLabel,
       cacheHit: record.provenance.cacheHit,
-      warnings: record.provenance.warnings,
       updatedAt: record.provenance.updatedAt
     }
   };

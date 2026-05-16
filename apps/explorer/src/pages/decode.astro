@@ -15,6 +15,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <Chip tone="success" label="Worker decode" />
         <Chip tone="info" label="IDL provenance" />
       </div>
+      <p class="decode-trust-line">
+        Decoded values are untrusted until tied to a verified code ID, verified IDL, and finalized chain data.
+      </p>
     </section>
 
     <DecodeLab client:only="react" />

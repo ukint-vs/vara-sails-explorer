@@ -130,6 +130,12 @@ export const decodeStatusRegistry: Record<DecodeStatusCode, DecodeStatusMeta> = 
     category: "sails_unknown",
     tone: "warning",
     recovery: "Inspect header fields, route candidates, and the selected decode kind."
+  },
+  codec_mismatch: {
+    label: "Codec mismatch",
+    category: "idl_failure",
+    tone: "warning",
+    recovery: "Entry is ethabi-only and cannot be decoded through the SCALE header path. Use the Vara.eth toolchain instead."
   }
 };
 

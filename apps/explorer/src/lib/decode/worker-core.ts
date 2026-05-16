@@ -2,6 +2,7 @@ import { SailsProgram } from "sails-js";
 import { extractIdlFromWasm, InterfaceId, SailsIdlParser, SailsMessageHeader } from "sails-js/parser";
 import type { DecodedUnknown, IIdlDoc, ResolvedEntry } from "sails-js/types";
 import { bytesToHex, enforceIdlLimit, enforcePayloadLimit, enforceWasmLimit, hashIdl, parseHexBytes } from "./bytes";
+import { DECODE_TIMEOUTS } from "./constants";
 import type { DecodeWorkerRequest, DecodeWorkerResponse } from "./worker-protocol";
 import type {
   DecodeEntryView,
@@ -120,6 +121,35 @@ async function decodePayload(request: Extract<DecodeWorkerRequest, { kind: "deco
     trace.push(traceStep("IDL ready", `idlHash ${request.idlHash.slice(0, 14)}...`, "success"));
 
     const header = readHeader(payload.bytes);
+
+    // Spec 8.1.5: do not silently decode ethabi entries as SCALE. Guard fires
+    // when sails-js eventually surfaces entry.codec; harmless no-op today
+    // because sails-js@0.5.1 ResolvedEntry has no codec field.
+    if (header?.header) {
+      try {
+        const peeked = entry.program.resolveEntry(header.header);
+        if (peeked.kind !== "unknown" && resolvedEntryCodec(peeked) === "ethabi") {
+          return {
+            kind: "decode",
+            jobId: request.jobId,
+            result: {
+              ok: false,
+              category: "idl_failure",
+              status: "codec_mismatch",
+              message: "Entry is ethabi-only and cannot be decoded through the SCALE header path.",
+              detail: `${peeked.kind} entry resolved with codec=ethabi`,
+              header: header.view,
+              candidates: entry.program.resolveEntryCandidates(header.header.interfaceId).map(mapEntry),
+              provenance: request.provenance,
+              trace: [...trace, traceStep("Codec mismatch", "Entry is ethabi-only.", "warning", started)]
+            }
+          };
+        }
+      } catch {
+        // resolveEntry can throw for malformed headers; fall through to runDecode which handles it.
+      }
+    }
+
     const decoded = runDecode(entry.program, payload.bytes, request.decodeKind);
 
     if (decoded.kind === "unknown") {
@@ -194,11 +224,35 @@ async function getProgram(idlHash: string, idlText: string): Promise<ProgramCach
 async function getParser(): Promise<SailsIdlParser> {
   parserPromise ??= (async () => {
     const parser = new SailsIdlParser();
-    await parser.init();
+    try {
+      await withParserInitTimeout(parser.init(), DECODE_TIMEOUTS.parserInitMs);
+    } catch (error) {
+      // Clear the cached promise so a retry can succeed (e.g. proxy comes back online).
+      parserPromise = undefined;
+      throw error;
+    }
     return parser;
   })();
 
   return parserPromise;
+}
+
+function withParserInitTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(`Sails IDL parser failed to initialize within ${timeoutMs}ms.`));
+    }, timeoutMs);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error: unknown) => {
+        clearTimeout(timer);
+        reject(error);
+      }
+    );
+  });
 }
 
 function runDecode(program: SailsProgram, bytes: Uint8Array, kind: DecodeKind): SailsDecoded {
@@ -300,8 +354,16 @@ function mapEntry(entry: ResolvedEntry): DecodeEntryView {
     route: "route" in entry ? entry.route : undefined,
     interfaceId: interfaceIdToString(entry.interfaceId),
     entryId: entry.entryId,
-    routeIdx: entry.routeIdx
+    routeIdx: entry.routeIdx,
+    codec: resolvedEntryCodec(entry)
   };
+}
+
+function resolvedEntryCodec(entry: ResolvedEntry): "scale" | "ethabi" | string | undefined {
+  // sails-js@0.5.1 ResolvedEntry has no codec field. Read defensively so the
+  // schema is ready when upstream exposes it (spec section 8.1.5).
+  const codec = (entry as unknown as { codec?: unknown }).codec;
+  return typeof codec === "string" ? codec : undefined;
 }
 
 function interfaceIdToString(value: unknown): string {
@@ -373,4 +435,4 @@ export async function computeIdlHashForWorker(text: string): Promise<string> {
   return hashIdl(text);
 }
 
-export const __test__ = { sanitize, interfaceIdToString };
+export const __test__ = { sanitize, interfaceIdToString, withParserInitTimeout, resolvedEntryCodec };
