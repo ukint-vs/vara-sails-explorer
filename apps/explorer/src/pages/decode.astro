@@ -1,69 +1,25 @@
 ---
-import Button from "../components/Button.astro";
-import Card from "../components/Card.astro";
 import Chip from "../components/Chip.astro";
-import StatePanel from "../components/StatePanel.astro";
+import { DecodeLab } from "../components/decode/DecodeLab";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="Decode lab" active="decode">
-  <main id="main-content" class="layout">
-    <section class="page-head">
+  <main id="main-content" class="layout decode-layout">
+    <section class="page-head decode-head">
       <div>
         <div class="eyebrow">Decode lab</div>
-        <h1>Decode raw Sails payloads with explicit failure reasons.</h1>
-        <p class="lede">Use this when a payload is undecoded in a message row or you need to verify an IDL route manually.</p>
+        <h1>Sails payload workbench.</h1>
       </div>
-      <div class="chip-row"><Chip tone="brand" label="Header-first" /><Chip label="No Wasm execution" /></div>
+      <div class="chip-row">
+        <Chip tone="success" label="Worker decode" />
+        <Chip tone="info" label="IDL provenance" />
+      </div>
+      <p class="decode-trust-line">
+        Decoded values are untrusted until tied to a verified code ID, verified IDL, and finalized chain data.
+      </p>
     </section>
 
-    <section class="grid wide-sidebar">
-      <div class="stack">
-        <Card title="Input" description="Paste bytes, select an IDL source, and decode call/reply/event/error/constructor payloads.">
-          <div class="stack">
-            <div class="grid two">
-              <div class="field"><label>Program or code ID</label><input class="input" value="0x4f8c8f...a241" /></div>
-              <div class="field"><label>Decode as</label><select class="select"><option>Auto-detect from Sails header</option><option>Call</option><option>Reply</option><option>Event</option><option>Error</option><option>Constructor</option></select></div>
-            </div>
-            <div class="field"><label>Raw payload</label><textarea>0x5341494c01108b7d9c110701000102a4010000c8b1a0f4...</textarea></div>
-            <div class="toolbar"><Button variant="primary">Decode payload</Button><Button>Upload IDL</Button><Button>Upload Wasm</Button><Button>Load from registry</Button></div>
-          </div>
-        </Card>
-
-        <Card title="Result" description="Decoded output shows service, method, arguments, header fields, and original bytes.">
-          <Fragment slot="action"><Chip tone="success" label="Decoded" /></Fragment>
-          <pre class="code-block">&#123;
-  <span class="key">"status"</span>: <span class="str">"decoded"</span>,
-  <span class="key">"kind"</span>: <span class="str">"call"</span>,
-  <span class="key">"service"</span>: <span class="str">"OrderBook"</span>,
-  <span class="key">"entry"</span>: <span class="str">"place_limit_order"</span>,
-  <span class="key">"codec"</span>: <span class="str">"scale"</span>,
-  <span class="key">"args"</span>: &#123; <span class="key">"side"</span>: <span class="str">"Buy"</span>, <span class="key">"quantity"</span>: <span class="num">2.4</span> &#125;
-&#125;</pre>
-        </Card>
-      </div>
-
-      <aside class="stack">
-        <Card pad body={false} className="stack">
-          <h3>IDL resolution order</h3>
-          <div class="doc-list">
-            <div class="doc-item"><span class="doc-icon">1</span><div><div class="doc-title">Embedded sails:idl</div><div class="doc-copy">Prefer custom section when code bytes are available.</div></div></div>
-            <div class="doc-item"><span class="doc-icon">2</span><div><div class="doc-title">Local cache</div><div class="doc-copy">Persist IDLs per codeId and hash.</div></div></div>
-            <div class="doc-item"><span class="doc-icon">3</span><div><div class="doc-title">Static registry</div><div class="doc-copy">Curated known programs without needing an indexer.</div></div></div>
-          </div>
-        </Card>
-        <Card pad body={false} className="stack">
-          <h3>Required failure labels</h3>
-          <div class="chip-row">
-            <Chip tone="warn" label="missing_idl" />
-            <Chip tone="danger" label="bad_header" />
-            <Chip tone="warn" label="unknown_interface" />
-            <Chip tone="warn" label="codec_mismatch" />
-            <Chip label="not_sails_payload" />
-          </div>
-        </Card>
-        <StatePanel state="error" title="Malformed payload example" description="Bad magic, unsupported version, bad length, or non-zero reserved byte maps to a precise decode status." />
-      </aside>
-    </section>
+    <DecodeLab client:only="react" />
   </main>
 </BaseLayout>

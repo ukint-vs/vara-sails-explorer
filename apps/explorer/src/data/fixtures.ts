@@ -20,10 +20,10 @@ export const statusStrip = {
 export const netStats: NetStat[] = [
   { label: "Best block", value: "#18,427,057", note: "4s ago · 3.0s block time", tone: "brand", live: true },
   { label: "Finalized", value: "#18,427,054", note: "lag 3 blocks", tone: "neutral" },
-  { label: "Msg/s", value: "487", note: "peak 1,247 · avg 412", tone: "info" },
-  { label: "Active programs", value: "1,284", note: "+12 newly deployed today", tone: "neutral" },
-  { label: "Active accounts", value: "9,021", note: "unique senders · 24h", tone: "steel" },
-  { label: "Decode coverage", value: "91.6%", note: "local cache · last 512 blocks", tone: "success" }
+  { label: "Data source", value: "Preview", note: "static rows until live RPC connects", tone: "info" },
+  { label: "Cached blocks", value: "512", note: "bounded local window", tone: "neutral" },
+  { label: "Gear events", value: "189", note: "observed in fixture window", tone: "steel" },
+  { label: "Failed ext.", value: "18", note: "fixture window", tone: "warn" }
 ];
 
 export const metrics: Metric[] = [
@@ -36,9 +36,9 @@ export const metrics: Metric[] = [
     progress: 72
   },
   {
-    label: "Decode coverage",
+    label: "IDL readiness",
     value: "91.6%",
-    note: "decoded with embedded, registry, or user IDL",
+    note: "fixture preview for later decode work",
     tone: "brand",
     badge: "Sails",
     progress: 92

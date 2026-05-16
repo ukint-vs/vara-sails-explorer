@@ -17,12 +17,12 @@ import { accountSummaries, programs, topEvents } from "../data/fixtures";
     <section class="page-head compact-head">
       <div>
         <div class="eyebrow">Programs</div>
-        <h1>Programs, code IDs, IDL trust, activity, and executable balance.</h1>
-        <p class="lede">Use this view to find active contracts, inspect their Sails interface, and watch decode coverage before calling them.</p>
+        <h1>Program directory preview.</h1>
+        <p class="lede">Fixture rows model the Milestone 3 program explorer. M1 only shows program candidates observed from live RPC blocks.</p>
       </div>
       <div class="chip-row">
-        <Chip tone="success" label="Active" dot />
-        <Chip tone="warn" label="Balance watch" dot />
+        <Chip tone="info" label="Preview · M3" dot />
+        <Chip tone="steel" label="Fixture rows" dot />
       </div>
     </section>
 
@@ -38,13 +38,13 @@ import { accountSummaries, programs, topEvents } from "../data/fixtures";
       <Button href="/decode" size="sm">Decode payload</Button>
     </section>
 
-    <DataCard title="Program directory" description="Program identity, code ID, IDL trust, decode coverage, activity, and balance warnings.">
+    <DataCard title="Program directory preview" description="Static program identity, code ID, IDL trust, activity, and balance examples.">
       <ProgramTable programs={programs} />
       <Fragment slot="foot"><Pagination label="Program pagination" location="Showing pinned and recently active programs" placeholder="Program / code ID" /></Fragment>
     </DataCard>
 
     <section class="grid two">
-      <DataCard title="Top decoded events" description="Event counts by decoded Sails entry.">
+      <DataCard title="Decoded events preview" description="Static examples for the later Sails-aware event explorer.">
         <div class="mini-list">
           {
             topEvents.map((event) => (

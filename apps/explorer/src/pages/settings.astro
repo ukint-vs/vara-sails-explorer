@@ -1,31 +1,21 @@
 ---
-import Button from "../components/Button.astro";
-import Card from "../components/Card.astro";
-import Chip from "../components/Chip.astro";
-import SettingsPanel from "../components/live/SettingsPanel";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="Settings" active="settings">
-  <main id="main-content" class="layout">
-    <section class="page-head">
+<BaseLayout title="Settings" active="settings" showStatus={false}>
+  <script is:inline>
+    const params = new URLSearchParams(window.location.search);
+    params.set("settings", "open");
+    const query = params.toString();
+    window.location.replace(query ? `/?${query}` : "/");
+  </script>
+
+  <main id="main-content" class="layout layout-dense">
+    <section class="page-head compact-head">
       <div>
         <div class="eyebrow">Settings</div>
-        <h1>RPC endpoint, local cache, wallet, and IDL registry controls.</h1>
-        <p class="lede">Configure endpoint, cache retention, wallet connection, and local IDL sources.</p>
+        <h1>Explorer settings.</h1>
       </div>
-      <Chip tone="info" label="Direct RPC mode" dot />
-    </section>
-
-    <SettingsPanel client:load />
-
-    <section class="grid two section-offset">
-      <Card title="Wallet" description="Wallet state for signed program actions. Read-only browsing remains available.">
-        <div class="toolbar"><Button variant="primary">Connect wallet</Button><Chip label="Disconnected" /></div>
-      </Card>
-      <Card title="IDL registry" description="Manage imported IDLs used to decode calls, replies, and events.">
-        <div class="toolbar"><Button>Import registry</Button><Button>Export uploaded IDLs</Button><Button>Clear user IDLs</Button></div>
-      </Card>
     </section>
   </main>
 </BaseLayout>

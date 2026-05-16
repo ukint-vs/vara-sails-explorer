@@ -1,5 +1,6 @@
 ---
 import Button from "./Button.astro";
+import SettingsDropdown from "./live/SettingsDropdown";
 
 interface Props {
   active?: "overview" | "blocks" | "messages" | "programs" | "codes" | "decode" | "settings" | "compare";
@@ -12,22 +13,26 @@ const nav = [
   { id: "messages", href: "/messages", label: "MESSAGES" },
   { id: "programs", href: "/programs", label: "PROGRAMS" },
   { id: "codes", href: "/codes", label: "CODES" },
-  { id: "decode", href: "/decode", label: "DECODE" },
-  { id: "settings", href: "/settings", label: "SETTINGS" }
+  { id: "decode", href: "/decode", label: "DECODE" }
 ] as const;
 ---
 
 <header class="topbar">
   <div class="topbar-inner">
     <a class="logo" href="/" aria-label="Vara Sails Explorer home">
-      <!-- TODO(vara-brand): replace [V] with the official Vara mark SVG when the asset ships. -->
-      <span class="logo-mark">[V]</span>
+      <span class="logo-mark" aria-hidden="true"></span>
       <span class="logo-copy">Vara Sails Explorer<small>Blocks · messages · programs</small></span>
     </a>
     <nav class="nav" aria-label="Primary navigation">
       {
         nav.map((item) => (
-          <a href={item.href} class:list={[active === item.id && "active"]}>{item.label}</a>
+          <a
+            href={item.href}
+            class:list={[active === item.id && "active"]}
+            aria-current={active === item.id ? "page" : undefined}
+          >
+            {item.label}
+          </a>
         ))
       }
     </nav>
@@ -36,7 +41,7 @@ const nav = [
       <span class="kbd-hint" aria-hidden="true">/</span>
     </div>
     <div class="header-actions">
-      <a class="network-chip" href="/settings"><span class="vara-mark">[V]</span> VARA.ETH MAINNET</a>
+      <SettingsDropdown client:load />
       <Button variant="primary">CONNECT WALLET</Button>
     </div>
   </div>

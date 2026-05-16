@@ -14,9 +14,12 @@
   "dependencies": {
     "@astrojs/react": "^5.0.5",
     "@gear-js/api": "^0.45.0",
+    "@polkadot/api": "^16.5.1",
+    "@polkadot/util": "^14.0.1",
     "astro": "^6.3.3",
     "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+    "react-dom": "^19.2.6",
+    "sails-js": "https://github.com/gear-tech/sails/releases/download/js/v1.0.0-beta.2/sails-js.tgz"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",

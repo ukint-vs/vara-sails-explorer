@@ -2,6 +2,7 @@ import type { EndpointValidationResult, RpcEndpoint, RpcEndpointSettings } from 
 
 export const TEST_MODE_STORAGE_KEY = "sails-explorer:test-source";
 export const SETTINGS_STORAGE_KEY = "sails-explorer:rpc-settings";
+export const RPC_SETTINGS_CHANGED_EVENT = "sails-explorer:rpc-settings-changed";
 export const DEFAULT_ENDPOINT_ID = "vara-testnet";
 export const DEFAULT_CUSTOM_ENDPOINT = "ws://127.0.0.1:9944";
 
@@ -119,6 +120,7 @@ export function saveRpcSettings(
   const nextSettings = { selectedEndpointId, customEndpointUrl };
 
   storage?.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(nextSettings));
+  dispatchRpcSettingsChanged(nextSettings);
   return nextSettings;
 }
 
@@ -141,4 +143,12 @@ function getBrowserStorage(): StorageLike | undefined {
   }
 
   return window.localStorage;
+}
+
+function dispatchRpcSettingsChanged(settings: RpcEndpointSettings): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.dispatchEvent(new CustomEvent<RpcEndpointSettings>(RPC_SETTINGS_CHANGED_EVENT, { detail: settings }));
 }

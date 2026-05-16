@@ -65,7 +65,7 @@ export class ExplorerCache {
     const key = detailKey(endpointKey, blockId);
     const memory = this.memoryDetails.get(key);
     if (memory) {
-      return { ...memory.detail, source: "cache" };
+      return cachedDetail(memory.detail);
     }
 
     const db = await this.openDb();
@@ -80,7 +80,7 @@ export class ExplorerCache {
       if (record) {
         this.memoryDetails.set(key, record);
       }
-      return record ? { ...record.detail, source: "cache" } : undefined;
+      return record ? cachedDetail(record.detail) : undefined;
     } catch {
       return undefined;
     }
@@ -132,11 +132,9 @@ export class ExplorerCache {
       const done = transactionDone(transaction);
       transaction.objectStore(BLOCK_STORE).delete(endpointKey);
       const details = transaction.objectStore(DETAIL_STORE);
-      const all = await requestResult<DetailRecord[]>(details.getAll());
-      for (const record of all) {
-        if (record.endpointKey === endpointKey) {
-          details.delete(record.key);
-        }
+      const endpointRecords = await requestResult<DetailRecord[]>(details.index("endpointKey").getAll(endpointKey));
+      for (const record of endpointRecords) {
+        details.delete(record.key);
       }
       await done;
     } catch {
@@ -183,6 +181,14 @@ export function detailKey(endpointKey: string, blockId: string): string {
   return `${endpointKey}:${blockId}`;
 }
 
+function cachedDetail(detail: ExplorerBlockDetail): ExplorerBlockDetail {
+  return {
+    ...detail,
+    observedObjects: detail.observedObjects ?? [],
+    source: "cache"
+  };
+}
+
 function requestResult<T>(request: IDBRequest<T>): Promise<T> {
   return new Promise((resolve, reject) => {
     request.onsuccess = () => resolve(request.result);
@@ -199,22 +205,21 @@ function transactionDone(transaction: IDBTransaction): Promise<void> {
 }
 
 function pruneMemoryDetails(records: Map<string, DetailRecord>, endpointKey: string): void {
-  const endpointRecords = [...records.values()]
-    .filter((record) => record.endpointKey === endpointKey)
-    .sort((a, b) => b.updatedAt - a.updatedAt);
-
-  for (const stale of endpointRecords.slice(DETAIL_LIMIT)) {
+  for (const stale of staleDetailRecords([...records.values()], endpointKey)) {
     records.delete(stale.key);
   }
 }
 
 async function pruneIndexedDetails(store: IDBObjectStore, endpointKey: string): Promise<void> {
-  const all = await requestResult<DetailRecord[]>(store.getAll());
-  const endpointRecords = all
-    .filter((record) => record.endpointKey === endpointKey)
-    .sort((a, b) => b.updatedAt - a.updatedAt);
-
-  for (const stale of endpointRecords.slice(DETAIL_LIMIT)) {
+  const endpointRecords = await requestResult<DetailRecord[]>(store.index("endpointKey").getAll(endpointKey));
+  for (const stale of staleDetailRecords(endpointRecords, endpointKey)) {
     store.delete(stale.key);
   }
+}
+
+function staleDetailRecords(records: DetailRecord[], endpointKey: string): DetailRecord[] {
+  return records
+    .filter((record) => record.endpointKey === endpointKey)
+    .sort((a, b) => b.updatedAt - a.updatedAt)
+    .slice(DETAIL_LIMIT);
 }

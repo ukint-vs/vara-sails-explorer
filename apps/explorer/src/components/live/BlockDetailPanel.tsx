@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import type { ExplorerBlockDetail } from "../../lib/live-explorer/types";
+import type { ExplorerBlockDetail, ExplorerObservedObject } from "../../lib/live-explorer/types";
 import { getExplorerRuntime, useExplorerSnapshot } from "../../lib/live-explorer/singleton";
 import ConnectionBanner from "./ConnectionBanner";
 import LiveBlockTable from "./LiveBlockTable";
@@ -14,6 +14,7 @@ export default function BlockDetailPanel() {
   const snapshot = useExplorerSnapshot();
   const blockId = useMemo(() => readBlockQuery(), []);
   const [state, setState] = useState<LoadState>(() => ({ kind: blockId ? "loading" : "idle", blockId }));
+  const phase = snapshot.status.phase;
 
   useEffect(() => {
     if (!blockId) {
@@ -22,6 +23,10 @@ export default function BlockDetailPanel() {
     }
     if (!isValidBlockQuery(blockId)) {
       setState({ kind: "error", blockId, message: "Use a block number or 0x hash to inspect a block." });
+      return;
+    }
+    if (phase === "idle" || phase === "connecting") {
+      setState({ kind: "loading", blockId });
       return;
     }
 
@@ -47,7 +52,7 @@ export default function BlockDetailPanel() {
     return () => {
       active = false;
     };
-  }, [blockId]);
+  }, [blockId, phase]);
 
   return (
     <div className="stack">
@@ -84,9 +89,10 @@ function LoadedDetail({ detail }: { detail: ExplorerBlockDetail }) {
       </section>
 
       <section className="grid two detail-grid">
+        <ObservedObjectsPanel objects={detail.observedObjects} />
         <DetailTable
           title="Events"
-          description="Raw runtime events for this block. Sails decode arrives in M2."
+          description="Runtime events returned for this block."
           rows={detail.events.map((event) => ({
             key: event.id,
             left: `${event.index}`,
@@ -103,12 +109,51 @@ function LoadedDetail({ detail }: { detail: ExplorerBlockDetail }) {
             left: `${extrinsic.index}`,
             main: `${extrinsic.section}.${extrinsic.method}`,
             sub: extrinsic.signer,
-            right: extrinsic.success == null ? "unknown" : extrinsic.success ? "success" : "failed"
+            right: formatExtrinsicStatus(extrinsic.success)
           }))}
         />
       </section>
     </>
   );
+}
+
+function ObservedObjectsPanel({ objects }: { objects: ExplorerObservedObject[] }) {
+  return (
+    <section className="data-card observed-card">
+      <div className="data-card-head">
+        <div>
+          <h3>Observed in this block</h3>
+          <p>Gear/Sails-relevant objects derived only from this block's RPC events and extrinsics.</p>
+        </div>
+      </div>
+      <div className="mini-list">
+        {objects.length === 0 ? (
+          <div className="callout">No Gear objects observed in this block.</div>
+        ) : (
+          objects.map((object) => (
+            <div className="mini-row og observed-row" key={`${object.kind}-${object.id}`}>
+              <span className="chip compact info">
+                <span className="chip-label">{object.kind}</span>
+              </span>
+              <div className="cell-stack">
+                <span className="cell-main">{object.label}</span>
+                <span className="cell-sub mono" title={object.id}>{object.id}</span>
+              </div>
+              <span className="cell-sub">{object.source.replace("_", " ")} · {object.confidence}</span>
+            </div>
+          ))
+        )}
+      </div>
+    </section>
+  );
+}
+
+function formatExtrinsicStatus(success: boolean | null): string {
+  if (success == null) {
+    return "unknown";
+  }
+
+  return success ? "success" : "failed";
 }
 
 function PendingDetail({ state }: { state: LoadState }) {

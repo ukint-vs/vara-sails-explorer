@@ -17,13 +17,13 @@ const message = messages[0];
 
     <section class="page-head compact-head">
       <div>
-        <div class="eyebrow">Message</div>
+        <div class="eyebrow">Message preview</div>
         <h1>{message.id}</h1>
-        <p class="lede">Execution, finality, decode status, payload bytes, caller, fee, and trust evidence for one Gear message.</p>
+        <p class="lede">Static Milestone 2 preview for one Gear message. M1 only links to message candidates observed from live RPC data.</p>
       </div>
       <div class="chip-row">
         <StatusChip kind="execution" value={message.execution} />
-        <StatusChip kind="decode" value={message.decode} />
+        <Chip tone="info" label="Preview · M2" />
         <StatusChip kind="finality" value={message.finality} />
       </div>
     </section>

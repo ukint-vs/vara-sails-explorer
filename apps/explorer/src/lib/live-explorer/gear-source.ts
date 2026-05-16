@@ -1,21 +1,22 @@
 import type { ExplorerBlock } from "../../data/types";
 import type { ExplorerDataSource } from "./data-source";
 import {
-  compactHash,
+  countFailedExtrinsics,
   countGearEvents,
+  extractObservedObjects,
   mapBlockSummary,
   mapRpcEvent,
   mapRpcExtrinsic,
   parseBlockIdentifier
 } from "./mappers";
-import type { ExplorerBlockDetail, ExplorerConnectionStatus, ExplorerHeads, RpcEndpoint, Unsubscribe } from "./types";
+import type { ExplorerBlockDetail, ExplorerBlockRef, ExplorerConnectionStatus, ExplorerHeads, RpcEndpoint, Unsubscribe } from "./types";
 
 type GearApiInstance = {
   blocks: {
     get: (block: string | number) => Promise<unknown>;
     getBlockHash: (blockNumber: number) => Promise<unknown>;
     getBlockNumber: (blockHash: string) => Promise<unknown>;
-    getBlockTimestamp: (blockNumber: number) => Promise<number>;
+    getBlockTimestamp: (blockNumber: number) => Promise<unknown>;
     getEvents: (blockHash: string) => Promise<unknown[]>;
     getExtrinsics: (blockHash: string) => Promise<unknown[]>;
   };
@@ -90,6 +91,7 @@ export class GearJsVaraDataSource implements ExplorerDataSource {
     const api = this.requireApi();
 
     const bestUnsub = await api.rpc.chain.subscribeNewHeads((header) => {
+      const updatedAt = Date.now();
       const best = mapHeaderRef(header);
       this.bestBlock = best.number ?? this.bestBlock;
       this.status = {
@@ -97,12 +99,13 @@ export class GearJsVaraDataSource implements ExplorerDataSource {
         phase: "live",
         bestBlock: this.bestBlock,
         finalizedBlock: this.finalizedBlock,
-        lastUpdated: Date.now()
+        lastUpdated: updatedAt
       };
-      onUpdate({ best, finalized: this.finalizedBlock ? { number: this.finalizedBlock } : undefined, updatedAt: Date.now() });
+      onUpdate({ best, finalized: this.finalizedBlock ? { number: this.finalizedBlock } : undefined, updatedAt });
     });
 
     const finalizedUnsub = await api.rpc.chain.subscribeFinalizedHeads((header) => {
+      const updatedAt = Date.now();
       const finalized = mapHeaderRef(header);
       this.finalizedBlock = finalized.number ?? this.finalizedBlock;
       this.status = {
@@ -110,9 +113,9 @@ export class GearJsVaraDataSource implements ExplorerDataSource {
         phase: "live",
         bestBlock: this.bestBlock,
         finalizedBlock: this.finalizedBlock,
-        lastUpdated: Date.now()
+        lastUpdated: updatedAt
       };
-      onUpdate({ best: this.bestBlock ? { number: this.bestBlock } : undefined, finalized, updatedAt: Date.now() });
+      onUpdate({ best: this.bestBlock ? { number: this.bestBlock } : undefined, finalized, updatedAt });
     });
 
     this.unsubs.push(bestUnsub, finalizedUnsub);
@@ -128,25 +131,21 @@ export class GearJsVaraDataSource implements ExplorerDataSource {
     const api = this.requireApi();
     const latestHeader = await api.rpc.chain.getHeader();
     const latest = headerNumber(latestHeader);
-    const numbers = Array.from({ length: Math.max(0, limit) }, (_, index) => latest - index).filter((number) => number >= 0);
+    const count = Math.min(Math.max(0, limit), Number.isFinite(latest) ? latest + 1 : 0);
+    const numbers = Array.from({ length: count }, (_, index) => latest - index);
 
     return mapWithConcurrency(numbers, 2, (number) => this.getBlockSummary(number));
   }
 
   async getBlockSummary(block: string | number): Promise<ExplorerBlock> {
-    const api = this.requireApi();
-    const parsed = parseBlockIdentifier(block);
-    const blockNumber = typeof parsed === "number" ? parsed : toNumber(await api.blocks.getBlockNumber(parsed));
-    const blockHash = typeof parsed === "string" ? parsed : toHex(await api.blocks.getBlockHash(blockNumber));
+    const { blockNumber, blockHash } = await this.resolveBlockRef(block);
 
     return this.mapBlockForHash(blockNumber, blockHash);
   }
 
   async getBlockDetail(block: string | number): Promise<ExplorerBlockDetail> {
     const api = this.requireApi();
-    const parsed = parseBlockIdentifier(block);
-    const blockNumber = typeof parsed === "number" ? parsed : toNumber(await api.blocks.getBlockNumber(parsed));
-    const blockHash = typeof parsed === "string" ? parsed : toHex(await api.blocks.getBlockHash(blockNumber));
+    const { blockNumber, blockHash } = await this.resolveBlockRef(block);
 
     /*
      * Detail pipeline:
@@ -162,6 +161,7 @@ export class GearJsVaraDataSource implements ExplorerDataSource {
     const extrinsics = extrinsicRecords.map((extrinsic, index) =>
       mapRpcExtrinsic(extrinsic as Parameters<typeof mapRpcExtrinsic>[0], index, events)
     );
+    const observedObjects = extractObservedObjects(events, extrinsics, blockNumber);
 
     return {
       block: {
@@ -171,6 +171,7 @@ export class GearJsVaraDataSource implements ExplorerDataSource {
       },
       blockNumber,
       blockHash,
+      observedObjects,
       events,
       extrinsics,
       fetchedAt: Date.now(),
@@ -182,13 +183,23 @@ export class GearJsVaraDataSource implements ExplorerDataSource {
     return this.status;
   }
 
+  private async resolveBlockRef(block: string | number): Promise<{ blockNumber: number; blockHash: string }> {
+    const api = this.requireApi();
+    const parsed = parseBlockIdentifier(block);
+    const blockNumber = typeof parsed === "number" ? parsed : toNumber(await api.blocks.getBlockNumber(parsed));
+    const blockHash = typeof parsed === "string" ? parsed : toHex(await api.blocks.getBlockHash(blockNumber));
+
+    return { blockNumber, blockHash };
+  }
+
   private async mapBlockForHash(blockNumber: number, blockHash: string): Promise<ExplorerBlock> {
     const api = this.requireApi();
-    const [block, timestampMs, events] = await Promise.all([
+    const [block, timestampMs, eventRecords] = await Promise.all([
       api.blocks.get(blockHash),
       api.blocks.getBlockTimestamp(blockNumber).catch(() => 0),
       api.blocks.getEvents(blockHash).catch(() => [])
     ]);
+    const events = eventRecords.map((event, index) => mapRpcEvent(event as Parameters<typeof mapRpcEvent>[0], index));
     const extrinsics = blockExtrinsicCount(block);
     const finality = this.finalizedBlock && blockNumber <= this.finalizedBlock ? "finalized" : "best_block";
 
@@ -200,7 +211,8 @@ export class GearJsVaraDataSource implements ExplorerDataSource {
       finality,
       extrinsics,
       events: events.length,
-      gearMessages: countGearEvents(events.map((event, index) => mapRpcEvent(event as Parameters<typeof mapRpcEvent>[0], index)))
+      gearMessages: countGearEvents(events),
+      failures: countFailedExtrinsics(events)
     });
   }
 
@@ -213,7 +225,7 @@ export class GearJsVaraDataSource implements ExplorerDataSource {
   }
 }
 
-function mapHeaderRef(header: unknown) {
+function mapHeaderRef(header: unknown): ExplorerBlockRef {
   return {
     number: headerNumber(header),
     hash: headerHash(header)
@@ -242,8 +254,14 @@ function blockAuthor(block: unknown): string {
     return "unknown";
   }
 
-  const engineLog = logs.find((log) => String(log).includes("0x"));
-  return compactHash(String(engineLog ?? "unknown"));
+  for (const log of logs) {
+    const label = consensusLabel(log);
+    if (label) {
+      return label;
+    }
+  }
+
+  return "unknown";
 }
 
 function readPath(value: unknown, path: string[]): unknown {
@@ -261,10 +279,13 @@ function toNumber(value: unknown): number {
   if (typeof value === "number") {
     return value;
   }
+  if (typeof value === "bigint") {
+    return Number(value);
+  }
   if (value && typeof value === "object" && "toNumber" in value && typeof value.toNumber === "function") {
     return value.toNumber();
   }
-  const numeric = Number(value);
+  const numeric = Number(String(value).replaceAll(",", ""));
   if (Number.isFinite(numeric)) {
     return numeric;
   }
@@ -282,6 +303,52 @@ function toHex(value: unknown): string {
     return value.toString();
   }
   return "unknown";
+}
+
+function consensusLabel(value: unknown): string | undefined {
+  const human = toHumanValue(value);
+  const direct = consensusLabelFromText(typeof human === "string" ? human : stringifySafe(human));
+  if (direct) {
+    return direct;
+  }
+
+  if (!human || typeof human !== "object" || Array.isArray(human)) {
+    return undefined;
+  }
+
+  for (const [key, entry] of Object.entries(human as Record<string, unknown>)) {
+    const label = consensusLabelFromText(key) ?? consensusLabelFromText(stringifySafe(entry));
+    if (label) {
+      return label;
+    }
+  }
+
+  return undefined;
+}
+
+function consensusLabelFromText(value: string): string | undefined {
+  const match = value.match(/\b(BABE|AURA|GRPA|FRNK)\b/i);
+  return match?.[1]?.toUpperCase();
+}
+
+function toHumanValue(value: unknown): unknown {
+  if (value && typeof value === "object" && "toHuman" in value && typeof value.toHuman === "function") {
+    return value.toHuman();
+  }
+
+  return value;
+}
+
+function stringifySafe(value: unknown): string {
+  if (typeof value === "string") {
+    return value;
+  }
+
+  try {
+    return JSON.stringify(value);
+  } catch {
+    return String(value);
+  }
 }
 
 async function mapWithConcurrency<T, R>(

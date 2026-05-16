@@ -1,5 +1,6 @@
 ---
 import type { ExplorerBlock } from "../data/types";
+import { blockNumberValue, formatBlockNumberPlain } from "../lib/live-explorer/mappers";
 import CopyHash from "./CopyHash.astro";
 import StatusChip from "./StatusChip.astro";
 
@@ -19,30 +20,39 @@ const { blocks, compact = false } = Astro.props;
     <span>Author</span>
     <span>Finality</span>
     <span>Extrinsics / events</span>
-    <span>Gear msgs</span>
-    <span>Sails decoded</span>
+    <span>Gear events</span>
+    <span>Failed ext.</span>
   </div>
   {
-    blocks.map((block) => (
-      <div class="table-row" data-searchable>
-        <CopyHash value={block.number} label={block.number} href="/blocks" name="block number" />
-        <div class="cell-stack">
-          <span class="cell-main mono">{block.age}</span>
-          <span class="cell-sub mono">{block.timestamp}</span>
+    blocks.map((block) => {
+      const blockNumber = formatBlockNumberPlain(block.number);
+
+      return (
+        <div class="table-row" data-searchable>
+          <CopyHash
+            value={blockNumber}
+            label={blockNumber}
+            href={`/block-detail?block=${blockNumberValue(block.number)}`}
+            name="block number"
+          />
+          <div class="cell-stack">
+            <span class="cell-main mono">{block.age}</span>
+            <span class="cell-sub mono">{block.timestamp}</span>
+          </div>
+          <CopyHash value={block.hash} label={block.hash} name="block hash" />
+          <CopyHash value={block.author} label={block.author} name="block author" />
+          <div><StatusChip kind="finality" value={block.finality} compact /></div>
+          <div class="cell-stack">
+            <span class="cell-main">{block.extrinsics}</span>
+            <span class="cell-sub">{block.events} events</span>
+          </div>
+          <div class="cell-stack">
+            <span class="cell-main">{block.gearMessages}</span>
+            <span class="cell-sub">observed</span>
+          </div>
+          <div class="cell-main">{block.failures}</div>
         </div>
-        <CopyHash value={block.hash} label={block.hash} name="block hash" />
-        <CopyHash value={block.author} label={block.author} name="block author" />
-        <div><StatusChip kind="finality" value={block.finality} compact /></div>
-        <div class="cell-stack">
-          <span class="cell-main">{block.extrinsics}</span>
-          <span class="cell-sub">{block.events} events</span>
-        </div>
-        <div class="cell-stack">
-          <span class="cell-main">{block.gearMessages}</span>
-          <span class="cell-sub">{block.failures} failed</span>
-        </div>
-        <div class="cell-main">{block.decodedSails}/{block.gearMessages}</div>
-      </div>
-    ))
+      );
+    })
   }
 </div>

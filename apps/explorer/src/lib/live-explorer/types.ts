@@ -62,10 +62,20 @@ export type ExplorerExtrinsic = {
   raw: unknown;
 };
 
+export type ExplorerObservedObject = {
+  kind: "program" | "message" | "code" | "event";
+  id: string;
+  label: string;
+  source: "rpc_event" | "rpc_extrinsic" | "fixture";
+  blockNumber: number;
+  confidence: "explicit" | "derived";
+};
+
 export type ExplorerBlockDetail = {
   block: ExplorerBlock;
   blockNumber: number;
   blockHash: string;
+  observedObjects: ExplorerObservedObject[];
   events: ExplorerEvent[];
   extrinsics: ExplorerExtrinsic[];
   fetchedAt: number;

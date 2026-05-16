@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { blocks } from "../data/fixtures";
 import type { ExplorerBlock } from "../data/types";
 import { ExplorerCache } from "../lib/live-explorer/cache";
@@ -8,6 +8,10 @@ import { RPC_ENDPOINTS } from "../lib/live-explorer/settings";
 import type { ExplorerBlockDetail, ExplorerConnectionStatus, ExplorerHeads, RpcEndpoint, Unsubscribe } from "../lib/live-explorer/types";
 
 describe("live explorer runtime", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("connects, emits live state, and merges queued head summaries", async () => {
     const source = new FakeDataSource([
       makeBlock(10),
@@ -30,6 +34,8 @@ describe("live explorer runtime", () => {
     expect(snapshots).toContain("live");
     expect(runtime.snapshot().blocks[0].number).toBe("#11");
     expect(runtime.snapshot().status.finalizedBlock).toBe(9);
+    expect(runtime.snapshot().stats.map((stat) => stat.label)).toContain("Gear events");
+    expect(runtime.snapshot().stats.map((stat) => stat.label)).not.toContain("Decode coverage");
   });
 
   it("uses cached data when the RPC connection fails", async () => {
@@ -102,11 +108,60 @@ describe("live explorer runtime", () => {
       source: "rpc"
     });
   });
+
+  it("does not fabricate fixture block detail after live RPC detail failure", async () => {
+    const runtime = new ExplorerRuntime({
+      cache: new ExplorerCache(),
+      dataSourceFactory: () => new RejectingDataSource(),
+      fixtureDataSource: new FakeDataSource([makeBlock(7)]),
+      initialBlocks: []
+    });
+
+    await runtime.start();
+
+    await expect(runtime.loadBlockDetail("7")).rejects.toThrow("Block detail unavailable until the RPC endpoint connects");
+  });
+
+  it("allows fixture block detail only when fixture mode is explicit", async () => {
+    const fixtureSource = new FakeDataSource([makeBlock(7)]);
+    const runtime = new ExplorerRuntime({
+      cache: new ExplorerCache(),
+      dataSourceFactory: () => new RejectingDataSource(),
+      fixtureDataSource: fixtureSource,
+      initialBlocks: []
+    });
+
+    await runtime.start({ forceFixture: true });
+
+    await expect(runtime.loadBlockDetail("7")).resolves.toMatchObject({
+      blockNumber: 7,
+      source: "rpc"
+    });
+  });
+
+  it("disconnects a source that loses the connection timeout race", async () => {
+    vi.useFakeTimers();
+    const source = new HangingDataSource();
+    const runtime = new ExplorerRuntime({
+      cache: new ExplorerCache(),
+      dataSourceFactory: () => source,
+      fixtureDataSource: new FakeDataSource([makeBlock(1)]),
+      initialBlocks: []
+    });
+
+    const start = runtime.start();
+    await vi.advanceTimersByTimeAsync(12_000);
+    await start;
+
+    expect(source.disconnects).toBeGreaterThan(0);
+    expect(runtime.snapshot().status.phase).toBe("error");
+  });
 });
 
 class FakeDataSource implements ExplorerDataSource {
   private endpoint = RPC_ENDPOINTS[0];
   private callback: ((heads: ExplorerHeads) => void) | undefined;
+  disconnects = 0;
 
   constructor(private readonly sourceBlocks: ExplorerBlock[]) {}
 
@@ -115,6 +170,7 @@ class FakeDataSource implements ExplorerDataSource {
   }
 
   async disconnect(): Promise<void> {
+    this.disconnects += 1;
     this.callback = undefined;
   }
 
@@ -146,6 +202,7 @@ class FakeDataSource implements ExplorerDataSource {
       block: summary,
       blockNumber,
       blockHash: `0x${blockNumber}`,
+      observedObjects: [],
       events: [],
       extrinsics: [],
       fetchedAt: Date.now(),
@@ -160,6 +217,16 @@ class FakeDataSource implements ExplorerDataSource {
       message: "Fake source connected.",
       usingCache: false
     };
+  }
+}
+
+class HangingDataSource extends FakeDataSource {
+  constructor() {
+    super([]);
+  }
+
+  async connect(): Promise<void> {
+    await new Promise(() => undefined);
   }
 }
 
