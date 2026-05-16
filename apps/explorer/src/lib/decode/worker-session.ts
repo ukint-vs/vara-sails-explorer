@@ -5,6 +5,7 @@ import type { DecodeWorkerLike, DecodeWorkerRequest, DecodeWorkerResponse } from
 type PendingJob = {
   resolve: (response: DecodeWorkerResponse) => void;
   timer: ReturnType<typeof setTimeout>;
+  kind: DecodeWorkerRequest["kind"];
 };
 
 export class DecodeWorkerSession {
@@ -30,7 +31,7 @@ export class DecodeWorkerSession {
   terminate(): void {
     for (const [jobId, pending] of this.pending) {
       clearTimeout(pending.timer);
-      pending.resolve(timeoutResponse(jobId, "decode"));
+      pending.resolve(timeoutResponse(jobId, pending.kind));
     }
     this.pending.clear();
     this.worker?.terminate();
@@ -52,7 +53,7 @@ export class DecodeWorkerSession {
         this.worker = undefined;
         resolve(timeoutResponse(request.jobId, request.kind));
       }, timeoutMs);
-      this.pending.set(request.jobId, { resolve, timer });
+      this.pending.set(request.jobId, { resolve, timer, kind: request.kind });
       worker.postMessage(request, transfer);
     });
   }
