@@ -92,7 +92,8 @@ type ExpectedEntryPickerProps = {
 function ExpectedEntryPicker({ inspection, expectedEntry, onChange }: ExpectedEntryPickerProps) {
   const candidates = inspection?.candidates ?? [];
   const disabled = candidates.length === 0;
-  const value = encodeExpectedEntryKey(expectedEntry);
+  const selectedIndex = findExpectedEntryIndex(expectedEntry, candidates);
+  const value = selectedIndex >= 0 ? String(selectedIndex) : "";
   return (
     <div className="decode-field decode-field-inline">
       <label htmlFor="decode-expected-entry">Expected entry</label>
@@ -106,7 +107,7 @@ function ExpectedEntryPicker({ inspection, expectedEntry, onChange }: ExpectedEn
       >
         <option value="">(none — accept whatever resolves)</option>
         {candidates.map((candidate, index) => (
-          <option key={`${candidate.interfaceId}-${candidate.entryId}-${index}`} value={`${index}`}>
+          <option key={`${candidate.interfaceId}-${candidate.entryId}-${index}`} value={String(index)}>
             {entryOptionLabel(candidate)}
           </option>
         ))}
@@ -123,9 +124,15 @@ function entryOptionLabel(entry: DecodeEntryView): string {
   return `${entry.kind} entry (r${entry.routeIdx})`;
 }
 
-function encodeExpectedEntryKey(value: DecodeExpectedEntry | undefined): string {
-  if (!value) return "";
-  return JSON.stringify(value);
+function findExpectedEntryIndex(hint: DecodeExpectedEntry | undefined, candidates: DecodeEntryView[]): number {
+  if (!hint) return -1;
+  return candidates.findIndex(
+    (candidate) =>
+      hint.service === candidate.service &&
+      hint.fn === candidate.fn &&
+      hint.event === candidate.event &&
+      hint.ctor === candidate.ctor
+  );
 }
 
 function decodeExpectedEntryKey(raw: string, candidates: DecodeEntryView[]): DecodeExpectedEntry | undefined {
