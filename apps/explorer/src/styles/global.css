@@ -2231,6 +2231,36 @@ textarea {
   text-transform: uppercase;
 }
 
+.decode-field-inline {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.decode-expected-entry {
+  min-height: 44px;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-tag);
+  background: var(--surface-2);
+  color: var(--text-strong);
+  padding: 0 var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+}
+
+.decode-expected-entry:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.decode-result-meta {
+  margin: 0;
+  color: var(--subtle);
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+}
+
 .decode-source-picker {
   display: grid;
   gap: var(--space-2);

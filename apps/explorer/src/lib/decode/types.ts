@@ -2,6 +2,13 @@ import type { RpcEndpoint } from "../live-explorer/types";
 
 export type DecodeKind = "auto" | "call" | "reply" | "error" | "event" | "constructor";
 
+export type DecodeExpectedEntry = {
+  service?: string;
+  fn?: string;
+  event?: string;
+  ctor?: string;
+};
+
 export type IdlSourceMode = "pasted_idl" | "uploaded_idl" | "uploaded_wasm" | "program_id" | "code_id" | "cache";
 
 export type IdlTrustLevel = "chain_embedded" | "user_supplied" | "cache" | "unverified" | "none";
@@ -122,6 +129,7 @@ export type DecodeFailureResult = {
   detail?: string;
   header?: DecodeHeaderView;
   candidates?: DecodeEntryView[];
+  consumedLen?: number;
   provenance?: DecodeProvenance;
   trace: DecodeTraceStep[];
 };

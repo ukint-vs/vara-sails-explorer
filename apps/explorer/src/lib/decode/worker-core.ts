@@ -6,6 +6,7 @@ import { DECODE_TIMEOUTS } from "./constants";
 import type { DecodeWorkerRequest, DecodeWorkerResponse } from "./worker-protocol";
 import type {
   DecodeEntryView,
+  DecodeExpectedEntry,
   DecodeFailureResult,
   DecodeKind,
   DecodeHeaderView,
@@ -168,6 +169,7 @@ async function decodePayload(request: Extract<DecodeWorkerRequest, { kind: "deco
           detail: decoded.detail,
           header: header?.view,
           candidates,
+          consumedLen: decoded.consumedLen,
           provenance: request.provenance,
           trace: [
             ...trace,
@@ -177,12 +179,37 @@ async function decodePayload(request: Extract<DecodeWorkerRequest, { kind: "deco
       };
     }
 
+    const entryView = mapEntry(decoded.entry);
+    if (request.expectedEntry) {
+      const mismatch = describeEntryMismatch(request.expectedEntry, entryView);
+      if (mismatch) {
+        return {
+          kind: "decode",
+          jobId: request.jobId,
+          result: {
+            ok: false,
+            category: "sails_unknown",
+            status: "sails_unknown",
+            message: "Decoded entry did not match the expected entry.",
+            reason: "entry-mismatch",
+            detail: mismatch,
+            header: header?.view,
+            candidates: header?.header
+              ? entry.program.resolveEntryCandidates(header.header.interfaceId).map(mapEntry)
+              : undefined,
+            provenance: request.provenance,
+            trace: [...trace, traceStep("Entry mismatch", mismatch, "warning", started)]
+          }
+        };
+      }
+    }
+
     const result: DecodeResult = {
       ok: true,
       category: "success",
       status: "decoded",
       kind: decoded.kind,
-      entry: mapEntry(decoded.entry),
+      entry: entryView,
       header: header?.view,
       value: decodedValue(decoded),
       candidates: header?.header ? entry.program.resolveEntryCandidates(header.header.interfaceId).map(mapEntry) : undefined,
@@ -359,6 +386,33 @@ function mapEntry(entry: ResolvedEntry): DecodeEntryView {
   };
 }
 
+function describeEntryMismatch(hint: DecodeExpectedEntry, actual: DecodeEntryView): string | undefined {
+  const expected = formatExpectedEntry(hint);
+  if (!expected) return undefined;
+  const actualLabel = formatActualEntry(actual);
+  if (hint.service && hint.service !== actual.service) return `Expected ${expected}, resolved ${actualLabel}.`;
+  if (hint.fn && hint.fn !== actual.fn) return `Expected ${expected}, resolved ${actualLabel}.`;
+  if (hint.event && hint.event !== actual.event) return `Expected ${expected}, resolved ${actualLabel}.`;
+  if (hint.ctor && hint.ctor !== actual.ctor) return `Expected ${expected}, resolved ${actualLabel}.`;
+  return undefined;
+}
+
+function formatExpectedEntry(hint: DecodeExpectedEntry): string | undefined {
+  if (hint.fn) return hint.service ? `${hint.service}.${hint.fn}` : hint.fn;
+  if (hint.event) return hint.service ? `${hint.service}.${hint.event}` : hint.event;
+  if (hint.ctor) return `ctor ${hint.ctor}`;
+  if (hint.service) return hint.service;
+  return undefined;
+}
+
+function formatActualEntry(entry: DecodeEntryView): string {
+  if (entry.fn) return entry.service ? `${entry.service}.${entry.fn}` : entry.fn;
+  if (entry.event) return entry.service ? `${entry.service}.${entry.event}` : entry.event;
+  if (entry.ctor) return `ctor ${entry.ctor}`;
+  if (entry.service) return entry.service;
+  return `${entry.kind} entry`;
+}
+
 function resolvedEntryCodec(entry: ResolvedEntry): "scale" | "ethabi" | string | undefined {
   // sails-js@0.5.1 ResolvedEntry has no codec field. Read defensively so the
   // schema is ready when upstream exposes it (spec section 8.1.5).
@@ -435,4 +489,10 @@ export async function computeIdlHashForWorker(text: string): Promise<string> {
   return hashIdl(text);
 }
 
-export const __test__ = { sanitize, interfaceIdToString, withParserInitTimeout, resolvedEntryCodec };
+export const __test__ = {
+  sanitize,
+  interfaceIdToString,
+  withParserInitTimeout,
+  resolvedEntryCodec,
+  describeEntryMismatch
+};

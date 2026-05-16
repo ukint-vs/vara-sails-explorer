@@ -5,14 +5,16 @@ type RouteInspectorProps = {
   result: DecodeResult | undefined;
   inspection: IdlInspection | undefined;
   provenance: DecodeProvenance | undefined;
+  onCopySnippet?: (entry: DecodeEntryView) => void;
 };
 
-export function RouteInspector({ result, inspection, provenance }: RouteInspectorProps) {
+export function RouteInspector({ result, inspection, provenance, onCopySnippet }: RouteInspectorProps) {
   const header = result?.header;
   const entry = result?.ok ? result.entry : undefined;
   const candidates = result?.candidates ?? inspection?.candidates ?? [];
   const hasContent = Boolean(result || inspection || provenance);
   const sectionClass = `decode-panel decode-inspector${result?.ok ? " success" : ""}`;
+  const canCopySnippet = Boolean(entry && onCopySnippet);
 
   return (
     <section className={sectionClass} aria-labelledby="decode-inspector-title">
@@ -21,7 +23,19 @@ export function RouteInspector({ result, inspection, provenance }: RouteInspecto
           <p className="decode-kicker">Route</p>
           <h2 id="decode-inspector-title">Header inspector</h2>
         </div>
-        <span>{candidates.length}</span>
+        <div className="decode-head-actions">
+          {canCopySnippet && (
+            <button
+              type="button"
+              className="btn small"
+              onClick={() => onCopySnippet!(entry!)}
+              title="Copy a sails-js decode-replay TypeScript snippet for this entry."
+            >
+              Copy TS
+            </button>
+          )}
+          <span>{candidates.length}</span>
+        </div>
       </div>
 
       {hasContent ? (

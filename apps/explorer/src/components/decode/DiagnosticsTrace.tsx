@@ -6,12 +6,14 @@ type DiagnosticsTraceProps = {
   trace: DecodeTraceStep[];
   result: DecodeResult | undefined;
   onCopy: () => void | Promise<void>;
+  onSaveJson?: () => void;
 };
 
-export function DiagnosticsTrace({ trace, result, onCopy }: DiagnosticsTraceProps) {
+export function DiagnosticsTrace({ trace, result, onCopy, onSaveJson }: DiagnosticsTraceProps) {
   const [open, setOpen] = useState(false);
   const meta = result ? statusMeta(result.status) : undefined;
   const summary = trace.at(-1);
+  const empty = trace.length === 0 && !result;
 
   return (
     <section className="decode-panel decode-trace" aria-labelledby="decode-trace-title">
@@ -20,9 +22,22 @@ export function DiagnosticsTrace({ trace, result, onCopy }: DiagnosticsTraceProp
           <p className="decode-kicker">Trace</p>
           <h2 id="decode-trace-title">Diagnostics</h2>
         </div>
-        <button type="button" className="btn small" disabled={trace.length === 0 && !result} onClick={() => void onCopy()}>
-          Copy
-        </button>
+        <div className="decode-head-actions">
+          <button type="button" className="btn small" disabled={empty} onClick={() => void onCopy()}>
+            Copy
+          </button>
+          {onSaveJson && (
+            <button
+              type="button"
+              className="btn small"
+              disabled={empty}
+              onClick={onSaveJson}
+              title="Save provenance, result, and trace as a JSON file."
+            >
+              Save .json
+            </button>
+          )}
+        </div>
       </div>
 
       <button
@@ -30,7 +45,7 @@ export function DiagnosticsTrace({ trace, result, onCopy }: DiagnosticsTraceProp
         className="trace-summary"
         onClick={() => setOpen((value) => !value)}
         aria-expanded={open}
-        disabled={trace.length === 0 && !result}
+        disabled={empty}
       >
         <span>{meta?.label ?? "No trace yet"}</span>
         <strong>{summary?.durationMs ? `${summary.durationMs}ms` : summary?.status ?? "idle"}</strong>

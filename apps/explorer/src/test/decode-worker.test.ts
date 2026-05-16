@@ -77,6 +77,77 @@ describe("decode worker core", () => {
     });
   });
 
+  it("surfaces DecodedUnknown.consumedLen on trailing-bytes failures", async () => {
+    const idlHash = await hashIdl(SAMPLE_IDL);
+    const source = await provenance();
+    const result = await handleDecodeWorkerRequest({
+      kind: "decode",
+      jobId: 30,
+      idlHash,
+      idlText: SAMPLE_IDL,
+      payloadHex: `${SAMPLE_PAYLOAD_HEX}deadbeef`,
+      decodeKind: "auto",
+      provenance: source
+    });
+    if (result.kind !== "decode" || result.result.ok) {
+      throw new Error("expected a decode failure result");
+    }
+    expect(result.result.reason).toBe("trailing-bytes");
+    expect(typeof result.result.consumedLen).toBe("number");
+    expect(result.result.consumedLen).toBeGreaterThan(0);
+  });
+
+  it("rejects payload when expectedEntry disagrees with the resolved entry", async () => {
+    const idlHash = await hashIdl(SAMPLE_IDL);
+    const source = await provenance();
+    const result = await handleDecodeWorkerRequest({
+      kind: "decode",
+      jobId: 31,
+      idlHash,
+      idlText: SAMPLE_IDL,
+      payloadHex: SAMPLE_PAYLOAD_HEX,
+      decodeKind: "auto",
+      expectedEntry: { service: "Counter", fn: "Get" },
+      provenance: source
+    });
+    expect(result).toMatchObject({
+      kind: "decode",
+      result: {
+        ok: false,
+        category: "sails_unknown",
+        status: "sails_unknown",
+        reason: "entry-mismatch"
+      }
+    });
+    if (result.kind === "decode" && !result.result.ok) {
+      expect(result.result.detail).toContain("Counter.Get");
+      expect(result.result.detail).toContain("Counter.Add");
+    }
+  });
+
+  it("accepts the decode when expectedEntry matches the resolved entry", async () => {
+    const idlHash = await hashIdl(SAMPLE_IDL);
+    const source = await provenance();
+    const result = await handleDecodeWorkerRequest({
+      kind: "decode",
+      jobId: 32,
+      idlHash,
+      idlText: SAMPLE_IDL,
+      payloadHex: SAMPLE_PAYLOAD_HEX,
+      decodeKind: "auto",
+      expectedEntry: { service: "Counter", fn: "Add" },
+      provenance: source
+    });
+    expect(result).toMatchObject({
+      kind: "decode",
+      result: {
+        ok: true,
+        status: "decoded",
+        entry: { service: "Counter", fn: "Add" }
+      }
+    });
+  });
+
   it("rejects invalid IDL through the worker result union", async () => {
     const source = await provenance();
     const result = await handleDecodeWorkerRequest({
