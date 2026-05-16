@@ -3,9 +3,12 @@ import { hashIdl, shortHash } from "../../lib/decode/bytes";
 import { DecodeIdlCache, makeIdlRecord } from "../../lib/decode/cache";
 import { DecodeResolverClient } from "../../lib/decode/resolver-client";
 import { SAMPLE_IDL, SAMPLE_PAYLOAD_HEX } from "../../lib/decode/sample";
+import { buildDecodeReplaySnippet } from "../../lib/decode/snippet";
 import { statusMeta } from "../../lib/decode/status";
 import { appendTrace, formatDiagnostics } from "../../lib/decode/trace";
 import type {
+  DecodeEntryView,
+  DecodeExpectedEntry,
   DecodeKind,
   DecodeProvenance,
   DecodeResult,
@@ -15,6 +18,7 @@ import type {
   IdlSourceMode
 } from "../../lib/decode/types";
 import { DecodeWorkerSession } from "../../lib/decode/worker-session";
+import { downloadJson } from "../../lib/download";
 import { copyText } from "../../lib/live-explorer/copy";
 import { getEndpointById, loadRpcSettings, RPC_SETTINGS_CHANGED_EVENT } from "../../lib/live-explorer/settings";
 import { CopyableHex } from "./CopyableHex";
@@ -43,6 +47,7 @@ export function DecodeLab() {
   const [payloadHex, setPayloadHex] = useState("");
   const [chainId, setChainId] = useState("");
   const [decodeKind, setDecodeKind] = useState<DecodeKind>("auto");
+  const [expectedEntry, setExpectedEntry] = useState<DecodeExpectedEntry | undefined>();
   const [record, setRecord] = useState<IdlRecord | undefined>();
   const [inspection, setInspection] = useState<IdlInspection | undefined>();
   const [result, setResult] = useState<DecodeResult | undefined>();
@@ -351,6 +356,7 @@ export function DecodeLab() {
         idlText: activeRecord.idlText,
         payloadHex: activePayload,
         decodeKind: activeKind,
+        expectedEntry,
         provenance: activeRecord.provenance
       });
       if (job !== decodeJobRef.current) {
@@ -381,6 +387,7 @@ export function DecodeLab() {
     setResult(undefined);
     setTrace([]);
     setBusy(undefined);
+    setExpectedEntry(undefined);
     setAnnouncement("Source cleared.");
     workerRef.current?.terminate();
     workerRef.current = new DecodeWorkerSession();
@@ -408,7 +415,30 @@ export function DecodeLab() {
     setInspection(undefined);
     setResult(undefined);
     setBusy(undefined);
+    setExpectedEntry(undefined);
     setAnnouncement(message);
+  }
+
+  async function copySnippet(entry: DecodeEntryView): Promise<void> {
+    const snippet = buildDecodeReplaySnippet({
+      entry,
+      payloadHex: payloadHex.trim(),
+      idlHash: record?.idlHash
+    });
+    const ok = await copyText(snippet);
+    setAnnouncement(ok ? "TypeScript snippet copied." : "Copy failed.");
+  }
+
+  function saveDiagnosticsJson(): void {
+    const idlHashChunk = record?.idlHash ? record.idlHash.slice(2, 10) : "no-idl";
+    const kindChunk = result?.ok ? result.kind : result?.status ?? "trace";
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    downloadJson(`decode-${idlHashChunk}-${kindChunk}-${timestamp}.json`, {
+      provenance: record?.provenance,
+      result,
+      trace
+    });
+    setAnnouncement("Diagnostics saved as JSON.");
   }
 
   return (
@@ -440,6 +470,9 @@ export function DecodeLab() {
         onPayloadHexChange={setPayloadHex}
         decodeKind={decodeKind}
         onDecodeKindChange={setDecodeKind}
+        inspection={inspection}
+        expectedEntry={expectedEntry}
+        onExpectedEntryChange={setExpectedEntry}
         ready={ready}
         busy={busy}
         result={result}
@@ -451,8 +484,13 @@ export function DecodeLab() {
           <span>{activeMeta.label}</span>
           {record ? <CopyableHex value={record.idlHash} name="IDL hash" chars={14} /> : <strong>no-idl</strong>}
         </div>
-        <RouteInspector result={result} inspection={inspection} provenance={record?.provenance} />
-        <DiagnosticsTrace trace={trace} result={result} onCopy={copyDiagnostics} />
+        <RouteInspector
+          result={result}
+          inspection={inspection}
+          provenance={record?.provenance}
+          onCopySnippet={(entry) => void copySnippet(entry)}
+        />
+        <DiagnosticsTrace trace={trace} result={result} onCopy={copyDiagnostics} onSaveJson={saveDiagnosticsJson} />
       </aside>
 
       <DecodeProvenanceLine provenance={record?.provenance} />

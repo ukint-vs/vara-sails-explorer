@@ -15,12 +15,14 @@ export function ResultPanel({ result }: ResultPanelProps) {
   }
 
   const meta = statusMeta(result.status);
+  const consumedLine = !result.ok && typeof result.consumedLen === "number" ? `Consumed ${result.consumedLen} byte${result.consumedLen === 1 ? "" : "s"}.` : undefined;
   return (
     <div className={`decode-result ${meta.tone}`}>
       <div className="decode-result-head">
         <span>{meta.label}</span>
         <strong>{result.ok ? result.kind : result.reason ?? result.status}</strong>
       </div>
+      {consumedLine && <p className="decode-result-meta">{consumedLine}</p>}
       <pre>{JSON.stringify(result.ok ? result.value : failureJson(result), null, 2)}</pre>
     </div>
   );
@@ -32,6 +34,7 @@ function failureJson(result: Exclude<DecodeResult, { ok: true }>): Record<string
     category: result.category,
     reason: result.reason,
     message: result.message,
-    detail: result.detail
+    detail: result.detail,
+    ...(typeof result.consumedLen === "number" ? { consumedLen: result.consumedLen } : {})
   };
 }

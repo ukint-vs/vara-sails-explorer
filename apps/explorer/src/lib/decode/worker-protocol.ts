@@ -1,4 +1,4 @@
-import type { DecodeKind, DecodeProvenance, DecodeResult, IdlInspection } from "./types";
+import type { DecodeExpectedEntry, DecodeKind, DecodeProvenance, DecodeResult, IdlInspection } from "./types";
 
 export type DecodeWorkerRequest =
   | {
@@ -21,6 +21,7 @@ export type DecodeWorkerRequest =
       idlText: string;
       payloadHex: string;
       decodeKind: DecodeKind;
+      expectedEntry?: DecodeExpectedEntry;
       provenance: DecodeProvenance;
     };
 
