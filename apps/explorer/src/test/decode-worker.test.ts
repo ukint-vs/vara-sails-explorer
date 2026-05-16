@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { hashIdl } from "../lib/decode/bytes";
 import { SAMPLE_IDL, SAMPLE_PAYLOAD_HEX } from "../lib/decode/sample";
 import type { DecodeProvenance } from "../lib/decode/types";
-import { handleDecodeWorkerRequest } from "../lib/decode/worker-core";
+import { __test__, handleDecodeWorkerRequest } from "../lib/decode/worker-core";
 
 const provenance = async (): Promise<DecodeProvenance> => ({
   source: "pasted_idl",
@@ -94,6 +94,61 @@ describe("decode worker core", () => {
         status: "invalid_idl",
         category: "idl_failure"
       }
+    });
+  });
+
+  describe("sanitize", () => {
+    const { sanitize } = __test__;
+
+    it("converts Uint8Array to hex instead of indexed-byte object", () => {
+      const bytes = new Uint8Array([0xde, 0xad, 0xbe, 0xef]);
+      expect(sanitize(bytes)).toBe("0xdeadbeef");
+    });
+
+    it("converts nested Uint8Array fields inside decoded args", () => {
+      const value = {
+        actorId: new Uint8Array([0x01, 0x23, 0x45, 0x67]),
+        amount: 42n,
+        nested: { hash: new Uint8Array([0xaa, 0xbb]) }
+      };
+      expect(sanitize(value)).toEqual({
+        actorId: "0x01234567",
+        amount: "42",
+        nested: { hash: "0xaabb" }
+      });
+    });
+
+    it("stringifies bigints, leaves primitives, recurses into arrays", () => {
+      expect(sanitize({ items: [1n, "x", { id: new Uint8Array([0xff]) }] })).toEqual({
+        items: ["1", "x", { id: "0xff" }]
+      });
+    });
+  });
+
+  describe("interfaceIdToString", () => {
+    const { interfaceIdToString } = __test__;
+
+    it("renders raw Uint8Array interface IDs as hex, not comma-joined bytes", () => {
+      const id = new Uint8Array([0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc, 0xde, 0xf0]);
+      expect(interfaceIdToString(id)).toBe("0x123456789abcdef0");
+    });
+
+    it("renders { bytes } shape as hex", () => {
+      expect(interfaceIdToString({ bytes: new Uint8Array([0xab, 0xcd]) })).toBe("0xabcd");
+    });
+
+    it("returns string values unchanged", () => {
+      expect(interfaceIdToString("0xabcd")).toBe("0xabcd");
+    });
+
+    it("falls back to default for nullish values", () => {
+      expect(interfaceIdToString(undefined)).toBe("0x0000000000000000");
+      expect(interfaceIdToString(null)).toBe("0x0000000000000000");
+    });
+
+    it("uses custom toString when available", () => {
+      const id = { toString: () => "0xfeedface" };
+      expect(interfaceIdToString(id)).toBe("0xfeedface");
     });
   });
 });

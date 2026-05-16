@@ -307,11 +307,13 @@ function mapEntry(entry: ResolvedEntry): DecodeEntryView {
 function interfaceIdToString(value: unknown): string {
   if (!value) return "0x0000000000000000";
   if (typeof value === "string") return value;
-  if (typeof value === "object" && "toString" in value && typeof value.toString === "function") {
-    return value.toString();
-  }
+  if (value instanceof Uint8Array) return bytesToHex(value);
   if (typeof value === "object" && "bytes" in value && value.bytes instanceof Uint8Array) {
     return bytesToHex(value.bytes);
+  }
+  if (typeof value === "object" && "toString" in value && typeof value.toString === "function") {
+    const str = value.toString();
+    if (str !== "[object Object]") return str;
   }
   return String(value);
 }
@@ -325,6 +327,7 @@ function decodedValue(decoded: Exclude<SailsDecoded, DecodedUnknown>): unknown {
 
 function sanitize(value: unknown): unknown {
   if (typeof value === "bigint") return value.toString();
+  if (value instanceof Uint8Array) return bytesToHex(value);
   if (Array.isArray(value)) return value.map(sanitize);
   if (value && typeof value === "object") {
     return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, sanitize(item)]));
@@ -369,3 +372,5 @@ function traceStep(
 export async function computeIdlHashForWorker(text: string): Promise<string> {
   return hashIdl(text);
 }
+
+export const __test__ = { sanitize, interfaceIdToString };
